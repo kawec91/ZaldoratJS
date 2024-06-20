@@ -1,7 +1,22 @@
 import express from "express";
-import { login, logout, signup } from "../controllers/auth.controller.js";
+import {
+  getMe,
+  login,
+  logout,
+  signup,
+} from "../controllers/auth.controller.js";
+import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
+
+//TEST
+// router.get("/", (req, res) => {
+//   res.status(200).json({ message: "Success" });
+// });
+
+// @desc    Check If user is authenticated
+// @route   GET /api/auth/me
+router.get("/me", protectRoute, getMe);
 
 // @desc    Auth Signup User
 // @route   POST /api/auth/signup
