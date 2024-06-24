@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import toast from 'react-hot-toast';
 import { Link, Outlet } from 'react-router-dom'
 
 export default function GameHeader() {
-
+    const queryClient = useQueryClient();
     const {mutate: logout} = useMutation({
         mutationFn: async() => {
             try {
@@ -21,6 +21,10 @@ export default function GameHeader() {
             }
         },
         onSuccess: () => {
+            //Invalidate query - refetch authUser
+            queryClient.invalidateQueries({
+                queryKey: ["authUser"]
+            })
             toast.success("Logout successful.");
         },
         onError: ()=>{
