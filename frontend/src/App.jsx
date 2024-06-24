@@ -9,6 +9,8 @@ import { Toaster } from "react-hot-toast";
 import GameHeader from "./components/Game/GameHeader/GameHeader";
 import LastNewsPage from "./components/Game/Page/LastNewsPage/LastNewsPage";
 import { useQuery } from "@tanstack/react-query";
+import AccountSettings from "./components/Game/AccountSettings/AccountSettings";
+import AccountPage from "./components/Game/Page/AccountPage/AccountPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -25,7 +27,8 @@ function App() {
       } catch (error) {
         throw new Error(error);
       }
-    }
+    },
+    retry: false,
   });
 
   //TODO
@@ -49,7 +52,8 @@ function App() {
           </Route>
         </Route>
         <Route path="/game" element={authUser ? <GameHeader /> : <Navigate to={'/login'} />}>
-        <Route path="/game" element={authUser ? <LastNewsPage /> : <Navigate to={'/login'} />} />
+          <Route path="/game" element={authUser ? <AccountPage /> : <Navigate to={'/login'} />} />
+          <Route path="/game/account" element={authUser ? <AccountSettings /> : <Navigate to={'/login'} />} />
         </Route>
       </Routes>
       <Toaster />

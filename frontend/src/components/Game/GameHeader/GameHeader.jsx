@@ -32,7 +32,7 @@ export default function GameHeader() {
         <div className='grid grid-cols-3 gap-2 px-4 py-2 border-b-[1px] border-black'>
             <div className='flex justify-start items-center gap-2'>
                 <div className='h-8 w-8 bg-gray-400 rounded-full'></div>
-                <div>Witaj, <span>Alakhei</span></div>
+                <div>Witaj, <Link to={'/game/'}><span className='text-blue-600 cursor-pointer'>Alakhei</span></Link></div>
             </div>
             <div className='flex items-center justify-center'>24.06.2024 13:07</div>
             <div className='flex items-center justify-end'>
@@ -41,12 +41,12 @@ export default function GameHeader() {
                         <li>Powiadomienia</li>
                     </Link>
                 
-                    <Link >
+                    <Link to={'/game/account'}>
                         <li>Ustawienia</li>
                     </Link>
                 
                     
-                    <li onClick={(e)=>{
+                    <li className='cursor-pointer' onClick={(e)=>{
                         e.preventDefault();
                         logout();
                     }}>Wyloguj</li>
