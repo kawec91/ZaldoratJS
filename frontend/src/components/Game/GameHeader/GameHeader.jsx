@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import React from 'react'
+import React from 'react';
 import toast from 'react-hot-toast';
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom';
+import { FaUserCircle } from "react-icons/fa";
 
 export default function GameHeader() {
     const queryClient = useQueryClient();
@@ -32,13 +33,14 @@ export default function GameHeader() {
         }
     });
 
-    //GetDate
+    //GetData
     const {data: authUser} = useQuery({queryKey:["authUser"]});
   return (
     <>
         <div className='grid grid-cols-3 gap-2 px-4 py-2 border-b-[1px] border-black'>
             <div className='flex justify-start items-center gap-2'>
-                <div className='h-8 w-8 bg-gray-400 rounded-full'></div>
+                {authUser?.userAvatar === "" ? <FaUserCircle className='h-8 w-8'/> : <>IMG</>}
+                
                 <div>Witaj, <Link to={'/game/'}><span className='text-blue-600 cursor-pointer'>{authUser?.username}</span></Link></div>
             </div>
             <div className='flex items-center justify-center'>24.06.2024 13:07</div>
