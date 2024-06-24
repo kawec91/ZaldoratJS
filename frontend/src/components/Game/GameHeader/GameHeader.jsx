@@ -1,7 +1,29 @@
+import { useMutation } from '@tanstack/react-query'
 import React from 'react'
+import toast from 'react-hot-toast';
 import { Link, Outlet } from 'react-router-dom'
 
 export default function GameHeader() {
+
+    const {mutate: logout, isPending, isError, error} = useMutation({
+        mutationFn: async() => {
+            try {
+                const res = await fetch('/api/auth/logout', {
+                    method: "POST",
+                });
+                const data = await res.json();
+
+                if(!res.ok) {
+                    throw new Error(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+        onSuccess: () => {
+            toast.success("Logout successful.");
+        }
+    });
   return (
     <>
         <div className='grid grid-cols-3 gap-2 px-4 py-2 border-b-[1px] border-black'>
@@ -20,9 +42,12 @@ export default function GameHeader() {
                         <li>Ustawienia</li>
                     </Link>
                 
-                    <Link >
-                        <li>Wyloguj</li>
-                    </Link>
+                    
+                    <li onClick={(e)=>{
+                        e.preventDefault();
+                        logout();
+                    }}>Wyloguj</li>
+                    
                 </ul>
             </div>
         </div>
