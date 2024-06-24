@@ -4,7 +4,10 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+<<<<<<< HEAD
 import startRoutes from "./routes/start.routes.js";
+=======
+>>>>>>> 38b9ffbb1fd2253824e0b67168f62695e408e87a
 
 import connectDB from "./db/connectDB.js";
 
