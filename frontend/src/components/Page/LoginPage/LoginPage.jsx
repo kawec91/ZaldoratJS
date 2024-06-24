@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { defaultInput } from '../../Styles/style.js';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 
@@ -16,6 +16,8 @@ export default function LoginPage() {
         })
         console.log(user);
     }
+
+    const queryClient = useQueryClient();
 
     const {
         mutate:loginMutation,isPending, isError, error} = useMutation({
@@ -38,7 +40,10 @@ export default function LoginPage() {
             }
         },
         onSuccess: (data) => {
-            <Navigate to={'/game'} />
+            //Invalidate query - refetch authUser
+            queryClient.invalidateQueries({
+                queryKey: ["authUser"]
+            })
             toast.success("Login succesful.")
         }
     });
