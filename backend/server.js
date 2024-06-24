@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import startRoutes from "./routes/start.routes.js";
-
+import characterRoutes from "./routes/character.routes.js";
 import connectDB from "./db/connectDB.js";
 
 dotenv.config();
@@ -30,6 +30,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/start", startRoutes);
+app.use('/api/characters', characterRoutes);
 //Server Listener
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/api`);
