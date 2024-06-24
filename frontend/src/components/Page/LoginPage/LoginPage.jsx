@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { defaultInput } from '../../Styles/style.js';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { Navigate } from 'react-router-dom';
 
 export default function LoginPage() {
     const [user, setUser] = useState({
@@ -37,6 +38,7 @@ export default function LoginPage() {
             }
         },
         onSuccess: (data) => {
+            <Navigate to={'/game'} />
             toast.success("Login succesful.")
         }
     });

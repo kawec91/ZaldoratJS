@@ -5,7 +5,7 @@ import { Link, Outlet } from 'react-router-dom'
 
 export default function GameHeader() {
 
-    const {mutate: logout, isPending, isError, error} = useMutation({
+    const {mutate: logout} = useMutation({
         mutationFn: async() => {
             try {
                 const res = await fetch('/api/auth/logout', {
@@ -22,6 +22,9 @@ export default function GameHeader() {
         },
         onSuccess: () => {
             toast.success("Logout successful.");
+        },
+        onError: ()=>{
+            toast.error("Logout faild.")
         }
     });
   return (
