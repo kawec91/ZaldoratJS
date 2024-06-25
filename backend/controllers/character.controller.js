@@ -1,4 +1,3 @@
-// controllers/character.controller.js
 import Character from '../class/character.js';
 import CharacterModel from '../models/character.model.js';
 
@@ -18,10 +17,25 @@ export const createCharacter = async (req, res) => {
   }
 };
 
+export const deleteCharacter = async (req, res) => {
+  try {
+    const { nickname } = req.params;
+    const character = await CharacterModel.findOneAndDelete({ nickname });
+
+    if (!character) {
+      return res.status(404).json({ error: 'Character not found' });
+    }
+
+    res.status(200).json({ message: 'Character deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting character:', error);
+    res.status(500).json({ error: 'Error deleting character' });
+  }
+};
+
 export const getCharacter = async (req, res) => {
   try {
     const { id } = req.params;
-
     const character = await CharacterModel.findById(id);
 
     if (!character) {
@@ -34,5 +48,3 @@ export const getCharacter = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-// Dodaj inne operacje, które będą potrzebne dla zarządzania postaciami
