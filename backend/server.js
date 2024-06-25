@@ -7,7 +7,8 @@ import userRoutes from "./routes/user.routes.js";
 import startRoutes from "./routes/start.routes.js";
 import characterRoutes from "./routes/character.routes.js";
 import connectDB from "./db/connectDB.js";
-
+import raceRoutes from './routes/race.routes.js';
+import classRoutes from './routes/class.routes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -31,6 +32,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/start", startRoutes);
 app.use('/api/characters', characterRoutes);
+app.use("/api/races", raceRoutes); 
+app.use("/api/classes", classRoutes);
+
 //Server Listener
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/api`);
