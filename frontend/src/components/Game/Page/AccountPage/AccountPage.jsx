@@ -8,7 +8,7 @@ export default function AccountPage() {
         {
         characterName: 'Alakhei',
         characterLvl: 33,
-        characterAvatar: '3avatar={data[0].characterAvatar}',
+        characterAvatar: '3',
         lastOnline: '20h ago'
     },
         {
