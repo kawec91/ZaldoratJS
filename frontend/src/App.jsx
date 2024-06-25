@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import AccountSettings from "./components/Game/AccountSettings/AccountSettings";
 import AccountPage from "./components/Game/Page/AccountPage/AccountPage";
 import CharacterCreatorPage from "./components/Game/Page/CharacterCreatorPage/CharacterCreatorPage";
+import InGameLayout from "./components/Game/Page/InGameLayout/InGameLayout";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -58,6 +59,7 @@ function App() {
           <Route path="/game/account" element={authUser ? <AccountSettings /> : <Navigate to={'/login'} />} />
           <Route path="/game/new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to={'/login'} />} />
         </Route>
+        <Route path="/game/play" element={<InGameLayout />} ></Route>
       </Routes>
       <Toaster />
     </>
