@@ -1,23 +1,22 @@
 import React from 'react'
+import avatar1 from '../../../assets/images/avatar1.jpg'
+import avatar2 from '../../../assets/images/avatar2.jpg'
+import avatar3 from '../../../assets/images/avatar3.jpg'
 
 export default function CharacterChooseCard({avatar,name,lvl, lastOnline}) {
   return (
-    <div className='border-[1px] border-black p-6 rounded-md flex justify-center gap-4 w-1/3'>
-        <div className='w-52 bg-gray-700 rounded-md'></div>
-        <div className='w-full'>
+    <div className='w-full bg-black rounded-md h-1/5 flex hover:shadow-md hover:shadow-black hover:duration-300 cursor-pointer'>
+        <img src={avatar === "1" ? avatar1 : avatar === "2" ? avatar2 : avatar3} alt='userAvatar' className='h-full w-1/3 rounded-md object-cover'/>
+        <div className='w-2/3 text-white hover:text-orange-500 px-2 py-2'>
             <div className='flex items-center justify-between'>
-            <h3 className='text-2xl'>{name}</h3>
+            <h3 className='text-xl'>{name}</h3>
             <p>Poziom: {lvl}</p>
             </div>
-            <hr className='border-black'/>
-            <p>HP: 100%</p>
-            <p>Mana: 100%</p>
-            <p>Gold: 10 000</p>
-            <p>Bank: 100 000</p>
-            <p>Last online: {lastOnline}</p>
-            <div className='flex py-2 items-center gap-4'>
-                <button className='px-4 py-2 text-white uppercase bg-red-600 rounded-md'>Usuń</button>
-                <button className='px-4 py-2 text-white uppercase bg-green-600 rounded-md'>Graj</button>
+            <hr className='border-white'/>
+            <p className='h-14 flex items-center justify-center'>Last online: {lastOnline}</p>
+            <div className='flex justify-between items-center gap-4'>
+                <button className='uppercase text-red-600 font-bold'>Usuń</button>
+                <button className='uppercase text-green-600 font-bold'>Graj</button>
             </div>
         </div>
     </div>
