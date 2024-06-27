@@ -1,10 +1,11 @@
+// models/origin.model.js
+
 import mongoose from 'mongoose';
 
 const originSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   reqRace: {
     type: String,
@@ -15,8 +16,22 @@ const originSchema = new mongoose.Schema({
     required: true
   },
   statsPerk: {
-    type: String,
-    required: true
+    power: {
+      type: String,
+      required: true
+    },
+    defence: {
+      type: String,
+      required: true
+    },
+    agility: {
+      type: String,
+      required: true
+    },
+    vitality: {
+      type: String,
+      required: true
+    }
   }
 });
 
