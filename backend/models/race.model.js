@@ -1,23 +1,25 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const raceSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
+const raceSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    attributes: {
+      strength: Number,
+      agility: Number,
+      vitality: Number,
+      intelligence: Number,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  attributes: {
-    strength: Number,
-    agility: Number,
-    vitality: Number,
-    intelligence: Number,
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Race = mongoose.model('Race', raceSchema);
+const Race = mongoose.model("Race", raceSchema);
 
 export default Race;
