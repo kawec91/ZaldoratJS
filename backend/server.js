@@ -11,6 +11,7 @@ import raceRoutes from './routes/race.routes.js';
 import classRoutes from './routes/class.routes.js';
 import locationRoutes from './routes/location.routes.js';
 import sublocationRoutes from './routes/sublocation.routes.js';
+import originRoutes from './routes/origin.routes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -38,6 +39,7 @@ app.use("/api/races", raceRoutes);
 app.use("/api/classes", classRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', sublocationRoutes);
+app.use('/api/origin', originRoutes);
 
 //Server Listener
 app.listen(PORT, () => {
