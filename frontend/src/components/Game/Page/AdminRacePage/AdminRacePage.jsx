@@ -50,19 +50,25 @@ export default function AdminRacePage() {
                 throw new Error(error);
             }
         },
-        onSuccess:(data) => {
-            console.log('os:',data);
+        onSuccess:() => {
             toast.success('Race successfully created.')
         },
-        onError: (data) => {
-            console.log('oe:',data);
+        onError: () => {
             toast.error("Something went wrong.")
         },
     });
 
     const sendData = (e) => {
         e.preventDefault();
-        addRaceMutation(formData)
+        addRaceMutation(formData);
+
+        //Set Object to initial values
+        setFormData({ name: '', description: '', attributes: {strength: 0, agility: 0, vitality: 0, intelligence: 0} });
+        //Clear inputs
+        let con = document.getElementsByTagName('input');
+        for(let i of con) {
+            i.value = "";
+        }
     }
   return (
     <div className='w-full h-full flex'>
