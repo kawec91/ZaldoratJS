@@ -35,7 +35,7 @@ export default function AdminRacePage() {
     const {mutate: addRaceMutation, isPending, isError, error} = useMutation({
         mutationFn: async ({ name,description, attributes }) =>{
             try {
-                const res = fetch('/api/races/create', {
+                const res = await fetch('/api/races/create', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -43,7 +43,7 @@ export default function AdminRacePage() {
                     body: JSON.stringify({ name,description, attributes })
                 })
                 const data = await res.json();
-                if(!res.ok) throw new Error(data.error || "Faild to login");
+                if(!res.ok) throw new Error(data.error || "Faild to create a race");
                 console.log(data);
                 return data;
             } catch (error) {
