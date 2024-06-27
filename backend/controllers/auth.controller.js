@@ -83,18 +83,27 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid email or password" });
     }
 
+     // check for ban
+     if (user.ban.isBanned && (!user.ban.expiryDate || user.ban.expiryDate > Date.now())) {
+      const banExpiry = user.ban.expiryDate ? new Date(user.ban.expiryDate).toLocaleString() : "Indefinite";
+      return res.status(403).json({ error: `Your account has been temporarily banned until ${banExpiry}` });
+    }
+
     //Generate Token
     generateTokanAndSetCookie(user._id, res);
 
-    res.status(200).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      nickname: user.nickname,
-      userAvatar: user.userAvatar,
-      profileImage: user.profileImage,
-      profileText: user.profileText,
-    });
+// Respond with user data
+res.status(200).json({
+  _id: user._id,
+  username: user.username,
+  email: user.email,
+  nickname: user.nickname,
+  userAvatar: user.userAvatar,
+  profileImage: user.profileImage,
+  profileText: user.profileText,
+  status: user.status,
+  ban: user.ban,
+});
   } catch (error) {
     console.log("Error in login controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });

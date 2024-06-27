@@ -23,6 +23,19 @@ const userSchema = new mongoose.Schema(
       required: true,
       minLength: 6,
     },
+    status: {
+      type: String,
+      enum: ['admin', 'vip', 'regular'],
+      default: 'regular',
+    },
+    ban: {
+      type: {
+        isBanned: { type: Boolean, default: false },
+        expiryDate: { type: Date, default: null },
+      },
+      default: {},
+    },
+
     userAvatar: {
       type: String,
       default: "",
