@@ -13,6 +13,8 @@ import AccountSettings from "./components/Game/AccountSettings/AccountSettings";
 import AccountPage from "./components/Game/Page/AccountPage/AccountPage";
 import CharacterCreatorPage from "./components/Game/Page/CharacterCreatorPage/CharacterCreatorPage";
 import InGameLayout from "./components/Game/Page/InGameLayout/InGameLayout";
+import AdminPage from "./components/Game/Page/AdminPage/AdminPage";
+import AdminRacePage from "./components/Game/Page/AdminRacePage/AdminRacePage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -59,7 +61,10 @@ function App() {
           <Route path="/game/account" element={authUser ? <AccountSettings /> : <Navigate to={'/login'} />} />
           <Route path="/game/new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to={'/login'} />} />
         </Route>
-        <Route path="/game/play" element={<InGameLayout />} ></Route>
+        <Route path="/game/play" element={<InGameLayout />} >
+          <Route path="/game/play/admin" element={<AdminPage />} />
+          <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
+        </Route>
       </Routes>
       <Toaster />
     </>
