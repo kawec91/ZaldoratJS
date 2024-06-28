@@ -49,3 +49,14 @@ export const deleteClass = async (req, res) => {
     res.status(500).json({ error: 'Error deleting class' });
   }
 };
+
+// Nowa funkcja do pobierania wszystkich klas
+export const getAllClasses = async (req, res) => {
+  try {
+    const classes = await ClassModel.find();
+    res.status(200).json(classes);
+  } catch (error) {
+    console.error('Error fetching classes:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

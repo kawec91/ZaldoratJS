@@ -49,3 +49,15 @@ export const deleteRace = async (req, res) => {
     res.status(500).json({ error: 'Error deleting race' });
   }
 };
+
+// @desc    Get all races
+// @route   GET /api/races/getall
+export const getAllRaces = async (req, res) => {
+  try {
+    const races = await RaceModel.find();
+    res.status(200).json(races);
+  } catch (error) {
+    console.error("Error in getAllRaces controller:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
