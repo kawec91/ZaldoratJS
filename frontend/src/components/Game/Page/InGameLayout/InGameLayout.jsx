@@ -1,7 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function InGameLayout() {
+    
   return (
     <div className='h-screen'>
         <div className='w-full grid grid-cols-3 py-2 border-b-[1px] border-black px-4 h-10'>

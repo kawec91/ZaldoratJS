@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import AdminNavbar from '../../../AdminNavbar/AdminNavbar'
 import { defaultInput } from '../../../Styles/style'
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import AdminRaceTable from '../../../AdminRaceTable/AdminRaceTable';
 
 export default function AdminRacePage() {
     const [formData, setFormData] = useState({ name: '', description: '', attributes: {strength: 0, agility: 0, vitality: 0, intelligence: 0} });
@@ -31,7 +32,7 @@ export default function AdminRacePage() {
         
         console.log(formData)
     }
-
+    const queryClient = useQueryClient();
     const {mutate: addRaceMutation, isPending, isError, error} = useMutation({
         mutationFn: async ({ name,description, attributes }) =>{
             try {
@@ -51,6 +52,8 @@ export default function AdminRacePage() {
             }
         },
         onSuccess:() => {
+            //Invalidate query - refetch raceList
+            queryClient.invalidateQueries({queryKey: ["racesList"]})
             toast.success('Race successfully created.')
         },
         onError: () => {
@@ -69,6 +72,7 @@ export default function AdminRacePage() {
         for(let i of con) {
             i.value = "";
         }
+        
     }
   return (
     <div className='w-full h-full flex'>
@@ -106,31 +110,7 @@ export default function AdminRacePage() {
                     
                 </div>
             </form>
-            <table>
-                <thead>
-                    <th>Race name</th>
-                    <th>Description</th>
-                    <th>Strength</th>
-                    <th>Agility</th>
-                    <th>Vitality</th>
-                    <th>Intelligence</th>
-                    <th>Action</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Test</td>
-                        <td>Desc</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td className='flex items-center gap-2'>
-                            <button>Edit</button>
-                            <button>Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <AdminRaceTable />
         </div>
     </div>
   )

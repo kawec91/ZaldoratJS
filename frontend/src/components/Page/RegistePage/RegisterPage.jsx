@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { defaultInput } from '../../Styles/style.js';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
@@ -11,6 +11,8 @@ export default function RegisterPage() {
         password: '',
         password2: '',
     });
+
+    const queryClient = useQueryClient();
 
     const {mutate, isError, isPending, error} = useMutation({
         mutationFn: async({ username,email,nickname,password,password2 }) => {
