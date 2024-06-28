@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React from 'react'
 import toast from 'react-hot-toast';
+import { defaultInput } from '../Styles/style';
 
 export default function AdminRaceTableRow({element}) {
     const queryClient = useQueryClient();
@@ -15,7 +16,7 @@ export default function AdminRaceTableRow({element}) {
                 } else {
                     i.disabled = true;
                     //TODO: Save in DB
-                    
+
                     //Invalidate query - refetch raceList
                     queryClient.invalidateQueries({queryKey: ["racesList"]})
                 }
@@ -56,26 +57,38 @@ export default function AdminRaceTableRow({element}) {
   return (
     <tr key={element.name} id={element._id}>
         <td>
-            <input value={element.name} disabled />
+            <div className='w-32'>
+                <input value={element.name} disabled className={defaultInput}/>
+            </div>
         </td>
         <td>
-            <input value={element.description} disabled />
+            <div className='w-full px-2'>
+                <input value={element.description} disabled className={defaultInput}/>
+            </div>
         </td>
         <td>
-            <input value={element.attributes.strength} disabled />
+            <div className='w-24'>
+                <input value={element.attributes.strength} disabled className={defaultInput}/>
+            </div>
         </td>
         <td>
-            <input value={element.attributes.agility} disabled />
+            <div className='w-24'>
+                <input value={element.attributes.agility} disabled className={defaultInput}/>
+            </div>
         </td>
         <td>
-            <input value={element.attributes.vitality} disabled />
+            <div className='w-24'>
+                <input value={element.attributes.vitality} disabled className={defaultInput}/>
+            </div>
         </td>
         <td>
-            <input value={element.attributes.intelligence} disabled />
+            <div className='w-24'>
+                <input value={element.attributes.intelligence} disabled className={defaultInput}/>
+            </div>
         </td>
-        <td className='flex items-center gap-2'>
-            <button onClick={() => {openInputFields(element._id)}}>Edit</button>
-            <button onClick={()=>{deleteRace(element._id)}} className='text-red-600'>Delete</button>
+        <td className='flex items-center gap-2 pl-2'>
+            <button onClick={() => {openInputFields(element._id)}} className='py-2 px-4 bg-green-700 rounded-md text-white'>Edit</button>
+            <button onClick={()=>{deleteRace(element._id)}} className='py-2 px-4 bg-red-700 rounded-md text-white'>Delete</button>
         </td>
     </tr>
   )

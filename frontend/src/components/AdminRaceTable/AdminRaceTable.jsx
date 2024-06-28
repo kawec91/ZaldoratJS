@@ -34,8 +34,8 @@ export default function AdminRaceTable() {
         <tbody>
             <tr>
                 <th>Race name</th>
-                <th>Description</th>
-                <th>Strength</th>
+                <th className='w-2/3'>Description</th>
+                <th >Strength</th>
                 <th>Agility</th>
                 <th>Vitality</th>
                 <th>Intelligence</th>

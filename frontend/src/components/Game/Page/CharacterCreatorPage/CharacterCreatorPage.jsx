@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function CharacterCreatorPage() {
   const [racesNameList, setRaceNameList] = useState([]);
+  const [racesData, setRacesData] = useState([]);
   const [selectedRace, setSelectedRace] = useState('');
   const [raceDescription, setRaceDescription] = useState('Wybierz aby zobaczyć opis...');
   const [raceStrenght, setRaceStrenght] = useState(0);
@@ -32,7 +33,7 @@ export default function CharacterCreatorPage() {
   }
 
   const changeRaceDescription = (id) => {
-    for(let i of racesList) {
+    for(let i of racesData) {
       console.log(i);
       if (i._id === id) {
         setRaceDescription(i.description);
@@ -55,10 +56,11 @@ export default function CharacterCreatorPage() {
           throw new Error(data.error || "Something went wrong.");
       }
       console.log('RacesList:', data);
+      setRacesData(data);
       const emptyList = [];
 
       data.forEach((element) => {
-        emptyList.push(<button className='px-4 py-1 border-yellow-900 border-t border-l border-r rounded-t-sm cursor-pointer' onClick={() => {handleRaceManuSelected(element._id)}}>{element.name}</button>);
+        emptyList.push(<button key={element.name} className='px-4 py-1 border-yellow-900 border-t border-l border-r rounded-t-sm cursor-pointer' onClick={() => {handleRaceManuSelected(element._id)}}>{element.name}</button>);
         //emptyList2.push(<div id={element._id} className='hidden'><div className='text-center'>Strength: {element.attributes.strength}, Agility: {element.attributes.agility}, Vitality: {element.attributes.vitality}, Intelligence: {element.attributes.intelligence}</div><p>{element.description}</p></div>);
        
       });
