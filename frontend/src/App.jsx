@@ -15,6 +15,7 @@ import CharacterCreatorPage from "./components/Game/Page/CharacterCreatorPage/Ch
 import InGameLayout from "./components/Game/Page/InGameLayout/InGameLayout";
 import AdminPage from "./components/Game/Page/AdminPage/AdminPage";
 import AdminRacePage from "./components/Game/Page/AdminRacePage/AdminRacePage";
+import AdminClasPage from "./components/Game/Page/AdminClasPage/AdminClasPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -64,6 +65,7 @@ function App() {
         <Route path="/game/play" element={<InGameLayout />} >
           <Route path="/game/play/admin" element={<AdminPage />} />
           <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
+          <Route path="/game/play/admin/clas" element={<AdminClasPage />} />    
         </Route>
       </Routes>
       <Toaster />

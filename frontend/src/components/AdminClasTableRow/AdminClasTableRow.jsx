@@ -3,7 +3,7 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { defaultInput } from '../Styles/style';
 
-export default function AdminRaceTableRow({element}) {
+export default function AdminClasTableRow({element}) {
     const queryClient = useQueryClient();
 
     const openInputFields = (id) => {
