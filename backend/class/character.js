@@ -1,4 +1,4 @@
-// models/character.model.js
+// class/character.js
 class Character {
   constructor({
     owner,
@@ -12,6 +12,9 @@ class Character {
     craftingAbilities = {},
     fightingAbilities = {},
     world,
+    deityRank,
+    lastSeen,
+    location,
   }) {
     this.owner = owner;
     this.nickname = nickname;
@@ -66,6 +69,9 @@ class Character {
       ...fightingAbilities,
     };
     this.world = world;
+    this.deityRank = deityRank;
+    this.lastSeen = lastSeen;
+    this.location = location;
   }
 
   // Metoda do konwersji instancji klasy na obiekt gotowy do zapisu w bazie danych
@@ -82,6 +88,9 @@ class Character {
       crafting_abilities: this.craftingAbilities,
       fighting_abilities: this.fightingAbilities,
       world: this.world,
+      deityRank: this.deityRank,
+      lastSeen: this.lastSeen,
+      location: this.location,
     };
   }
 }
