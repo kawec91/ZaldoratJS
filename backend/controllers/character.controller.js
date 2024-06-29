@@ -1,6 +1,7 @@
 import Character from '../class/character.js';
 import CharacterModel from '../models/character.model.js';
 
+// Funkcja do tworzenia postaci
 export const createCharacter = async (req, res) => {
   try {
     const characterData = req.body;
@@ -17,6 +18,7 @@ export const createCharacter = async (req, res) => {
   }
 };
 
+// Funkcja do usuwania postaci
 export const deleteCharacter = async (req, res) => {
   try {
     const { nickname } = req.params;
@@ -33,6 +35,7 @@ export const deleteCharacter = async (req, res) => {
   }
 };
 
+// Funkcja do pobierania postaci na podstawie ID
 export const getCharacter = async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,18 +52,30 @@ export const getCharacter = async (req, res) => {
   }
 };
 
+// Funkcja do pobierania wszystkich postaci
+export const getAllCharacters = async (req, res) => {
+  try {
+    const characters = await CharacterModel.find();
+    res.status(200).json(characters);
+  } catch (error) {
+    console.error('Error fetching characters:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// Funkcja do aktualizacji postaci
 export const updateCharacter = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const updateData = req.body;
 
-    const updatedCharacter = await CharacterModel.findByIdAndUpdate(id, updates, { new: true });
+    const character = await CharacterModel.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
 
-    if (!updatedCharacter) {
+    if (!character) {
       return res.status(404).json({ error: "Character not found" });
     }
 
-    res.status(200).json(updatedCharacter);
+    res.status(200).json(character);
   } catch (error) {
     console.error("Error updating character:", error);
     res.status(500).json({ error: "Internal Server Error" });
