@@ -1,25 +1,26 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
-import AdminRaceTableRow from '../AdminRaceTableRow/AdminRaceTableRow';
+import AdminClasTableRow from '../AdminClasTableRow/AdminClasTableRow';
 
-export default function AdminRaceTable() {
-    const [rList, setRaceList] = useState([]);
-    const { data: racesList, isLoading } = useQuery({
-        queryKey: ['racesList'],
+export default function AdminClasTable() {
+    const [cList, setClasList] = useState([]);
+    const { data: clasList, isLoading } = useQuery({
+        queryKey: ['classesList'],
         queryFn: async() => {
           try {
-            const res = await fetch('/api/races/getall');
+            const res = await fetch('/api/classes/getall');
             const data = await res.json();
             if(data.error) return null;
             if(!res.ok) {
               throw new Error(data.error || "Something went wrong.");
           }
-          console.log('RacesList:', data);
+          console.log('ClassesList:', data);
           const emptyList = [];
+          console.log('----',data)
           data.forEach((element) => {
-            emptyList.push(<AdminRaceTableRow element={element} />);
+            emptyList.push();
           });
-          setRaceList(emptyList);
+          setClasList(emptyList);
           return data;
           } catch (error) {
             throw new Error(error);
@@ -33,7 +34,7 @@ export default function AdminRaceTable() {
     <table>
         <tbody>
             <tr>
-                <th>Race name</th>
+                <th>Clas name</th>
                 <th className='w-2/3'>Description</th>
                 <th >Strength</th>
                 <th>Agility</th>
@@ -41,7 +42,7 @@ export default function AdminRaceTable() {
                 <th>Intelligence</th>
                 <th>Action</th>
             </tr>
-            {rList}
+            {cList}
         </tbody>
     </table>
   )
