@@ -1,6 +1,6 @@
-// schemas/character.schema.js
 import mongoose from 'mongoose';
 
+// Schemat statystyk
 const statsSchema = new mongoose.Schema({
   power: { type: Number, default: 3 },
   defence: { type: Number, default: 3 },
@@ -14,6 +14,7 @@ const statsSchema = new mongoose.Schema({
   luck: { type: Number, default: 3 },
 });
 
+// Schemat umiejętności rzemieślniczych
 const craftingAbilitiesSchema = new mongoose.Schema({
   smithing: { type: Number, default: 3 },
   smelting: { type: Number, default: 3 },
@@ -32,6 +33,7 @@ const craftingAbilitiesSchema = new mongoose.Schema({
   farming: { type: Number, default: 3 },
 });
 
+// Schemat umiejętności bojowych
 const fightingAbilitiesSchema = new mongoose.Schema({
   dodge: { type: Number, default: 3 },
   swords: { type: Number, default: 3 },
@@ -46,6 +48,7 @@ const fightingAbilitiesSchema = new mongoose.Schema({
   necromancy: { type: Number, default: 3 },
 });
 
+// Główny schemat postaci
 const characterSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -82,6 +85,14 @@ const characterSchema = new mongoose.Schema({
   world: {
     type: String,
     required: true,
+  },
+  deityRank: {
+    type: String,
+    required: true,
+  },
+  lastSeen: {
+    type: Date,
+    default: Date.now,
   },
   createdAt: {
     type: Date,

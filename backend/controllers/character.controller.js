@@ -48,3 +48,21 @@ export const getCharacter = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateCharacter = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const updatedCharacter = await CharacterModel.findByIdAndUpdate(id, updates, { new: true });
+
+    if (!updatedCharacter) {
+      return res.status(404).json({ error: "Character not found" });
+    }
+
+    res.status(200).json(updatedCharacter);
+  } catch (error) {
+    console.error("Error updating character:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
