@@ -13,6 +13,7 @@ import locationRoutes from './routes/location.routes.js';
 import sublocationRoutes from './routes/sublocation.routes.js';
 import originRoutes from './routes/origin.routes.js';
 import deityRoutes from './routes/deity.routes.js';
+import changelogRoutes from './routes/changelog.routes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use('/api', locationRoutes);
 app.use('/api', sublocationRoutes);
 app.use('/api/origin', originRoutes);
 app.use('/api/deities', deityRoutes);
+app.use('/api/changelogs', changelogRoutes);
 
 //Server Listener
 app.listen(PORT, () => {
