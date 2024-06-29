@@ -60,3 +60,23 @@ export const getAllClasses = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// @desc    Update specific fields of a class
+// @route   PATCH /api/classes/:id
+export const updateClass = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const characterClass = await ClassModel.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
+
+    if (!characterClass) {
+      return res.status(404).json({ error: "Class not found" });
+    }
+
+    res.status(200).json(characterClass);
+  } catch (error) {
+    console.error("Error updating class:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

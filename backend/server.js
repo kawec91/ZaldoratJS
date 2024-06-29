@@ -12,6 +12,7 @@ import classRoutes from './routes/class.routes.js';
 import locationRoutes from './routes/location.routes.js';
 import sublocationRoutes from './routes/sublocation.routes.js';
 import originRoutes from './routes/origin.routes.js';
+import deityRoutes from './routes/deity.routes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -40,6 +41,7 @@ app.use("/api/classes", classRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', sublocationRoutes);
 app.use('/api/origin', originRoutes);
+app.use('/api/deities', deityRoutes);
 
 //Server Listener
 app.listen(PORT, () => {
