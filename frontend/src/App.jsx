@@ -18,6 +18,9 @@ import AdminRacePage from "./components/Game/Page/AdminRacePage/AdminRacePage";
 import AdminClasPage from "./components/Game/Page/AdminClasPage/AdminClasPage";
 import AdminFaithPage from "./components/Game/Page/AdminFaithPage.jsx/AdminFaithPage";
 import ChangeLogPage from "./components/Game/Page/ChangeLogPage/ChangeLogPage";
+import StatsPage from "./components/Game/Page/StatsPage/StatsPage";
+import EquipmentPage from "./components/Game/Page/EquipmentPage/EquipmentPage";
+import GoodsPage from "./components/Game/Page/GoodsPage/GoodsPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -66,6 +69,9 @@ function App() {
         </Route>
         <Route path="/game/play" element={<InGameLayout />} >
           <Route path="/game/play" element={<ChangeLogPage />} />
+          <Route path="/game/play/stats" element={<StatsPage />} />
+          <Route path="/game/play/equipment" element={<EquipmentPage />} />
+          <Route path="/game/play/goods" element={<GoodsPage />} />
           <Route path="/game/play/admin" element={<AdminPage />} />
           <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
           <Route path="/game/play/admin/clas" element={<AdminClasPage />} />    

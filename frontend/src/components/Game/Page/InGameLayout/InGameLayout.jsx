@@ -17,15 +17,15 @@ export default function InGameLayout() {
             <Outlet />
         </div>
         <div className='px-4 border-t-[1px] border-black flex items-center justify-between h-10'>
-            <p>Statystyki</p>
-            <p>Ekwipunek</p>
-            <p>Bogactwa</p>
-            <p>Verentris</p>
-            <p>Arena Walk</p>
-            <p>Szpital</p>
-            <p>Mapa</p>
-            <p>Bank: 100 000</p>
-            <p>Gold: 10 000</p>
+            <Link to={'/game/play/stats'}>Statystyki</Link>
+            <Link to={'/game/play/equipment'}>Ekwipunek</Link>
+            <Link to={'/game/play/goods'}>Bogactwa</Link>
+            <Link to={'/game/play'}>Verentris</Link>
+            <Link to={'/game/play'}>Arena Walk</Link>
+            <Link to={'/game/play'}>Szpital</Link>
+            <Link to={'/game/play'}>Mapa</Link>
+            <Link to={'/game/play'}>Bank: 100 000</Link>
+            <Link to={'/game/play'}>Gold: 10 000</Link>
             
         </div>
     </div>
