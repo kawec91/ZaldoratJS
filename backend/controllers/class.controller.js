@@ -1,5 +1,5 @@
-import CharacterClass from '../class/class.js';
-import ClassModel from '../models/class.model.js';
+import CharacterClass from "../class/class.js";
+import ClassModel from "../models/class.model.js";
 
 export const createClass = async (req, res) => {
   try {
@@ -40,13 +40,13 @@ export const deleteClass = async (req, res) => {
     const characterClass = await ClassModel.findByIdAndDelete(id);
 
     if (!characterClass) {
-      return res.status(404).json({ error: 'Class not found' });
+      return res.status(404).json({ error: "Class not found" });
     }
 
-    res.status(200).json({ message: 'Class deleted successfully' });
+    res.status(200).json({ message: "Class deleted successfully" });
   } catch (error) {
-    console.error('Error deleting class:', error);
-    res.status(500).json({ error: 'Error deleting class' });
+    console.error("Error deleting class:", error);
+    res.status(500).json({ error: "Error deleting class" });
   }
 };
 
@@ -56,19 +56,23 @@ export const getAllClasses = async (req, res) => {
     const classes = await ClassModel.find();
     res.status(200).json(classes);
   } catch (error) {
-    console.error('Error fetching classes:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching classes:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 // @desc    Update specific fields of a class
-// @route   PATCH /api/classes/:id
+// @route   PATCH /api/classes/update/:id
 export const updateClass = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
-    const characterClass = await ClassModel.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
+    const characterClass = await ClassModel.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
 
     if (!characterClass) {
       return res.status(404).json({ error: "Class not found" });

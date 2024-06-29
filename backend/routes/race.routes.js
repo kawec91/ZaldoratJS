@@ -1,5 +1,11 @@
-import express from 'express';
-import { createRace, getRace, deleteRace, getAllRaces, updateRace } from '../controllers/race.controller.js';
+import express from "express";
+import {
+  createRace,
+  getRace,
+  deleteRace,
+  getAllRaces,
+  updateRace,
+} from "../controllers/race.controller.js";
 
 const router = express.Router();
 

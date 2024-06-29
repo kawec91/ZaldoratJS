@@ -3,7 +3,7 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { defaultInput } from '../Styles/style';
 
-export default function AdminClasTableRow({element}) {
+export default function AdminFaithTableRow({element}) {
     console.log(element);
     const queryClient = useQueryClient();
 
@@ -19,15 +19,15 @@ export default function AdminClasTableRow({element}) {
                     //TODO: Save in DB
 
                     //Invalidate query - refetch raceList
-                    queryClient.invalidateQueries({queryKey: ["classesList"]})
+                    queryClient.invalidateQueries({queryKey: ["faithList"]})
                 }
             }
     }
 
-    const {mutate: deleteRace, isPending, isSuccess, isError, error} = useMutation({
+    const {mutate: deleteFaith, isPending, isSuccess, isError, error} = useMutation({
         mutationFn: async(id) => {
             try {
-                const res = await fetch(`/api/races/delete/${id}`,{
+                const res = await fetch(`/api/deities/delete/${id}`,{
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -48,7 +48,7 @@ export default function AdminClasTableRow({element}) {
         onSuccess: (data) => {
             toast.success(data.message)
             //Invalidate query - refetch raceList
-            queryClient.invalidateQueries({queryKey: ["classesList"]})
+            queryClient.invalidateQueries({queryKey: ["faithList"]})
         },
         onError: (data) => {
             toast.error(data.message);
@@ -70,7 +70,7 @@ export default function AdminClasTableRow({element}) {
         
         <td className='flex items-center gap-2 pl-2'>
             <button onClick={() => {openInputFields(element._id)}} className='py-2 px-4 bg-green-700 rounded-md text-white'>Edit</button>
-            <button onClick={()=>{deleteRace(element._id)}} className='py-2 px-4 bg-red-700 rounded-md text-white'>Delete</button>
+            <button onClick={()=>{deleteFaith(element._id)}} className='py-2 px-4 bg-red-700 rounded-md text-white'>Delete</button>
         </td>
     </tr>
   )

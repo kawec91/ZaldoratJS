@@ -1,5 +1,11 @@
-import express from 'express';
-import { createClass, getClass, deleteClass, getAllClasses, updateClass } from '../controllers/class.controller.js';
+import express from "express";
+import {
+  createClass,
+  getClass,
+  deleteClass,
+  getAllClasses,
+  updateClass,
+} from "../controllers/class.controller.js";
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import Race from '../class/race.js';
-import RaceModel from '../models/race.model.js';
+import Race from "../class/race.js";
+import RaceModel from "../models/race.model.js";
 
 export const createRace = async (req, res) => {
   try {
@@ -40,13 +40,13 @@ export const deleteRace = async (req, res) => {
     const race = await RaceModel.findByIdAndDelete(id);
 
     if (!race) {
-      return res.status(404).json({ error: 'Race not found' });
+      return res.status(404).json({ error: "Race not found" });
     }
 
-    res.status(200).json({ message: 'Race deleted successfully' });
+    res.status(200).json({ message: "Race deleted successfully" });
   } catch (error) {
-    console.error('Error deleting race:', error);
-    res.status(500).json({ error: 'Error deleting race' });
+    console.error("Error deleting race:", error);
+    res.status(500).json({ error: "Error deleting race" });
   }
 };
 
@@ -63,13 +63,17 @@ export const getAllRaces = async (req, res) => {
 };
 
 // @desc    Update specific fields of a race
-// @route   PATCH /api/races/:id
+// @route   PATCH /api/races/update/:id
 export const updateRace = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
 
-    const race = await RaceModel.findByIdAndUpdate(id, { $set: updateData }, { new: true, runValidators: true });
+    const race = await RaceModel.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
 
     if (!race) {
       return res.status(404).json({ error: "Race not found" });
