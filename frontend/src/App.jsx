@@ -16,6 +16,7 @@ import InGameLayout from "./components/Game/Page/InGameLayout/InGameLayout";
 import AdminPage from "./components/Game/Page/AdminPage/AdminPage";
 import AdminRacePage from "./components/Game/Page/AdminRacePage/AdminRacePage";
 import AdminClasPage from "./components/Game/Page/AdminClasPage/AdminClasPage";
+import AdminFaithPage from "./components/Game/Page/AdminFaithPage.jsx/AdminFaithPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -66,6 +67,7 @@ function App() {
           <Route path="/game/play/admin" element={<AdminPage />} />
           <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
           <Route path="/game/play/admin/clas" element={<AdminClasPage />} />    
+          <Route path="/game/play/admin/faith" element={<AdminFaithPage />} />    
         </Route>
       </Routes>
       <Toaster />
