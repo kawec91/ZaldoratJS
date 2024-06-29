@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { defaultInput } from '../Styles/style';
 
 export default function AdminClasTableRow({element}) {
+    console.log(element);
     const queryClient = useQueryClient();
 
     const openInputFields = (id) => {
@@ -18,7 +19,7 @@ export default function AdminClasTableRow({element}) {
                     //TODO: Save in DB
 
                     //Invalidate query - refetch raceList
-                    queryClient.invalidateQueries({queryKey: ["racesList"]})
+                    queryClient.invalidateQueries({queryKey: ["classesList"]})
                 }
             }
     }
@@ -47,7 +48,7 @@ export default function AdminClasTableRow({element}) {
         onSuccess: (data) => {
             toast.success(data.message)
             //Invalidate query - refetch raceList
-            queryClient.invalidateQueries({queryKey: ["racesList"]})
+            queryClient.invalidateQueries({queryKey: ["classesList"]})
         },
         onError: (data) => {
             toast.error(data.message);
@@ -66,26 +67,7 @@ export default function AdminClasTableRow({element}) {
                 <input value={element.description} disabled className={defaultInput}/>
             </div>
         </td>
-        <td>
-            <div className='w-24'>
-                <input value={element.attributes.strength} disabled className={defaultInput}/>
-            </div>
-        </td>
-        <td>
-            <div className='w-24'>
-                <input value={element.attributes.agility} disabled className={defaultInput}/>
-            </div>
-        </td>
-        <td>
-            <div className='w-24'>
-                <input value={element.attributes.vitality} disabled className={defaultInput}/>
-            </div>
-        </td>
-        <td>
-            <div className='w-24'>
-                <input value={element.attributes.intelligence} disabled className={defaultInput}/>
-            </div>
-        </td>
+        
         <td className='flex items-center gap-2 pl-2'>
             <button onClick={() => {openInputFields(element._id)}} className='py-2 px-4 bg-green-700 rounded-md text-white'>Edit</button>
             <button onClick={()=>{deleteRace(element._id)}} className='py-2 px-4 bg-red-700 rounded-md text-white'>Delete</button>

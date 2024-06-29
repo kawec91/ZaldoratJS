@@ -17,10 +17,13 @@ export default function AdminClasTable() {
           console.log('ClassesList:', data);
           const emptyList = [];
           console.log('----',data)
-          data.forEach((element) => {
-            emptyList.push();
-          });
-          setClasList(emptyList);
+          if(data.lenght !== 0) {
+            data.forEach((element) => {
+              emptyList.push(<AdminClasTableRow element={element}/>);
+            });
+            setClasList(emptyList);
+          }
+          
           return data;
           } catch (error) {
             throw new Error(error);
@@ -35,11 +38,7 @@ export default function AdminClasTable() {
         <tbody>
             <tr>
                 <th>Clas name</th>
-                <th className='w-2/3'>Description</th>
-                <th >Strength</th>
-                <th>Agility</th>
-                <th>Vitality</th>
-                <th>Intelligence</th>
+                <th className='w-full'>Description</th>
                 <th>Action</th>
             </tr>
             {cList}
