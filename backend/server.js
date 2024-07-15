@@ -14,6 +14,7 @@ import sublocationRoutes from './routes/sublocation.routes.js';
 import originRoutes from './routes/origin.routes.js';
 import deityRoutes from './routes/deity.routes.js';
 import changelogRoutes from './routes/changelog.routes.js';
+import backpackRoutes from './routes/backpack.routes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use('/api', sublocationRoutes);
 app.use('/api/origin', originRoutes);
 app.use('/api/deities', deityRoutes);
 app.use('/api/changelogs', changelogRoutes);
+app.use('/api/backpack', backpackRoutes);
 
 //Server Listener
 app.listen(PORT, () => {
