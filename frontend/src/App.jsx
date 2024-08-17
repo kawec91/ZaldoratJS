@@ -55,12 +55,12 @@ function App() {
     <>
       <Routes>
         <Route path={'/'} element={<Header />}>
-          <Route path={'/'} element={<Footer />}>
+          {/* <Route path={'/'} element={<Footer />}> */}
             <Route path={'/'} element={<HomePage />}/>
             <Route path={'/register'} element={!authUser ? <RegisterPage /> : <Navigate to={'/game'} />} />
             <Route path={'/login'} element={!authUser ? <LoginPage /> : <Navigate to={'/game'} />} />
             <Route path={'/faq'} element={<FaqPage />} />
-          </Route>
+          {/* </Route> */}
         </Route>
         <Route path="/game" element={authUser ? <GameHeader /> : <Navigate to={'/login'} />}>
           <Route path="/game" element={authUser ? <AccountPage /> : <Navigate to={'/login'} />} />
