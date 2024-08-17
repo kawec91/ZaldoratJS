@@ -7,9 +7,12 @@ import Footer from '../../Footer/Footer'
 export default function HomePage() {
   return (
     <>
-    <div className='min-h-screen text-secondary flex justify-start items-center flex-col bg-gradient-to-br from-red-900 via-zinc-900 to-red-900'>
-      <img src={ZaldoratLogo} alt='game logo' className='h-1/2 w-1/2 my-20'/>
-      <section className='h-full border-t-[1px] border-white'>
+    <div className='min-h-screen text-secondary flex justify-start items-center flex-col '>
+      <section className='h-1/2 w-full bg-gradient-to-br from-red-900 via-zinc-900 to-red-900 py-20 flex items-center justify-center'>
+        <img src={ZaldoratLogo} alt='game logo' className='h-1/2 w-1/2 object-cover'/>
+      </section>
+      
+      <section className='h-full w-full pb-20 bg-gradient-to-bl from-red-900 via-zinc-900 to-red-900'>
         <SectionTitle title={'Królestwa'} />
         <KingdomsList />
       </section>

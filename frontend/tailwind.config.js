@@ -4,10 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#002244",
-        secondary: "#E0FBFC",
-        accent: "#98C1D9",
-        cta: "#EE6C4D",
+        myLightBrown: "#B19772",
+        myMediumBrown: "#88613B",
+        myDarkBrown: "#462B1E",
+        myGoldenYellow: "#EAAF44",
+        myLightCream: "#F5EDD3",
+        myReddishOrange: "#C9400E",
+        myDeepRed: "#7F0A12",
       },
     },
   },
