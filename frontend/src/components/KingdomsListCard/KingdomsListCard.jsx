@@ -4,7 +4,7 @@ export default function KingdomsListCard({number, img, title, text}) {
     let c = number % 2;
 
     const imgStyle = `h-72 w-72 rounded-xl`
-    const titleStyle = `text-2xl px-6`
+    const titleStyle = `text-2xl px-6 text-myGoldenYellow font-serif`
     const textStyle = `p-6`
   return (
     <div className='flex items-center justify-center w-3/4 border border-[1px]-white rounded-xl text-myLightCream'>
