@@ -16,6 +16,8 @@ import deityRoutes from './routes/deity.routes.js';
 import changelogRoutes from './routes/changelog.routes.js';
 import backpackRoutes from './routes/backpack.routes.js';
 import resourceRoutes from './routes/resource.routes.js';
+import mineRoutes from './routes/mine.routes.js';
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -48,7 +50,7 @@ app.use('/api/deities', deityRoutes);
 app.use('/api/changelogs', changelogRoutes);
 app.use('/api/backpack', backpackRoutes);
 app.use('/api/resources', resourceRoutes);
-
+app.use('/api/mine', mineRoutes);
 //Server Listener
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/api`);
