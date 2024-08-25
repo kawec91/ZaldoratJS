@@ -15,6 +15,7 @@ class Character {
     deityRank,
     lastSeen,
     location,
+    weight = 80,
   }) {
     this.owner = owner;
     this.nickname = nickname;
@@ -72,6 +73,7 @@ class Character {
     this.deityRank = deityRank;
     this.lastSeen = lastSeen;
     this.location = location;
+    this.weight = weight; 
   }
 
   // Metoda do konwersji instancji klasy na obiekt gotowy do zapisu w bazie danych
@@ -91,6 +93,7 @@ class Character {
       deityRank: this.deityRank,
       lastSeen: this.lastSeen,
       location: this.location,
+      weight: this.weight, 
     };
   }
 }

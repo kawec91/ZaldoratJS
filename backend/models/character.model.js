@@ -98,6 +98,12 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+
+  weight: { 
+    type: Number, 
+    default: 80 
+  },
+  
   createdAt: {
     type: Date,
     default: Date.now,
