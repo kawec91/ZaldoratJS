@@ -88,7 +88,7 @@ const characterSchema = new mongoose.Schema({
   },
   deityRank: {
     type: String,
-    required: true,
+    required: false,
   },
   lastSeen: {
     type: Date,
@@ -96,7 +96,7 @@ const characterSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,

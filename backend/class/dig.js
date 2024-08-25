@@ -69,11 +69,12 @@ class Dig {
 
       // Sprawdź, czy surowiec już istnieje w plecaku
       const existingResource = backpack.items.find(
-        (item) => item.resource === resource
+        (item) => item.name === resource
       );
-
+      console.log("existingResource", existingResource);
       if (existingResource) {
         existingResource.quantity += quantity; // Zwiększ ilość istniejącego surowca
+        existingResource.weight += quantity; // Zwiększ wagi istniejącego surowca
       } else {
         backpack.items.push({
           name: resource.toString(),
@@ -93,7 +94,7 @@ class Dig {
   async increaseMiningSkill(character) {
     try {
       // Zwiększenie umiejętności górnictwa postaci
-      character.fighting_abilities.mining += 1;
+      character.crafting_abilities.mining += 1;
       await character.save();
 
       return { success: true, message: "Umiejętność górnictwa zwiększona." };
