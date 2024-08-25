@@ -1,4 +1,5 @@
 import MineModel from '../models/mine.model.js';
+import Dig from '../class/dig.js';
 
 // Tworzenie nowej kopalni
 export const createMine = async (req, res) => {
@@ -76,5 +77,21 @@ export const deleteMine = async (req, res) => {
   } catch (error) {
     console.error('Error deleting mine:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+//kopanie
+export const digInMine = async (req, res) => {
+  const { characterId, mineId } = req.params;
+  const { quantity } = req.body;
+
+  const dig = new Dig(characterId, mineId);
+  const result = await dig.extractResource(quantity);
+
+  if (result.success) {
+    res.status(200).json(result);
+  } else {
+    res.status(400).json(result);
   }
 };

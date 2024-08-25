@@ -4,6 +4,7 @@ import {
   getMine,
   updateMineQuantity,
   deleteMine,
+  digInMine,
 } from '../controllers/mine.controller.js';
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.put('/:mineId/quantity', updateMineQuantity);
 
 // Trasa do usuwania kopalni
 router.delete('/:mineId', deleteMine);
+
+// Route dla akcji kopania w kopalni
+router.put('/dig/:characterId/:mineId', digInMine);
 
 export default router;
