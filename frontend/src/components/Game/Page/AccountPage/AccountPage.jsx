@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CharacterChooseCard from '../../CharacterChooseCard/CharacterChooseCard'
 import CharacterCreateCard from '../../CharacterCreateCard/CharacterCreateCard'
+import { useQuery } from '@tanstack/react-query';
 
 
 export default function AccountPage() {
-    const data = [
+    const [myCharacterList, setMyCharacterList] = useState([]);
+    const edata = [
         {
         characterName: 'Alakhei',
         characterLvl: 33,
@@ -25,6 +27,34 @@ export default function AccountPage() {
     },
 ]
 
+//Get authUser Data - uzywamy wczesniej napisanego query po queryKey i przypisujemy go pod zmienna authUser (data:authUser)
+const {data: authUser} = useQuery({queryKey:["authUser"]});
+
+const { myData: charakterList, isLoading } = useQuery({
+    queryKey: ['charakterList'],
+    queryFn: async() => {
+      try {
+        const res = await fetch(`/api/characters/owner/${authUser._id}`);
+        const myData = await res.json();
+
+        if(myData.error) return null;
+        if(!res.ok) {
+          throw new Error(myData.error || "Something went wrong.");
+      }
+      
+      //Wyświetlamy charaktery
+      console.log('CharakterList:', myData);
+
+      //Przypisujemy otrzymaną listę 
+      setMyCharacterList(myData);
+      return myData;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    retry: false,
+  });
+
   return (
     <div className='h-[calc(100vh_-_50px)]'>
         <div className='w-full border-b-[1px] border-black'>
@@ -38,7 +68,8 @@ export default function AccountPage() {
         </div>
         <div className='flex'>
            <div className=' h-[calc(100vh_-_90px)] w-1/4 p-2 flex flex-col gap-2'>
-           {data.map((item)=><CharacterChooseCard avatar={item.characterAvatar} name={item.characterName} lvl={item.characterLvl} lastOnline={item.lastOnline}/>)}          </div>
+            {myCharacterList.map((item)=><CharacterChooseCard key={`${item.character_name}-${item.lastSeen}`} avatar={'3'} name={item.character_name} lvl={item.level} lastOnline={item.lastSeen}/>)}          
+           </div>
            <div className='w-2/4 p-2'>
             <div className='bg-black/80 flex flex-col items-center rounded-md h-[calc(100vh_-106px)] '>
                 <h3 className='text-center text-white text-2xl py-2'>Wieści</h3>
