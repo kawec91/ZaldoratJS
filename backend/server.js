@@ -17,7 +17,7 @@ import changelogRoutes from './routes/changelog.routes.js';
 import backpackRoutes from './routes/backpack.routes.js';
 import resourceRoutes from './routes/resource.routes.js';
 import mineRoutes from './routes/mine.routes.js';
-
+import fuelRoutes from './routes/fuel.routes.js';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ app.use('/api/characters', characterRoutes);
 app.use("/api/races", raceRoutes); 
 app.use("/api/classes", classRoutes);
 app.use('/api', locationRoutes);
-
+app.use('/api/fuels', fuelRoutes);
 app.use('/api/origin', originRoutes);
 app.use('/api/deities', deityRoutes);
 app.use('/api/changelogs', changelogRoutes);
