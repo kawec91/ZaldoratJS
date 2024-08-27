@@ -81,3 +81,22 @@ export const updateCharacter = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+// Funkcja do pobierania postaci na podstawie ownera (accountId)
+export const getCharactersByOwner = async (req, res) => {
+  try {
+    const { ownerId } = req.params; // Pobierz accountId z parametrów
+
+    const characters = await CharacterModel.find({ owner: ownerId }); // Znajdź postacie dla danego ownera
+
+    if (characters.length === 0) {
+      return res.status(404).json({ error: "No characters found for this account" });
+    }
+
+    res.status(200).json(characters);
+  } catch (error) {
+    console.error("Error fetching characters:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

@@ -38,12 +38,7 @@ export default function AccountPage() {
         </div>
         <div className='flex'>
            <div className=' h-[calc(100vh_-_90px)] w-1/4 p-2 flex flex-col gap-2'>
-                <CharacterChooseCard avatar={data[0].characterAvatar}name={data[0].characterName} lvl={data[0].characterLvl} lastOnline={data[0].lastOnline}/>
-                <CharacterChooseCard avatar={data[1].characterAvatar}name={data[1].characterName} lvl={data[1].characterLvl} lastOnline={data[1].lastOnline}/>
-                <CharacterChooseCard avatar={data[2].characterAvatar}name={data[2].characterName} lvl={data[2].characterLvl} lastOnline={data[2].lastOnline}/>
-                <CharacterCreateCard />
-                <CharacterCreateCard />
-           </div>
+           {data.map((item)=><CharacterChooseCard avatar={item.characterAvatar} name={item.characterName} lvl={item.characterLvl} lastOnline={item.lastOnline}/>)}          </div>
            <div className='w-2/4 p-2'>
             <div className='bg-black/80 flex flex-col items-center rounded-md h-[calc(100vh_-106px)] '>
                 <h3 className='text-center text-white text-2xl py-2'>Wieści</h3>
