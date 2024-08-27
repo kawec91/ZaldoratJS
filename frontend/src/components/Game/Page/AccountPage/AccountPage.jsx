@@ -6,26 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function AccountPage() {
     const [myCharacterList, setMyCharacterList] = useState([]);
-    const edata = [
-        {
-        characterName: 'Alakhei',
-        characterLvl: 33,
-        characterAvatar: '3',
-        lastOnline: '20h ago'
-    },
-        {
-        characterName: 'Araxagus',
-        characterLvl: 47,
-        characterAvatar: '1',
-        lastOnline: '3h ago'
-    },
-        {
-        characterName: 'Ni',
-        characterLvl: 58,
-        characterAvatar: '2',
-        lastOnline: '12h ago'
-    },
-]
 
 //Get authUser Data - uzywamy wczesniej napisanego query po queryKey i przypisujemy go pod zmienna authUser (data:authUser)
 const {data: authUser} = useQuery({queryKey:["authUser"]});
