@@ -9,23 +9,19 @@ export default function AccountPage() {
   const { data: authUser } = useQuery({ queryKey: ['authUser'] });
 
   // Pobieranie listy postaci
-  const { data: charakterList, isLoading: isLoadingCharakterList } = useQuery({
-    queryKey: ['charakterList'],
+  const { isLoading: isLoadingCharakterList } = useQuery({
+    queryKey: ['charakterList', authUser?._id],
     queryFn: async () => {
-      try {
-        const res = await fetch(`/api/characters/owner/${authUser._id}`);
-        const myData = await res.json();
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch characters');
-        }
-
-        setMyCharacterList(myData);
-        return myData;
-      } catch (error) {
-        throw new Error(error.message);
+      if (!authUser) return []; // Jeśli authUser nie jest dostępny, zwróć pustą tablicę
+      const res = await fetch(`/api/characters/owner/${authUser._id}`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch characters');
       }
+      const myData = await res.json();
+      setMyCharacterList(myData);
+      return myData;
     },
+    enabled: !!authUser, // Zapytanie jest wykonywane tylko wtedy, gdy authUser jest dostępny
     retry: false,
   });
 
@@ -33,15 +29,11 @@ export default function AccountPage() {
   const { data: lastNews, isLoading: isLoadingNews, isError, error } = useQuery({
     queryKey: ['lastNews'],
     queryFn: async () => {
-      try {
-        const response = await fetch('/api/start/get');
-        if (!response.ok) {
-          throw new Error('Failed to fetch last news');
-        }
-        return response.json();
-      } catch (error) {
-        throw new Error(error.message);
+      const response = await fetch('/api/start/get');
+      if (!response.ok) {
+        throw new Error('Failed to fetch last news');
       }
+      return response.json();
     },
     retry: false,
   });
@@ -85,9 +77,11 @@ export default function AccountPage() {
                 <div>Wystąpił błąd: {error.message}</div>
               ) : (
                 lastNews.map((newsItem) => (
-                  <div key={newsItem._id} className='mb-2'>
-                    <h4 className='font-bold'>{newsItem.title}</h4>
-                    <p>{newsItem.description}</p>
+                  <div key={newsItem._id} className='mb-4'>
+                    <h4 className='text-xl font-bold'>
+                      {newsItem.subject} - dodano dnia {new Date(newsItem.date).toLocaleDateString()} przez {newsItem.author}
+                    </h4>
+                    <p className='text-white mt-2'>{newsItem.description}</p>
                   </div>
                 ))
               )}
