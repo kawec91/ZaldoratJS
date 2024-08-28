@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function InGameLayout() {
