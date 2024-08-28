@@ -17,10 +17,11 @@ class StartController {
   // @route   POST /api/start
   async addNews(req, res) {
     try {
-      const { date, description, author } = req.body;
+      const { date, subject, description, author } = req.body;
 
       const newNews = new LastNews({
         date,
+        subject,
         description,
         author,
       });

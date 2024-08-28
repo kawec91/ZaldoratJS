@@ -5,6 +5,12 @@ const lastNewsSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+
+  subject: {
+    type: String,
+    required: true,
+  },
+  
   description: {
     type: String,
     required: true,

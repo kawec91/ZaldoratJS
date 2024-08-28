@@ -5,7 +5,7 @@ export default function ChangeLogPage() {
   const [characterData, setCharacterData] = useState(null);
 
   useEffect(() => {
-    const characterId = localStorage.getItem('selectedCharacterId');
+    const characterId = sessionStorage.getItem('selectedCharacterId');
     
     if (characterId) {
       // Pobierz dane postaci z API na podstawie characterId
