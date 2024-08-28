@@ -9,7 +9,7 @@ export default function CharacterChooseCard({ avatar, name, lvl, lastOnline, cha
 
   const handleClick = () => {
     // Przechowujemy characterId w localStorage lub w stanie aplikacji
-    localStorage.setItem('selectedCharacterId', characterId);
+    sessionStorage.setItem('selectedCharacterId', characterId);
     
     // Przekierowujemy na stronę gry
     nav('/game/play');

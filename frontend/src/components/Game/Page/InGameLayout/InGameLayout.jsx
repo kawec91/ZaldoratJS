@@ -3,6 +3,9 @@ import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function InGameLayout() {
+    const handleCharacterChange = () => {
+        sessionStorage.removeItem("selectedCharacterId");
+    }
     
   return (
     <div className='h-screen'>
@@ -10,7 +13,7 @@ export default function InGameLayout() {
             <div><Link to={'/game/play/admin'}>Admin (Not protected yet!)</Link></div>
             <div className='text-center'>Alakhei</div>
             <div className='text-right'>
-                <Link to={'/game'}>Zmień postać</Link>
+                <Link to={'/game'} onClick={handleCharacterChange}>Zmień postać</Link>
             </div>
         </div>
         <div className='px-4 h-[calc(100vh_-_80px)] flex justify-center items-center'>
