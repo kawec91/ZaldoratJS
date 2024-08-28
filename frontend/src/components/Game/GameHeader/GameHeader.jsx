@@ -41,8 +41,8 @@ export default function GameHeader() {
     const getDateTime = () => {
         let now = new Date();
         let year = now.getFullYear();
-        let month = now.getMonth();
-        let day = now.getDay();
+        let month = now.getMonth()+1;
+        let day = now.getDate();
         let hour = now.getHours();
         let minute = now.getMinutes();
         let second = now.getSeconds();
