@@ -69,14 +69,20 @@ export const removeItemFromBackpack = async (req, res) => {
   try {
     const { id, itemId } = req.params;
 
+    // Znalezienie plecaka po jego ID
     const backpack = await Backpack.findById(id);
 
     if (!backpack) {
       return res.status(404).json({ error: "Backpack not found" });
     }
 
-    const updatedBackpack = await backpack.removeItem(itemId);
-    res.status(200).json(updatedBackpack);
+    // Usunięcie przedmiotu z plecaka (filtrowanie listy przedmiotów)
+    backpack.items = backpack.items.filter((item) => item._id.toString() !== itemId);
+
+    // Zapisanie zaktualizowanego plecaka do bazy danych
+    await backpack.save();
+
+    res.status(200).json(backpack);
   } catch (error) {
     console.error("Error removing item from backpack:", error);
     res.status(500).json({ error: "Internal Server Error" });

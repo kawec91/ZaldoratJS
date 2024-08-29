@@ -4,6 +4,8 @@ export default function EquipmentPage() {
   const [backpack, setBackpack] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState(null); // Przedmiot do usunięcia
+  const [showConfirmModal, setShowConfirmModal] = useState(false); // Stan modala
 
   // Pobieranie plecaka postaci z sesji
   const characterId = sessionStorage.getItem('selectedCharacterId');
@@ -46,9 +48,39 @@ export default function EquipmentPage() {
 
   // Obliczanie całkowitej wagi przedmiotów w plecaku
   const totalWeight = items.reduce((total, item) => total + item.weight, 0); // Suma wag przedmiotów
-  
+
   // Użycie weight z obiektu character jako maksymalnej wagi
-  const maxWeight = backpack.owner?.weight || 50; 
+  const maxWeight = backpack.owner?.weight || 50;
+
+  // Funkcja otwierająca modal potwierdzenia
+  const handleDeleteClick = (item) => {
+    setItemToDelete(item);
+    setShowConfirmModal(true);
+  };
+
+  // Funkcja do usuwania przedmiotu
+  const handleConfirmDelete = () => {
+    // Sprawdź, czy mamy ID plecaka i przedmiotu
+    if (backpack?._id && itemToDelete?._id) {
+      fetch(`/api/backpack/${backpack._id}/remove-item/${itemToDelete._id}`, {
+        method: 'DELETE',
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Failed to delete item');
+          }
+          return res.json();
+        })
+        .then((updatedBackpack) => {
+          setBackpack(updatedBackpack);
+          setShowConfirmModal(false);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setShowConfirmModal(false);
+        });
+    }
+  };
 
   return (
     <div className='bg-black/80 flex flex-col items-center rounded-md h-[calc(100vh_-_106px)] w-3/4 p-4'>
@@ -63,6 +95,9 @@ export default function EquipmentPage() {
             <h4 className='text-lg'>{item.name}</h4>
             <p>Ilość: {item.quantity}</p>
             <p>Waga: {item.weight}</p>
+            <button className='text-red-500 text-sm mt-2' onClick={() => handleDeleteClick(item)}>
+              Wyrzuć
+            </button>
           </div>
         ))}
         {/* Puste kafelki */}
@@ -76,6 +111,23 @@ export default function EquipmentPage() {
       <div className='text-white text-lg mt-4'>
         Waga: {totalWeight}/{maxWeight}
       </div>
+
+      {/* Modal potwierdzenia usunięcia */}
+      {showConfirmModal && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
+          <div className='bg-white p-4 rounded-md'>
+            <p>Czy na pewno chcesz wyrzucić ten przedmiot?</p>
+            <div className='flex justify-around mt-4'>
+              <button className='bg-red-500 text-white px-4 py-2 rounded-md' onClick={handleConfirmDelete}>
+                Tak
+              </button>
+              <button className='bg-gray-500 text-white px-4 py-2 rounded-md' onClick={() => setShowConfirmModal(false)}>
+                Nie
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
