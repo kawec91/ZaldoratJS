@@ -4,6 +4,7 @@ import {
   getBackpackById,
   addItemToBackpack,
   removeItemFromBackpack,
+  getBackpackByOwnerId,
 } from '../controllers/backpack.controller.js';
 
 const router = express.Router();
@@ -19,5 +20,7 @@ router.post('/:id/add-item', addItemToBackpack);
 
 // Route to remove an item from a backpack
 router.delete('/:id/remove-item/:itemId', removeItemFromBackpack);
+
+router.get('/owner/:ownerId', getBackpackByOwnerId);
 
 export default router;

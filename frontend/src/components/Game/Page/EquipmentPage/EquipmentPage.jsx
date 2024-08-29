@@ -39,35 +39,42 @@ export default function EquipmentPage() {
     return <div>Wystąpił błąd: {error}</div>;
   }
 
+  const slots = backpack.slots; // Użyj slots z plecaka
+  const items = backpack.items || [];
+  const emptySlots = slots - items.length; // Obliczanie pustych slotów
+  const occupiedSlots = items.length; // Zajęte sloty
+
+  // Obliczanie całkowitej wagi przedmiotów w plecaku
+  const totalWeight = items.reduce((total, item) => total + item.weight, 0); // Suma wag przedmiotów
+  
+  // Użycie weight z obiektu character jako maksymalnej wagi
+  const maxWeight = backpack.owner?.weight || 50; 
+
   return (
-    <div className='h-[calc(100vh_-_50px)] flex flex-col items-center'>
-      <div className='bg-black/80 flex flex-col items-center rounded-md h-[calc(100vh_-_106px)] w-3/4 p-4'>
-        <h3 className='text-center text-white text-2xl py-2'>Plecak</h3>
-        <hr className='border-white w-3/4 mb-4' />
-        <div className='w-full h-full py-2 px-4 text-white overflow-y-scroll'>
-          {backpack.items && backpack.items.length > 0 ? (
-            <table className='table-auto w-full text-left'>
-              <thead>
-                <tr>
-                  <th className='px-4 py-2'>Nazwa Przedmiotu</th>
-                  <th className='px-4 py-2'>Ilość</th>
-                  <th className='px-4 py-2'>Waga</th>
-                </tr>
-              </thead>
-              <tbody>
-                {backpack.items.map((item) => (
-                  <tr key={item._id}>
-                    <td className='border px-4 py-2'>{item.name}</td>
-                    <td className='border px-4 py-2'>{item.quantity}</td>
-                    <td className='border px-4 py-2'>{item.weight}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="text-center text-white">Plecak jest pusty.</div>
-          )}
-        </div>
+    <div className='bg-black/80 flex flex-col items-center rounded-md h-[calc(100vh_-_106px)] w-3/4 p-4'>
+      <h3 className='text-center text-white text-2xl py-2'>
+        Plecak ({occupiedSlots}/{slots})
+      </h3>
+      <hr className='border-white w-3/4 mb-4' />
+      <div className='w-full h-full py-2 px-4 text-white overflow-y-scroll grid grid-cols-4 gap-4'>
+        {/* Wyświetlanie przedmiotów w kafelkach */}
+        {items.map((item) => (
+          <div key={item._id} className='border border-white p-2 rounded-md bg-gray-800 flex flex-col items-center justify-center' style={{ width: '100px', height: '100px' }}>
+            <h4 className='text-lg'>{item.name}</h4>
+            <p>Ilość: {item.quantity}</p>
+            <p>Waga: {item.weight}</p>
+          </div>
+        ))}
+        {/* Puste kafelki */}
+        {emptySlots > 0 && Array.from({ length: emptySlots }).map((_, index) => (
+          <div key={index} className='border border-gray-500 p-2 rounded-md bg-gray-600 flex flex-col items-center justify-center' style={{ width: '100px', height: '100px' }}>
+            <p className='text-center'>Pusty slot</p>
+          </div>
+        ))}
+      </div>
+      {/* Wyświetlanie wagi na środku */}
+      <div className='text-white text-lg mt-4'>
+        Waga: {totalWeight}/{maxWeight}
       </div>
     </div>
   );

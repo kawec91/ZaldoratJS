@@ -55,41 +55,53 @@ class Dig {
     }
   }
 
-  // Metoda dodająca surowiec do plecaka postaci
-  async addResourceToBackpack(characterId, resource, quantity) {
-    console.log("charID BP: ", characterId);
-    console.log("resource BP: ", resource);
-    console.log("quantity BP: ", quantity);
-    try {
-      // Znajdź plecak postaci na podstawie właściciela
-      const backpack = await BackpackModel.findOne({ owner: characterId });
-      if (!backpack) {
-        throw new Error("Plecak nie znaleziony.");
-      }
-
-      // Sprawdź, czy surowiec już istnieje w plecaku
-      const existingResource = backpack.items.find(
-        (item) => item.name === resource
-      );
-      console.log("existingResource", existingResource);
-      if (existingResource) {
-        existingResource.quantity += quantity; // Zwiększ ilość istniejącego surowca
-        existingResource.weight += quantity; // Zwiększ wagi istniejącego surowca
-      } else {
-        backpack.items.push({
-          name: resource.toString(),
-          weight: quantity,
-          quantity: quantity,
-        }); // Dodaj nowy surowiec
-      }
-
-      await backpack.save(); // Zapisz zmiany w plecaku
-    } catch (error) {
-      console.error("Błąd podczas dodawania surowca do plecaka:", error);
-      throw new Error("Nie udało się dodać surowca do plecaka.");
+ // Metoda dodająca surowiec do plecaka postaci
+async addResourceToBackpack(characterId, resource, quantity) {
+  console.log("charID BP: ", characterId);
+  console.log("resource BP: ", resource);
+  console.log("quantity BP: ", quantity);
+  
+  try {
+    // Znajdź plecak postaci na podstawie właściciela
+    const backpack = await BackpackModel.findOne({ owner: characterId }).populate('owner');
+    if (!backpack) {
+      throw new Error("Plecak nie znaleziony.");
     }
-  }
 
+    const character = backpack.owner; // Właściciel plecaka
+
+    // Oblicz całkowitą wagę przedmiotów w plecaku
+    const currentWeight = backpack.items.reduce((total, item) => total + item.weight, 0);
+    const newResourceWeight = quantity; // Waga dodawanego surowca
+
+    // Sprawdzanie maksymalnej wagi
+    if (currentWeight + newResourceWeight > character.weight) { // Użycie wagi z obiektu character
+      throw new Error("Nie udźwigniesz już więcej");
+    }
+
+    // Sprawdź, czy surowiec już istnieje w plecaku
+    const existingResource = backpack.items.find(
+      (item) => item.name === resource
+    );
+    console.log("existingResource", existingResource);
+    
+    if (existingResource) {
+      existingResource.quantity += quantity; // Zwiększ ilość istniejącego surowca
+      existingResource.weight += quantity; // Zwiększ wagę istniejącego surowca
+    } else {
+      backpack.items.push({
+        name: resource.toString(),
+        weight: quantity,
+        quantity: quantity,
+      }); // Dodaj nowy surowiec
+    }
+
+    await backpack.save(); // Zapisz zmiany w plecaku
+  } catch (error) {
+    console.error("Błąd podczas dodawania surowca do plecaka:", error);
+    throw new Error("Nie udało się dodać surowca do plecaka.");
+  }
+}
   // Metoda odpowiedzialna za rozwój umiejętności górnictwa
   async increaseMiningSkill(character) {
     try {

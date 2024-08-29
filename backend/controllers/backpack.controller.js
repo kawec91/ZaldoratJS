@@ -29,6 +29,23 @@ export const getBackpackById = async (req, res) => {
   }
 };
 
+// Nowa funkcja do pobierania plecaka na podstawie ID właściciela
+export const getBackpackByOwnerId = async (req, res) => {
+  try {
+    const { ownerId } = req.params;
+    const backpack = await Backpack.findByOwnerId(ownerId);
+
+    if (!backpack) {
+      return res.status(404).json({ error: "Backpack not found" });
+    }
+
+    res.status(200).json(backpack);
+  } catch (error) {
+    console.error("Error fetching backpack by owner ID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const addItemToBackpack = async (req, res) => {
   try {
     const { id } = req.params;
