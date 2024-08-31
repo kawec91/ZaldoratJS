@@ -20,6 +20,7 @@ import AdminFaithPage from "./components/Game/Page/AdminFaithPage.jsx/AdminFaith
 import ChangeLogPage from "./components/Game/Page/ChangeLogPage/ChangeLogPage";
 import StatsPage from "./components/Game/Page/StatsPage/StatsPage";
 import EquipmentPage from "./components/Game/Page/EquipmentPage/EquipmentPage";
+import Travel from "./components/Game/Page/Travel/Travel";
 import GoodsPage from "./components/Game/Page/GoodsPage/GoodsPage";
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
           <Route path="/game/play" element={<ChangeLogPage />} />
           <Route path="/game/play/stats" element={<StatsPage />} />
           <Route path="/game/play/equipment" element={<EquipmentPage />} />
+          <Route path="/game/play/travel" element={<Travel />} />
           <Route path="/game/play/goods" element={<GoodsPage />} />
           <Route path="/game/play/admin" element={<AdminPage />} />
           <Route path="/game/play/admin/race" element={<AdminRacePage />} />    

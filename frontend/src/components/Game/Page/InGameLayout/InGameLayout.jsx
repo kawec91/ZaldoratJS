@@ -24,7 +24,8 @@ export default function InGameLayout() {
             <Link to={'/game/play/equipment'}>Ekwipunek</Link>
             <Link to={'/game/play/goods'}>Bogactwa</Link>
             <Link to={'/game/play'}>Verentris</Link>
-            <Link to={'/game/play'}>Arena Walk</Link>
+            <Link to={'/game/play/travel'}>Podróż</Link>
+            <Link to={'/game/play/'}>Arena Walk</Link>
             <Link to={'/game/play'}>Szpital</Link>
             <Link to={'/game/play'}>Mapa</Link>
             <Link to={'/game/play'}>Bank: 100 000</Link>
