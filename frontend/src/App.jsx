@@ -7,8 +7,6 @@ import LoginPage from "./components/Page/LoginPage/LoginPage";
 import FaqPage from "./components/Page/FaqPage/FaqPage";
 import { Toaster } from "react-hot-toast";
 import GameHeader from "./components/Game/GameHeader/GameHeader";
-import LastNewsPage from "./components/Game/Page/LastNewsPage/LastNewsPage";
-import { useQuery } from "@tanstack/react-query";
 import AccountSettings from "./components/Game/AccountSettings/AccountSettings";
 import AccountPage from "./components/Game/Page/AccountPage/AccountPage";
 import CharacterCreatorPage from "./components/Game/Page/CharacterCreatorPage/CharacterCreatorPage";
@@ -22,78 +20,86 @@ import StatsPage from "./components/Game/Page/StatsPage/StatsPage";
 import EquipmentPage from "./components/Game/Page/EquipmentPage/EquipmentPage";
 import Travel from "./components/Game/Page/TravelPage/TravelPage";
 import GoodsPage from "./components/Game/Page/GoodsPage/GoodsPage";
-//góry
+// Góry
 import BariermountainsPage from "./components/Game/Page/MountainsPage/BariermountainsPage";
 import WhitemountainsPage from "./components/Game/Page/MountainsPage/WhitemountainsPage";
 import GlassmountainsPage from "./components/Game/Page/MountainsPage/GlassmountainsPage";
 import SandmountainsPage from "./components/Game/Page/MountainsPage/SandmountainsPage";
+// Character creator
+import SelectRacePage from "./components/Game/Page/CharacterCreatorPage/SelectRacePage";
+import SelectDeityPage from "./components/Game/Page/CharacterCreatorPage/SelectDeityPage";
+import SelectClassPage from "./components/Game/Page/CharacterCreatorPage/SelectClassPage";
+import SelectGenderPage from "./components/Game/Page/CharacterCreatorPage/SelectGenderPage";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ['authUser'],
-    queryFn: async() => {
+    queryFn: async () => {
       try {
         const res = await fetch('/api/auth/me');
         const data = await res.json();
-        if(data.error) return null;
-        if(!res.ok) {
+        if (data.error) return null; // Handle error case
+        if (!res.ok) {
           throw new Error(data.error || "Something went wrong.");
-      }
-      console.log('Auth usere is here:', data);
-      return data;
+        }
+        console.log('Auth user is here:', data);
+        return data; // Successful authentication
       } catch (error) {
-        throw new Error(error);
+        console.error(error); // Log the error for debugging
+        return null; // Ensure null is returned on error
       }
     },
     retry: false,
   });
 
-  //TODO
-  // if(isLoading) {
-  //   return (
-  //     <div className="h-screen">
-  //       loading spinner
-  //     </div>
-  //   )
-  // }
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p>Loading...</p> {/* You can replace this with a loading spinner */}
+      </div>
+    );
+  }
 
   return (
     <>
       <Routes>
-        <Route path={'/'} element={<Header />}>
-          {/* <Route path={'/'} element={<Footer />}> */}
-            <Route path={'/'} element={<HomePage />}/>
-            <Route path={'/register'} element={!authUser ? <RegisterPage /> : <Navigate to={'/game'} />} />
-            <Route path={'/login'} element={!authUser ? <LoginPage /> : <Navigate to={'/game'} />} />
-            <Route path={'/faq'} element={<FaqPage />} />
-          {/* </Route> */}
+        <Route path="/" element={<Header />}>
+          <Route index element={<HomePage />} />
+          <Route path="register" element={!authUser ? <RegisterPage /> : <Navigate to="/game" />} />
+          <Route path="login" element={!authUser ? <LoginPage /> : <Navigate to="/game" />} />
+          <Route path="faq" element={<FaqPage />} />
         </Route>
-        <Route path="/game" element={authUser ? <GameHeader /> : <Navigate to={'/login'} />}>
-          <Route path="/game" element={authUser ? <AccountPage /> : <Navigate to={'/login'} />} />
-          <Route path="/game/account" element={authUser ? <AccountSettings /> : <Navigate to={'/login'} />} />
-          <Route path="/game/new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to={'/login'} />} />
+        <Route path="/game" element={authUser ? <GameHeader /> : <Navigate to="/login" />}>
+          <Route index element={authUser ? <AccountPage /> : <Navigate to="/login" />} />
+          <Route path="account" element={authUser ? <AccountSettings /> : <Navigate to="/login" />} />
+          <Route path="new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to="/login" />} />
+          <Route path="selectrace" element={authUser ? <SelectRacePage /> : <Navigate to="/login" />} />
+          <Route path="selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
+          <Route path="selectdeity" element={authUser ? <SelectDeityPage /> : <Navigate to="/login" />} />
+          <Route path="selectgender" element={authUser ? <SelectGenderPage /> : <Navigate to="/login" />} />
         </Route>
-        <Route path="/game/play" element={<InGameLayout />} >
-          <Route path="/game/play" element={<ChangeLogPage />} />
-          <Route path="/game/play/stats" element={<StatsPage />} />
-          <Route path="/game/play/equipment" element={<EquipmentPage />} />
-          <Route path="/game/play/travel" element={<Travel />} />
-          
-          <Route path="/game/play/goods" element={<GoodsPage />} />
-          <Route path="/game/play/admin" element={<AdminPage />} />
-          <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
-          <Route path="/game/play/admin/clas" element={<AdminClasPage />} />    
-          <Route path="/game/play/admin/faith" element={<AdminFaithPage />} />    
-          {/* </Góry> */}
-          <Route path="/game/play/bariermountains" element={<BariermountainsPage />} />
-          <Route path="/game/play/whitemountains" element={<WhitemountainsPage />} />
-          <Route path="/game/play/glassmountains" element={<GlassmountainsPage />} />
-          <Route path="/game/play/sandmountains" element={<SandmountainsPage />} />
+        <Route path="/game/play" element={<InGameLayout />}>
+          <Route index element={<ChangeLogPage />} />
+          <Route path="stats" element={<StatsPage />} />
+          <Route path="equipment" element={<EquipmentPage />} />
+          <Route path="travel" element={<Travel />} />
+          <Route path="goods" element={<GoodsPage />} />
+          <Route path="admin" element={<AdminPage />} />
+          <Route path="admin/race" element={<AdminRacePage />} />
+          <Route path="admin/class" element={<AdminClasPage />} />
+          <Route path="admin/faith" element={<AdminFaithPage />} />
+          <Route path="mountains/barier" element={<BariermountainsPage />} />
+          <Route path="mountains/white" element={<WhitemountainsPage />} />
+          <Route path="mountains/glass" element={<GlassmountainsPage />} />
+          <Route path="mountains/sand" element={<SandmountainsPage />} />
         </Route>
       </Routes>
+      <Footer />
       <Toaster />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
