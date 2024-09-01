@@ -20,7 +20,7 @@ import AdminFaithPage from "./components/Game/Page/AdminFaithPage.jsx/AdminFaith
 import ChangeLogPage from "./components/Game/Page/ChangeLogPage/ChangeLogPage";
 import StatsPage from "./components/Game/Page/StatsPage/StatsPage";
 import EquipmentPage from "./components/Game/Page/EquipmentPage/EquipmentPage";
-import Travel from "./components/Game/Page/Travel/Travel";
+import Travel from "./components/Game/Page/TravelPage/TravelPage";
 import GoodsPage from "./components/Game/Page/GoodsPage/GoodsPage";
 
 function App() {
