@@ -75,8 +75,8 @@ function App() {
           <Route index element={authUser ? <AccountPage /> : <Navigate to="/login" />} />
           <Route path="account" element={authUser ? <AccountSettings /> : <Navigate to="/login" />} />
           <Route path="new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to="/login" />} />
-          <Route path="selectrace" element={authUser ? <SelectRacePage /> : <Navigate to="/login" />} />
-          <Route path="selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace" element={authUser ? <SelectRacePage /> : <Navigate to="/login" />} />
+          <Route path="/game/new-character/game/selectrace/selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
           <Route path="selectdeity" element={authUser ? <SelectDeityPage /> : <Navigate to="/login" />} />
           <Route path="selectgender" element={authUser ? <SelectGenderPage /> : <Navigate to="/login" />} />
         </Route>
