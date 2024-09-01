@@ -22,6 +22,11 @@ import StatsPage from "./components/Game/Page/StatsPage/StatsPage";
 import EquipmentPage from "./components/Game/Page/EquipmentPage/EquipmentPage";
 import Travel from "./components/Game/Page/TravelPage/TravelPage";
 import GoodsPage from "./components/Game/Page/GoodsPage/GoodsPage";
+//góry
+import BariermountainsPage from "./components/Game/Page/MountainsPage/BariermountainsPage";
+import WhitemountainsPage from "./components/Game/Page/MountainsPage/WhitemountainsPage";
+import GlassmountainsPage from "./components/Game/Page/MountainsPage/GlassmountainsPage";
+import SandmountainsPage from "./components/Game/Page/MountainsPage/SandmountainsPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -73,11 +78,17 @@ function App() {
           <Route path="/game/play/stats" element={<StatsPage />} />
           <Route path="/game/play/equipment" element={<EquipmentPage />} />
           <Route path="/game/play/travel" element={<Travel />} />
+          
           <Route path="/game/play/goods" element={<GoodsPage />} />
           <Route path="/game/play/admin" element={<AdminPage />} />
           <Route path="/game/play/admin/race" element={<AdminRacePage />} />    
           <Route path="/game/play/admin/clas" element={<AdminClasPage />} />    
           <Route path="/game/play/admin/faith" element={<AdminFaithPage />} />    
+          {/* </Góry> */}
+          <Route path="/game/play/bariermountains" element={<BariermountainsPage />} />
+          <Route path="/game/play/whitemountains" element={<WhitemountainsPage />} />
+          <Route path="/game/play/glassmountains" element={<GlassmountainsPage />} />
+          <Route path="/game/play/sandmountains" element={<SandmountainsPage />} />
         </Route>
       </Routes>
       <Toaster />
