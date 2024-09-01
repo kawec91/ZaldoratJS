@@ -100,3 +100,20 @@ export const getCharactersByOwner = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// Pobieranie lokalizacji postaci
+export const getCharacterLocation = async (req, res) => {
+  try {
+    const { characterId } = req.params;
+    const character = await CharacterModel.findById(characterId);
+
+    if (!character) {
+      return res.status(404).json({ error: 'Postać nie znaleziona' });
+    }
+
+    res.status(200).json({ location: character.location });
+  } catch (error) {
+    console.error('Błąd podczas pobierania lokalizacji postaci:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
