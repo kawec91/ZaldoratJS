@@ -3,8 +3,69 @@ import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function InGameLayout() {
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const bottomMenu = [
+        {
+            id: 1,
+            name: "Statystyki",
+            link: "/game/play/stats"
+        },
+        {
+            id: 2,
+            name: "Ekwipunek",
+            link: "/game/play/equipment"
+        },
+        {
+            id: 3,
+            name: "Bogactwa",
+            link: "/game/play/goods"
+        },
+        {
+            id: 4,
+            name: "Verentris",
+            link: "/game/play/"
+        },
+        {
+            id: 5,
+            name: "Podróż",
+            link: "/game/play/travel"
+        },
+        {
+            id: 6,
+            name: "Arena Walk",
+            link: "/game/play/stats"
+        },
+        {
+            id: 7,
+            name: "Szpital",
+            link: "/game/play/"
+        },
+        {
+            id: 8,
+            name: "Mapa",
+            link: "/game/play/"
+        },
+        {
+            id: 9,
+            name: "Bank: 100 000",
+            link: "/game/play/"
+        },
+        {
+            id: 10,
+            name: "Gold: 10 000",
+            link: "/game/play/"
+        },
+    ];
+
     const handleCharacterChange = () => {
         sessionStorage.removeItem("selectedCharacterId");
+    }
+
+    const handleBottomMenuChoice = (id) => {
+        console.log('hbmc', id);
+        setSelectedItem(id);
+        console.log(selectedItem)
     }
     
   return (
@@ -20,17 +81,7 @@ export default function InGameLayout() {
             <Outlet />
         </div>
         <div className='px-4 border-t-[1px] border-black flex items-center justify-between h-10'>
-            <Link to={'/game/play/stats'}>Statystyki</Link>
-            <Link to={'/game/play/equipment'}>Ekwipunek</Link>
-            <Link to={'/game/play/goods'}>Bogactwa</Link>
-            <Link to={'/game/play'}>Verentris</Link>
-            <Link to={'/game/play/travel'}>Podróż</Link>
-            <Link to={'/game/play/'}>Arena Walk</Link>
-            <Link to={'/game/play'}>Szpital</Link>
-            <Link to={'/game/play'}>Mapa</Link>
-            <Link to={'/game/play'}>Bank: 100 000</Link>
-            <Link to={'/game/play'}>Gold: 10 000</Link>
-            
+            {bottomMenu.map((item) => <p onClick={() => handleBottomMenuChoice(item.id)} ><Link className={`${selectedItem === item.id ? 'bg-slate-400' : ''}`} key={`${item.name}-${item.link}`} to={item.link}>{item.name}</Link></p>)}
         </div>
     </div>
   )
