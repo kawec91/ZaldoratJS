@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
+import toast from 'react-hot-toast';
 
 export default function SummaryPage() {
     const navigate = useNavigate();
@@ -15,7 +16,8 @@ export default function SummaryPage() {
     const handleConfirm = () => {
         // Potwierdź stworzenie postaci (zapisz dane, przejdź dalej, itp.)
         // Tutaj można dodać logikę do zapisania postaci na serwerze, itp.
-        alert('Postać została stworzona!');
+        //alert('Postać została stworzona!');
+        toast.success("Postać została stworzona!");
         // Przejdź do następnego ekranu, np. głównego menu gry
         navigate('/game');
     };
