@@ -12,12 +12,23 @@ export default function SummaryPage() {
     const characterDeity = sessionStorage.getItem('characterDeity');
     const characterGender = sessionStorage.getItem('characterGender');
     const nickname = sessionStorage.getItem('nickname'); // Pobierz imię postaci
+    const characterAncestry = sessionStorage.getItem('characterAncestry'); // Pobierz pochodzenie postaci
 
     const handleConfirm = () => {
         // Potwierdź stworzenie postaci (zapisz dane, przejdź dalej, itp.)
         // Tutaj można dodać logikę do zapisania postaci na serwerze, itp.
         //alert('Postać została stworzona!');
         toast.success("Postać została stworzona!");
+
+        // Clear session storage after confirming character creation
+        sessionStorage.removeItem('characterRace');
+        sessionStorage.removeItem('characterRaceId');
+        sessionStorage.removeItem('characterClass');
+        sessionStorage.removeItem('characterDeity');
+        sessionStorage.removeItem('characterGender');
+        sessionStorage.removeItem('nickname');
+        sessionStorage.removeItem('characterAncestry'); // Clear ancestry from session storage
+
         // Przejdź do następnego ekranu, np. głównego menu gry
         navigate('/game');
     };
@@ -31,7 +42,7 @@ export default function SummaryPage() {
         <div className="flex flex-col items-center">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={6} /> {/* Ustawia obecny krok na 5 (Podsumowanie) */}
+                <ProgressBar currentStep={6} /> {/* Ustawia obecny krok na 6 (Podsumowanie) */}
             </div>
 
             <div className="flex flex-col items-center w-full p-4">
@@ -39,9 +50,11 @@ export default function SummaryPage() {
                 <div className="bg-gray-100 border border-gray-300 p-4 rounded w-3/4">
                     <p><strong>Imię:</strong> {nickname}</p>
                     <p><strong>Rasa:</strong> {characterRace}</p>
+                    <p><strong>Pochodzenie:</strong> {characterAncestry}</p>
                     <p><strong>Klasa:</strong> {characterClass}</p>
                     <p><strong>Wyznanie:</strong> {characterDeity}</p>
                     <p><strong>Płeć:</strong> {characterGender}</p>
+                     {/* Display ancestry */}
                 </div>
 
                 <div className="mt-4">

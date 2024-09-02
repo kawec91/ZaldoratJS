@@ -24,8 +24,7 @@ export default function SelectAncestryPage() {
                 }
                 const data = await response.json();
                 console.log("Pobrane pochodzenia:", data);
-                setAncestries(data);
-                console.log("Stan ancestries po aktualizacji:", data); // Log after setting state
+                setAncestries(data.ancestries);
             } catch (error) {
                 console.error('Błąd podczas pobierania pochodzeń:', error);
             }
@@ -33,8 +32,18 @@ export default function SelectAncestryPage() {
     
         fetchAncestries();
     }, [raceId]);
-    
-    // Render logic
+
+    const handleAncestrySelection = (ancestry) => {
+        setSelectedAncestry(ancestry);
+    };
+
+    const handleNext = () => {
+        if (selectedAncestry) {
+            sessionStorage.setItem('characterAncestry', selectedAncestry.name);
+            navigate('selectclass');
+        }
+    };
+
     return (
         <div>
             <ProgressBar currentStep={1} />
@@ -47,7 +56,7 @@ export default function SelectAncestryPage() {
                         {ancestries.length > 0 ? (
                             ancestries.map((ancestry) => (
                                 <li
-                                    key={ancestry._id}
+                                    key={ancestry._id} // Keep this for the ancestry list
                                     onClick={() => handleAncestrySelection(ancestry)}
                                     className={`cursor-pointer p-2 rounded hover:bg-gray-200 ${selectedAncestry && selectedAncestry._id === ancestry._id ? 'bg-gray-300' : ''}`}
                                 >
@@ -66,6 +75,39 @@ export default function SelectAncestryPage() {
                         <>
                             <h2 className="text-xl font-bold">{selectedAncestry.name}</h2>
                             <p className="mt-2">{selectedAncestry.description}</p>
+                            
+                            {/* Display Crafting Stats */}
+                            <h3 className="text-lg font-semibold mt-4">Umiejętności Rzemieślnicze:</h3>
+                            <ul className="mt-2">
+                                {selectedAncestry.stats.crafting ? (
+                                    Object.entries(selectedAncestry.stats.crafting)
+                                        .filter(([key]) => key !== '_id') // Exclude _id key
+                                        .map(([skill, value]) => (
+                                            <li key={skill}>
+                                                <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {value}
+                                            </li>
+                                        ))
+                                ) : (
+                                    <li>Brak umiejętności rzemieślniczych dla tego pochodzenia.</li>
+                                )}
+                            </ul>
+
+                            {/* Display Fighting Stats */}
+                            <h3 className="text-lg font-semibold mt-4">Umiejętności Bojowe:</h3>
+                            <ul className="mt-2">
+                                {selectedAncestry.stats.fighting ? (
+                                    Object.entries(selectedAncestry.stats.fighting)
+                                        .filter(([key]) => key !== '_id') // Exclude _id key
+                                        .map(([skill, value]) => (
+                                            <li key={skill}>
+                                                <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {value}
+                                            </li>
+                                        ))
+                                ) : (
+                                    <li>Brak umiejętności bojowych dla tego pochodzenia.</li>
+                                )}
+                            </ul>
+                            
                             <button
                                 onClick={handleNext}
                                 className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -80,6 +122,4 @@ export default function SelectAncestryPage() {
             </div>
         </div>
     );
-    
-    
 }
