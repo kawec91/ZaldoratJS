@@ -11,7 +11,7 @@ export default function SelectNamePage() {
         // Zapisz imię postaci w sessionStorage
         sessionStorage.setItem('nickname', nickname);
         // Przejdź do następnej strony
-        navigate('summary'); // Przykład, zmień na odpowiednią ścieżkę
+        navigate('selectlocation'); // Przykład, zmień na odpowiednią ścieżkę
     };
 
     return (

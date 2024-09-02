@@ -9,7 +9,8 @@ const ProgressBar = ({ currentStep }) => {
     { label: 'Wybór Bóstwa', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity' },
     { label: 'Wybór Płci', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender' },
     { label: 'Nadanie Imienia', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname' },
-    { label: 'Podsumowanie', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/summary' },
+    { label: 'Wybierz Lokacje początkową', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/selectlocation' },
+    { label: 'Podsumowanie', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/selectlocation/summary' },
   ];
 
   return (
