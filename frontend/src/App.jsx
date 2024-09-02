@@ -31,6 +31,7 @@ import SelectDeityPage from "./components/Game/Page/CharacterCreatorPage/SelectD
 import SelectClassPage from "./components/Game/Page/CharacterCreatorPage/SelectClassPage";
 import SelectGenderPage from "./components/Game/Page/CharacterCreatorPage/SelectGenderPage";
 import SummaryPage from "./components/Game/Page/CharacterCreatorPage/SummaryPage";
+import SelectNamePage from "./components/Game/Page/CharacterCreatorPage/SelectNamePage";
 import { useQuery } from "@tanstack/react-query";
 
 function App() {
@@ -80,7 +81,9 @@ function App() {
           <Route path="new-character/game/selectrace/selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
           <Route path="new-character/game/selectrace/selectclass/selectdeity" element={authUser ? <SelectDeityPage /> : <Navigate to="/login" />} />
           <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender" element={authUser ? <SelectGenderPage /> : <Navigate to="/login" />} />
-          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender/summary" element={authUser ? <SummaryPage /> : <Navigate to="/login" />} />
+
+          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname" element={authUser ? <SelectNamePage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname/summary" element={authUser ? <SummaryPage /> : <Navigate to="/login" />} />
         </Route>
         <Route path="/game/play" element={<InGameLayout />}>
           <Route index element={<ChangeLogPage />} />

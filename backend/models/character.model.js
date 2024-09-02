@@ -75,6 +75,10 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  deity: {
+    type: String,
+    required: true,
+  },
   level: {
     type: Number,
     default: 1,
