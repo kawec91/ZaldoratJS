@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import CharacterChooseCard from '../../CharacterChooseCard/CharacterChooseCard';
+import { Link } from 'react-router-dom';
 
 export default function AccountPage() {
   const [myCharacterList, setMyCharacterList] = useState([]);
@@ -45,7 +46,7 @@ export default function AccountPage() {
           <p>Tip: Pamiętaj. Możesz posiadać maksymalnie 5 postaci.</p>
           <p className='text-center'>Postaci: {myCharacterList.length} / 5</p>
           <div className='text-right'>
-            <p>Utwórz postać</p>
+            <Link to={'/game/new-character'}>Utwórz postać</Link>
           </div>
         </div>
       </div>

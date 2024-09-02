@@ -10,7 +10,7 @@ export default function CharacterCreatorPage() {
                 Przejdziesz przez kilka kroków, aby wybrać rasę, klasę, bóstwo i inne cechy swojej postaci.
             </p>
             <Link 
-                to="game/selectrace" 
+                to="/game/new-character/game/selectrace" 
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
                 Wybierz swoją rasę
