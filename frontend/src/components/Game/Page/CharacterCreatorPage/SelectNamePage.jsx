@@ -18,7 +18,7 @@ export default function SelectNamePage() {
         <div className="flex flex-col items-center">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={4} /> {/* Ustawia obecny krok na 4 (Nadanie Imienia) */}
+                <ProgressBar currentStep={5} /> {/* Ustawia obecny krok na 4 (Nadanie Imienia) */}
             </div>
 
             <div className="flex flex-col items-center w-full p-4">

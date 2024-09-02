@@ -21,7 +21,7 @@ export default function SelectGenderPage() {
         <div className="flex flex-col">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={3} /> {/* Ustawia obecny krok na 3 (Wybór Płci) */}
+                <ProgressBar currentStep={4} /> {/* Ustawia obecny krok na 3 (Wybór Płci) */}
             </div>
 
             <div className="flex flex-col items-center w-full p-4">

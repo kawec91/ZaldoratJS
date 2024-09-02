@@ -37,7 +37,7 @@ export default function SelectDeityPage() {
         <div className="flex flex-col">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={2} /> {/* Ustawia obecny krok na 2 (Wybór Bóstwa) */}
+                <ProgressBar currentStep={3} /> {/* Ustawia obecny krok na 2 (Wybór Bóstwa) */}
             </div>
 
             <div className="flex flex-row w-full">

@@ -29,7 +29,7 @@ export default function SummaryPage() {
         <div className="flex flex-col items-center">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={5} /> {/* Ustawia obecny krok na 5 (Podsumowanie) */}
+                <ProgressBar currentStep={6} /> {/* Ustawia obecny krok na 5 (Podsumowanie) */}
             </div>
 
             <div className="flex flex-col items-center w-full p-4">

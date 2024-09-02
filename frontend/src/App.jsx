@@ -32,6 +32,7 @@ import SelectClassPage from "./components/Game/Page/CharacterCreatorPage/SelectC
 import SelectGenderPage from "./components/Game/Page/CharacterCreatorPage/SelectGenderPage";
 import SummaryPage from "./components/Game/Page/CharacterCreatorPage/SummaryPage";
 import SelectNamePage from "./components/Game/Page/CharacterCreatorPage/SelectNamePage";
+import SelectAncestryPage from "./components/Game/Page/CharacterCreatorPage/SelectAncestryPage";
 import { useQuery } from "@tanstack/react-query";
 
 function App() {
@@ -78,12 +79,12 @@ function App() {
           <Route path="account" element={authUser ? <AccountSettings /> : <Navigate to="/login" />} />
           <Route path="new-character" element={authUser ? <CharacterCreatorPage /> : <Navigate to="/login" />} />
           <Route path="new-character/game/selectrace" element={authUser ? <SelectRacePage /> : <Navigate to="/login" />} />
-          <Route path="new-character/game/selectrace/selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
-          <Route path="new-character/game/selectrace/selectclass/selectdeity" element={authUser ? <SelectDeityPage /> : <Navigate to="/login" />} />
-          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender" element={authUser ? <SelectGenderPage /> : <Navigate to="/login" />} />
-
-          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname" element={authUser ? <SelectNamePage /> : <Navigate to="/login" />} />
-          <Route path="new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname/summary" element={authUser ? <SummaryPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass" element={authUser ? <SelectClassPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity" element={authUser ? <SelectDeityPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender" element={authUser ? <SelectGenderPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname" element={authUser ? <SelectNamePage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry" element={authUser ? <SelectAncestryPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/summary" element={authUser ? <SummaryPage /> : <Navigate to="/login" />} />
         </Route>
         <Route path="/game/play" element={<InGameLayout />}>
           <Route index element={<ChangeLogPage />} />

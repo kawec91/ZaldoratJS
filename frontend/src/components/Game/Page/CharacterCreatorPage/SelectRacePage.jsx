@@ -29,8 +29,9 @@ export default function SelectRacePage() {
     const handleNext = () => {
         // Zapisz wybraną rasę w sessionStorage
         sessionStorage.setItem('characterRace', selectedRace.name);
+        sessionStorage.setItem('characterRaceId', selectedRace._id);
         // Przejdź do wyboru klasy
-        navigate('selectclass');
+        navigate('selectancestry');
     };
 
     return (

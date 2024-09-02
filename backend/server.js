@@ -10,7 +10,7 @@ import connectDB from "./db/connectDB.js";
 import raceRoutes from './routes/race.routes.js';
 import classRoutes from './routes/class.routes.js';
 import locationRoutes from './routes/location.routes.js';
-
+import ancestryRouter from './routes/ancestry.router.js';
 import originRoutes from './routes/origin.routes.js';
 import deityRoutes from './routes/deity.routes.js';
 import changelogRoutes from './routes/changelog.routes.js';
@@ -52,7 +52,7 @@ app.use('/api/changelogs', changelogRoutes);
 app.use('/api/backpack', backpackRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/mine', mineRoutes);
-
+app.use('/api', ancestryRouter);
 
 //Server Listener
 app.listen(PORT, () => {

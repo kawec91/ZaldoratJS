@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 const ProgressBar = ({ currentStep }) => {
   const steps = [
     { label: 'Wybór Rasy', path: '/game/new-character/game/selectrace' },
-    { label: 'Wybór Klasy', path: '/game/new-character/game/selectrace/selectclass' },
-    { label: 'Wybór Bóstwa', path: '/game/new-character/game/selectrace/selectclass/selectdeity' },
-    { label: 'Wybór Płci', path: '/game/new-character/game/selectrace/selectclass/selectdeity/selectgender' },
-    { label: 'Nadanie Imienia', path: '/game/new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname' },
-    { label: 'Podsumowanie', path: '/game/new-character/game/selectrace/selectclass/selectdeity/selectgender/selectname/summary' },
+    { label: 'Wybór Pochodzenia', path: '/game/new-character/game/selectrace/selectancestry' },
+    { label: 'Wybór Klasy', path: '/game/new-character/game/selectrace/selectancestry/selectclass' },
+    { label: 'Wybór Bóstwa', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity' },
+    { label: 'Wybór Płci', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender' },
+    { label: 'Nadanie Imienia', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname' },
+    { label: 'Podsumowanie', path: '/game/new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/summary' },
   ];
 
   return (

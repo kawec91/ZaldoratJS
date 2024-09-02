@@ -39,7 +39,7 @@ export default function SelectClassPage() {
         <div className="flex flex-col">
             {/* Opis kroku */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={1} /> {/* Ustawia obecny krok na 1 (Wybór Klasy) */}
+                <ProgressBar currentStep={2} /> {/* Ustawia obecny krok na 1 (Wybór Klasy) */}
             </div>
 
             <div className="flex flex-row w-full">
