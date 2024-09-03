@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useClearSessionOnLeave from './UseClearSessionOnLeave'; // Upewnij się, że ścieżka jest poprawna
+
 
 export default function CharacterCreatorPage() {
+    useClearSessionOnLeave(); // Używaj hooka tutaj
+
+
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
             <h1 className="text-4xl font-bold mb-6">Witamy w kreatorze postaci</h1>
