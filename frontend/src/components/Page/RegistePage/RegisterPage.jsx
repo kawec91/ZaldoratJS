@@ -72,7 +72,6 @@ export default function RegisterPage() {
                 </form>
             </div>
         </div>
-        <Footer />
     </div>
   )
 }

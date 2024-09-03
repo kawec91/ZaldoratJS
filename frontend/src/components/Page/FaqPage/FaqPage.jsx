@@ -8,7 +8,6 @@ export default function FaqPage() {
         Dział w budowie...
       </div>
       <div className='w-full h-14'></div>
-      <Footer />
     </div>
   )
 }

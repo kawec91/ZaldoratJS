@@ -3,6 +3,7 @@ import ZaldoratLogo from '../../../assets/images/zaldoratLogo.png'
 import SectionTitle from '../../SectionTitle/SectionTitle'
 import KingdomsList from '../../KingdomsList/KingdomsList'
 import Footer from '../../Footer/Footer'
+import LandingStatsBar from '../../LandingStatsBar/LandingStatsBar'
 
 export default function HomePage() {
   return (
@@ -12,11 +13,11 @@ export default function HomePage() {
         <img src={ZaldoratLogo} alt='game logo' className='h-1/2 w-1/2 object-cover'/>
       </section>
       
-      <section className='h-full w-full pb-20 bg-gradient-to-bl from-red-900 via-zinc-900 to-red-900'>
+      <section className='h-full w-full pb-20 bg-gradient-to-bl from-red-900 via-zinc-900 to-red-900 relative'>
+        <LandingStatsBar />
         <SectionTitle title={'Królestwa'} />
         <KingdomsList />
       </section>
-      <Footer />
     </div>
     
     </>
