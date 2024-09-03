@@ -1,4 +1,3 @@
-// class/character.js
 class Character {
   constructor({
     owner,
@@ -9,8 +8,11 @@ class Character {
     ancestry,
     level = 1,
     stats = {},
+    statsXpMultiplier = {},
     craftingAbilities = {},
+    craftingAbilitiesXpMultiplier = {},
     fightingAbilities = {},
+    fightingAbilitiesXpMultiplier = {},
     world,
     deityRank,
     lastSeen,
@@ -24,6 +26,7 @@ class Character {
     this.classType = classType;
     this.ancestry = ancestry;
     this.level = level;
+
     this.stats = {
       power: 3,
       defence: 3,
@@ -37,6 +40,21 @@ class Character {
       luck: 3,
       ...stats,
     };
+
+    this.statsXpMultiplier = {
+      power: 1.0,
+      defence: 1.0,
+      speed: 1.0,
+      agility: 1.0,
+      vitality: 1.0,
+      blood: 1.0,
+      hp: 1.0,
+      max_hp: 1.0,
+      critical: 1.0,
+      luck: 1.0,
+      ...statsXpMultiplier,
+    };
+
     this.craftingAbilities = {
       smithing: 3,
       smelting: 3,
@@ -55,6 +73,26 @@ class Character {
       farming: 3,
       ...craftingAbilities,
     };
+
+    this.craftingAbilitiesXpMultiplier = {
+      smithing: 1.0,
+      smelting: 1.0,
+      tailoring: 1.0,
+      taming: 1.0,
+      animalHusbandry: 1.0,
+      carpenter: 1.0,
+      mining: 1.0,
+      alchemy: 1.0,
+      healingHerbalism: 1.0,
+      runemaking: 1.0,
+      jewlery: 1.0,
+      woodcutting: 1.0,
+      cooking: 1.0,
+      trading: 1.0,
+      farming: 1.0,
+      ...craftingAbilitiesXpMultiplier,
+    };
+
     this.fightingAbilities = {
       dodge: 3,
       swords: 3,
@@ -72,6 +110,25 @@ class Character {
       necromancy: 3,
       ...fightingAbilities,
     };
+
+    this.fightingAbilitiesXpMultiplier = {
+      dodge: 1.0,
+      swords: 1.0,
+      axes: 1.0,
+      maces: 1.0,
+      polearms: 1.0,
+      bows: 1.0,
+      magic: 1.0,
+      shielding: 1.0,
+      lightarmor: 1.0,
+      mediumarmor: 1.0,
+      heavyarmor: 1.0,
+      stealing: 1.0,
+      vampire: 1.0,
+      necromancy: 1.0,
+      ...fightingAbilitiesXpMultiplier,
+    };
+
     this.world = world;
     this.deityRank = deityRank;
     this.lastSeen = lastSeen;
@@ -90,8 +147,11 @@ class Character {
       ancestry: this.ancestry,
       level: this.level,
       stats: this.stats,
+      stats_xp_multiplier: this.statsXpMultiplier,
       crafting_abilities: this.craftingAbilities,
+      crafting_abilities_xp_multiplier: this.craftingAbilitiesXpMultiplier,
       fighting_abilities: this.fightingAbilities,
+      fighting_abilities_xp_multiplier: this.fightingAbilitiesXpMultiplier,
       world: this.world,
       deityRank: this.deityRank,
       lastSeen: this.lastSeen,

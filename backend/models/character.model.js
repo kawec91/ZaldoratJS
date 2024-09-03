@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Schemat statystyk
+// Schemat statystyk z xpMultiplier
 const statsSchema = new mongoose.Schema({
   power: { type: Number, default: 3 },
   defence: { type: Number, default: 3 },
@@ -12,9 +12,21 @@ const statsSchema = new mongoose.Schema({
   max_hp: { type: Number, default: 3 },
   critical: { type: Number, default: 3 },
   luck: { type: Number, default: 3 },
+  xpMultiplier: {
+    power: { type: Number, default: 1.0 },
+    defence: { type: Number, default: 1.0 },
+    speed: { type: Number, default: 1.0 },
+    agility: { type: Number, default: 1.0 },
+    vitality: { type: Number, default: 1.0 },
+    blood: { type: Number, default: 1.0 },
+    hp: { type: Number, default: 1.0 },
+    max_hp: { type: Number, default: 1.0 },
+    critical: { type: Number, default: 1.0 },
+    luck: { type: Number, default: 1.0 },
+  },
 });
 
-// Schemat umiejętności rzemieślniczych
+// Schemat umiejętności rzemieślniczych z xpMultiplier
 const craftingAbilitiesSchema = new mongoose.Schema({
   smithing: { type: Number, default: 3 },
   smelting: { type: Number, default: 3 },
@@ -31,9 +43,26 @@ const craftingAbilitiesSchema = new mongoose.Schema({
   cooking: { type: Number, default: 3 },
   trading: { type: Number, default: 3 },
   farming: { type: Number, default: 3 },
+  xpMultiplier: {
+    smithing: { type: Number, default: 1.0 },
+    smelting: { type: Number, default: 1.0 },
+    tailoring: { type: Number, default: 1.0 },
+    taming: { type: Number, default: 1.0 },
+    animal_husbandry: { type: Number, default: 1.0 },
+    carpenter: { type: Number, default: 1.0 },
+    mining: { type: Number, default: 1.0 },
+    alchemy: { type: Number, default: 1.0 },
+    healing_herbalism: { type: Number, default: 1.0 },
+    runemaking: { type: Number, default: 1.0 },
+    jewlery: { type: Number, default: 1.0 },
+    woodcutting: { type: Number, default: 1.0 },
+    cooking: { type: Number, default: 1.0 },
+    trading: { type: Number, default: 1.0 },
+    farming: { type: Number, default: 1.0 },
+  },
 });
 
-// Schemat umiejętności bojowych
+// Schemat umiejętności bojowych z xpMultiplier
 const fightingAbilitiesSchema = new mongoose.Schema({
   dodge: { type: Number, default: 3 },
   swords: { type: Number, default: 3 },
@@ -49,6 +78,22 @@ const fightingAbilitiesSchema = new mongoose.Schema({
   stealing: { type: Number, default: 3 },
   vampire: { type: Number, default: 3 },
   necromancy: { type: Number, default: 3 },
+  xpMultiplier: {
+    dodge: { type: Number, default: 1.0 },
+    swords: { type: Number, default: 1.0 },
+    axes: { type: Number, default: 1.0 },
+    maces: { type: Number, default: 1.0 },
+    polearms: { type: Number, default: 1.0 },
+    bows: { type: Number, default: 1.0 },
+    magic: { type: Number, default: 1.0 },
+    shielding: { type: Number, default: 1.0 },
+    lightarmor: { type: Number, default: 1.0 },
+    mediumarmor: { type: Number, default: 1.0 },
+    heavyarmor: { type: Number, default: 1.0 },
+    stealing: { type: Number, default: 1.0 },
+    vampire: { type: Number, default: 1.0 },
+    necromancy: { type: Number, default: 1.0 },
+  },
 });
 
 // Główny schemat postaci
@@ -70,7 +115,7 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  class: {
+  class: {  // Zmieniono 'class' na 'classType'
     type: String,
     required: true,
   },
@@ -105,12 +150,10 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-
   weight: { 
     type: Number, 
     default: 80 
   },
-  
   createdAt: {
     type: Date,
     default: Date.now,
