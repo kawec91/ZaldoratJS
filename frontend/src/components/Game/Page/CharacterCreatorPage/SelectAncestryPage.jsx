@@ -25,6 +25,7 @@ export default function SelectAncestryPage() {
                 const data = await response.json();
                 console.log("Pobrane pochodzenia:", data);
                 setAncestries(data.ancestries);
+                console.log("Stan ancestries po aktualizacji:", data); // Log after setting state
             } catch (error) {
                 console.error('Błąd podczas pobierania pochodzeń:', error);
             }
