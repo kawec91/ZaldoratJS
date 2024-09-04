@@ -14,20 +14,20 @@ const TravelPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-[calc(100vh_-_80px)] bg-gray-100 w-full">
       <div
-        className="overflow-hidden relative"
+        className="overflow-auto relative h-full w-full"
         onMouseMove={handleMouseMove}
       >
         <img
           src={worldMap}
           alt="Mapa"
-          className="transition-transform duration-300 ease-in-out"
+          className="transition-transform duration-300 ease-in-out w-full cursor-none"
         />
-        
+        {/*Ta mapa tam jest w lewym gornym rogu, pomniejszona nie powiększona trzeba ją rozciągnąć ;p */}
         {/* Szklane powiększenie */}
         <div
-          className="absolute border-2 border-black rounded-full"
+          className="absolute border-2 border-black rounded-full" 
           style={{
             width: '150px', // Szerokość szkła powiększającego
             height: '150px', // Wysokość szkła powiększającego
@@ -40,6 +40,7 @@ const TravelPage = () => {
           <img
             src={worldMap}
             alt="Mapa powiększona"
+            className='w-full'
             style={{
               position: 'absolute',
               transform: `scale(${zoomFactor})`,

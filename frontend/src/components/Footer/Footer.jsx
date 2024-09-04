@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom'
 export default function Footer() {
   return (
     <>
-      {/* <Outlet /> */}
+      <Outlet />
       <div className='w-full bottom-0 left 0 flex items-center justify-between p-4'>
         <div className='text-myLightCream'>&copy; 2024 Team Zaldorat</div>
         <div className='flex items-center justify-center gap-2'>

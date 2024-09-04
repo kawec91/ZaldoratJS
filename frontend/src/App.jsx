@@ -71,10 +71,12 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Header />}>
-          <Route index element={<HomePage />} />
-          <Route path="register" element={!authUser ? <RegisterPage /> : <Navigate to="/game" />} />
-          <Route path="login" element={!authUser ? <LoginPage /> : <Navigate to="/game" />} />
-          <Route path="faq" element={<FaqPage />} />
+          <Route path="/" element={<Footer />}>
+            <Route index element={<HomePage />} />
+            <Route path="register" element={!authUser ? <RegisterPage /> : <Navigate to="/game" />} />
+            <Route path="login" element={!authUser ? <LoginPage /> : <Navigate to="/game" />} />
+            <Route path="faq" element={<FaqPage />} />
+          </Route>
         </Route>
         <Route path="/game" element={authUser ? <GameHeader /> : <Navigate to="/login" />}>
           <Route index element={authUser ? <AccountPage /> : <Navigate to="/login" />} />
@@ -106,7 +108,6 @@ function App() {
           <Route path="mountains/sand" element={<SandmountainsPage />} />
         </Route>
       </Routes>
-      <Footer />
       <Toaster />
     </>
   );

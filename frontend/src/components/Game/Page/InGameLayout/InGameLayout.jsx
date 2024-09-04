@@ -81,7 +81,7 @@ export default function InGameLayout() {
             <Outlet />
         </div>
         <div className='px-4 border-t-[1px] border-black flex items-center justify-between h-10'>
-            {bottomMenu.map((item) => <p onClick={() => handleBottomMenuChoice(item.id)} ><Link className={`${selectedItem === item.id ? 'bg-slate-400' : ''}`} key={`${item.name}-${item.link}`} to={item.link}>{item.name}</Link></p>)}
+            {bottomMenu.map((item) => <p key={`${item.id}-${item.name}`} onClick={() => handleBottomMenuChoice(item.id)} ><Link className={`${selectedItem === item.id ? 'bg-slate-400' : ''}`} key={`${item.name}-${item.link}`} to={item.link}>{item.name}</Link></p>)}
         </div>
     </div>
   )

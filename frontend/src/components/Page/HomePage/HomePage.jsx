@@ -2,7 +2,6 @@ import React from 'react'
 import ZaldoratLogo from '../../../assets/images/zaldoratLogo.png'
 import SectionTitle from '../../SectionTitle/SectionTitle'
 import KingdomsList from '../../KingdomsList/KingdomsList'
-import Footer from '../../Footer/Footer'
 import LandingStatsBar from '../../LandingStatsBar/LandingStatsBar'
 
 export default function HomePage() {
