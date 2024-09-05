@@ -4,10 +4,11 @@ import RaceModel from "../models/race.model.js";
 export const createRace = async (req, res) => {
   try {
     const raceData = req.body;
-    const race = new Race(raceData);
-    const raceDBObject = race.toDBObject();
 
-    const newRace = new RaceModel(raceDBObject);
+    // Tworzenie nowej instancji modelu Mongoose
+    const newRace = new RaceModel(raceData);
+
+    // Zapis do bazy danych
     const savedRace = await newRace.save();
 
     res.status(201).json(savedRace);
