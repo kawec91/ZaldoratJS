@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Schemat statystyk z xpMultiplier
+// Schemat statystyk
 const statsSchema = new mongoose.Schema({
   power: { type: Number, default: 3 },
   defence: { type: Number, default: 3 },
@@ -12,21 +12,9 @@ const statsSchema = new mongoose.Schema({
   max_hp: { type: Number, default: 3 },
   critical: { type: Number, default: 3 },
   luck: { type: Number, default: 3 },
-  xpMultiplier: {
-    power: { type: Number, default: 1.0 },
-    defence: { type: Number, default: 1.0 },
-    speed: { type: Number, default: 1.0 },
-    agility: { type: Number, default: 1.0 },
-    vitality: { type: Number, default: 1.0 },
-    blood: { type: Number, default: 1.0 },
-    hp: { type: Number, default: 1.0 },
-    max_hp: { type: Number, default: 1.0 },
-    critical: { type: Number, default: 1.0 },
-    luck: { type: Number, default: 1.0 },
-  },
 });
 
-// Schemat umiejętności rzemieślniczych z xpMultiplier
+// Schemat umiejętności rzemieślniczych
 const craftingAbilitiesSchema = new mongoose.Schema({
   smithing: { type: Number, default: 3 },
   smelting: { type: Number, default: 3 },
@@ -38,31 +26,14 @@ const craftingAbilitiesSchema = new mongoose.Schema({
   alchemy: { type: Number, default: 3 },
   healing_herbalism: { type: Number, default: 3 },
   runemaking: { type: Number, default: 3 },
-  jewlery: { type: Number, default: 3 },
+  jewelry: { type: Number, default: 3 },
   woodcutting: { type: Number, default: 3 },
   cooking: { type: Number, default: 3 },
   trading: { type: Number, default: 3 },
   farming: { type: Number, default: 3 },
-  xpMultiplier: {
-    smithing: { type: Number, default: 1.0 },
-    smelting: { type: Number, default: 1.0 },
-    tailoring: { type: Number, default: 1.0 },
-    taming: { type: Number, default: 1.0 },
-    animal_husbandry: { type: Number, default: 1.0 },
-    carpenter: { type: Number, default: 1.0 },
-    mining: { type: Number, default: 1.0 },
-    alchemy: { type: Number, default: 1.0 },
-    healing_herbalism: { type: Number, default: 1.0 },
-    runemaking: { type: Number, default: 1.0 },
-    jewlery: { type: Number, default: 1.0 },
-    woodcutting: { type: Number, default: 1.0 },
-    cooking: { type: Number, default: 1.0 },
-    trading: { type: Number, default: 1.0 },
-    farming: { type: Number, default: 1.0 },
-  },
 });
 
-// Schemat umiejętności bojowych z xpMultiplier
+// Schemat umiejętności bojowych
 const fightingAbilitiesSchema = new mongoose.Schema({
   dodge: { type: Number, default: 3 },
   swords: { type: Number, default: 3 },
@@ -78,22 +49,49 @@ const fightingAbilitiesSchema = new mongoose.Schema({
   stealing: { type: Number, default: 3 },
   vampire: { type: Number, default: 3 },
   necromancy: { type: Number, default: 3 },
-  xpMultiplier: {
-    dodge: { type: Number, default: 1.0 },
-    swords: { type: Number, default: 1.0 },
-    axes: { type: Number, default: 1.0 },
-    maces: { type: Number, default: 1.0 },
-    polearms: { type: Number, default: 1.0 },
-    bows: { type: Number, default: 1.0 },
-    magic: { type: Number, default: 1.0 },
-    shielding: { type: Number, default: 1.0 },
-    lightarmor: { type: Number, default: 1.0 },
-    mediumarmor: { type: Number, default: 1.0 },
-    heavyarmor: { type: Number, default: 1.0 },
-    stealing: { type: Number, default: 1.0 },
-    vampire: { type: Number, default: 1.0 },
-    necromancy: { type: Number, default: 1.0 },
-  },
+});
+
+// Sekcja mnożników
+const multipliersSchema = new mongoose.Schema({
+  power: { type: Number, default: 1.0 },
+  defence: { type: Number, default: 1.0 },
+  speed: { type: Number, default: 1.0 },
+  agility: { type: Number, default: 1.0 },
+  vitality: { type: Number, default: 1.0 },
+  blood: { type: Number, default: 1.0 },
+  hp: { type: Number, default: 1.0 },
+  max_hp: { type: Number, default: 1.0 },
+  critical: { type: Number, default: 1.0 },
+  luck: { type: Number, default: 1.0 },
+  smithing: { type: Number, default: 1.0 },
+  smelting: { type: Number, default: 1.0 },
+  tailoring: { type: Number, default: 1.0 },
+  taming: { type: Number, default: 1.0 },
+  animal_husbandry: { type: Number, default: 1.0 },
+  carpenter: { type: Number, default: 1.0 },
+  mining: { type: Number, default: 1.0 },
+  alchemy: { type: Number, default: 1.0 },
+  healing_herbalism: { type: Number, default: 1.0 },
+  runemaking: { type: Number, default: 1.0 },
+  jewelry: { type: Number, default: 1.0 },
+  woodcutting: { type: Number, default: 1.0 },
+  cooking: { type: Number, default: 1.0 },
+  trading: { type: Number, default: 1.0 },
+  farming: { type: Number, default: 1.0 },
+  dodge: { type: Number, default: 1.0 },
+  swords: { type: Number, default: 1.0 },
+  axes: { type: Number, default: 1.0 },
+  maces: { type: Number, default: 1.0 },
+  polearms: { type: Number, default: 1.0 },
+  bows: { type: Number, default: 1.0 },
+  magic: { type: Number, default: 1.0 },
+  shielding: { type: Number, default: 1.0 },
+  lightarmor: { type: Number, default: 1.0 },
+  mediumarmor: { type: Number, default: 1.0 },
+  heavyarmor: { type: Number, default: 1.0 },
+  stealing: { type: Number, default: 1.0 },
+  vampire: { type: Number, default: 1.0 },
+  necromancy: { type: Number, default: 1.0 },
 });
 
 // Główny schemat postaci
@@ -115,7 +113,7 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  class: {  // Zmieniono 'class' na 'classType'
+  classType: {  // Zmieniono 'class' na 'classType'
     type: String,
     required: true,
   },
@@ -134,6 +132,7 @@ const characterSchema = new mongoose.Schema({
   stats: statsSchema,
   crafting_abilities: craftingAbilitiesSchema,
   fighting_abilities: fightingAbilitiesSchema,
+  multipliers: multipliersSchema,  // Dodano sekcję dla mnożników
   world: {
     type: String,
     required: true,

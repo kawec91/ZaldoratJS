@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 export default function CharacterStatsPage() {
   const [characterData, setCharacterData] = useState(null);
+  const [hoveredStat, setHoveredStat] = useState(null);
 
   useEffect(() => {
-    // Pobranie ID postaci z sessionStorage
     const characterId = sessionStorage.getItem('selectedCharacterId');
 
     if (characterId) {
-      // Pobranie danych postaci z API na podstawie characterId
       fetch(`/api/characters/${characterId}`)
         .then(res => res.json())
         .then(data => {
@@ -30,50 +29,47 @@ export default function CharacterStatsPage() {
     return <div>Loading character data...</div>;
   }
 
-  const { stats, crafting_abilities, fighting_abilities, character_name } = characterData;
+  const { stats, crafting_abilities, fighting_abilities, multipliers, character_name } = characterData;
+
+  // Function to render stats with their corresponding multipliers
+  const renderStats = (statsObject, multiplierObject) => {
+    return Object.entries(statsObject)
+      .filter(([key]) => key !== '_id')
+      .map(([key, value]) => (
+        <li key={key} className='mb-2 flex items-center relative'>
+          <span className='font-bold text-blue-600'>{key}: </span>
+          <span className='ml-2 text-gray-800'>{value}</span>
+          {hoveredStat === key && (
+            <span className='absolute left-40 bg-gray-200 p-1 rounded'>
+              Multiplier: {multiplierObject[key] || 'undefined'}
+            </span>
+          )}
+          <span
+            onMouseEnter={() => setHoveredStat(key)}
+            onMouseLeave={() => setHoveredStat(null)}
+            className='ml-2 text-gray-500 cursor-pointer'
+          >
+            (?)
+          </span>
+        </li>
+      ));
+  };
 
   return (
-    <div className='h-[calc(100vh_-_50px)] p-4'>
-      <h3 className='text-center text-2xl font-bold mb-4'>{`Statystyki Postaci: ${character_name}`}</h3>
-
-      <div className='grid grid-cols-3 gap-4'>
-        <div className='bg-gray-800 p-4 rounded-lg text-white'>
-          <h4 className='text-lg font-semibold mb-2'>Ogólne Statystyki:</h4>
-          <ul>
-            {Object.entries(stats)
-              .filter(([key]) => key !== '_id')  // Wyklucz klucz '_id'
-              .map(([key, value]) => (
-                <li key={key} className='mb-1'>
-                  <span className='font-bold'>{key}: </span>{value}
-                </li>
-              ))}
-          </ul>
+    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">{character_name}'s Stats</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-blue-50 border border-blue-300 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-blue-600">Statistics</h2>
+          <ul>{renderStats(stats, multipliers)}</ul>
         </div>
-
-        <div className='bg-gray-800 p-4 rounded-lg text-white'>
-          <h4 className='text-lg font-semibold mb-2'>Umiejętności Rzemieślnicze:</h4>
-          <ul>
-            {Object.entries(crafting_abilities)
-              .filter(([key]) => key !== '_id')  // Wyklucz klucz '_id'
-              .map(([key, value]) => (
-                <li key={key} className='mb-1'>
-                  <span className='font-bold'>{key}: </span>{value}
-                </li>
-              ))}
-          </ul>
+        <div className="bg-green-50 border border-green-300 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-green-600">Crafting Abilities</h2>
+          <ul>{renderStats(crafting_abilities, multipliers)}</ul>
         </div>
-
-        <div className='bg-gray-800 p-4 rounded-lg text-white'>
-          <h4 className='text-lg font-semibold mb-2'>Umiejętności Bojowe:</h4>
-          <ul>
-            {Object.entries(fighting_abilities)
-              .filter(([key]) => key !== '_id')  // Wyklucz klucz '_id'
-              .map(([key, value]) => (
-                <li key={key} className='mb-1'>
-                  <span className='font-bold'>{key}: </span>{value}
-                </li>
-              ))}
-          </ul>
+        <div className="bg-red-50 border border-red-300 p-4 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-red-600">Fighting Abilities</h2>
+          <ul>{renderStats(fighting_abilities, multipliers)}</ul>
         </div>
       </div>
     </div>
