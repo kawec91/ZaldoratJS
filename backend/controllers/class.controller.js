@@ -4,10 +4,11 @@ import ClassModel from "../models/class.model.js";
 export const createClass = async (req, res) => {
   try {
     const classData = req.body;
-    const characterClass = new CharacterClass(classData);
-    const classDBObject = characterClass.toDBObject();
 
-    const newClass = new ClassModel(classDBObject);
+    // Tworzenie nowej instancji modelu Mongoose
+    const newClass = new ClassModel(classData);
+
+    // Zapis do bazy danych
     const savedClass = await newClass.save();
 
     res.status(201).json(savedClass);

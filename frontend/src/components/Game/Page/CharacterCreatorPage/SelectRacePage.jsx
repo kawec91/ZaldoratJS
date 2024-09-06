@@ -34,6 +34,16 @@ export default function SelectRacePage() {
         navigate('selectancestry');
     };
 
+    const renderMultipliers = (multipliers) => {
+        return Object.entries(multipliers)
+            .filter(([key, value]) => value !== 0) // Filtruj mnożniki różne od 0
+            .map(([key, value]) => (
+                <li key={key}>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}: <span className="font-medium">{value}</span>
+                </li>
+            ));
+    };
+
     return (
         <div className="flex flex-col">
             {/* Opis kroku */}
@@ -64,12 +74,9 @@ export default function SelectRacePage() {
                         <>
                             <h2 className="text-xl font-bold">{selectedRace.name}</h2>
                             <p className="mt-2">{selectedRace.description}</p>
-                            <h3 className="mt-4 text-lg font-semibold">Statystyki:</h3>
+                            <h3 className="mt-4 text-lg font-semibold">Mnożniki:</h3>
                             <ul className="mt-2">
-                                <li>Siła: <span className="font-medium">{selectedRace.attributes.strength}</span></li>
-                                <li>Zwinność: <span className="font-medium">{selectedRace.attributes.agility}</span></li>
-                                <li>Witalność: <span className="font-medium">{selectedRace.attributes.vitality}</span></li>
-                                <li>Inteligencja: <span className="font-medium">{selectedRace.attributes.intelligence}</span></li>
+                                {renderMultipliers(selectedRace.xpMultipliers)} {/* Wyświetl tylko mnożniki różne od 0 */}
                             </ul>
                             <button 
                                 onClick={handleNext} 

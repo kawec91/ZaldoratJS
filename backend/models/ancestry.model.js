@@ -1,47 +1,54 @@
 import mongoose from 'mongoose';
 
-// Schemat umiejętności rzemieślniczych
-const craftingAbilitiesSchema = new mongoose.Schema({
-  smithing: { type: Number, default: 3 },
-  smelting: { type: Number, default: 3 },
-  tailoring: { type: Number, default: 3 },
-  taming: { type: Number, default: 3 },
-  animal_husbandry: { type: Number, default: 3 },
-  carpenter: { type: Number, default: 3 },
-  mining: { type: Number, default: 3 },
-  alchemy: { type: Number, default: 3 },
-  healing_herbalism: { type: Number, default: 3 },
-  runemaking: { type: Number, default: 3 },
-  jewlery: { type: Number, default: 3 },
-  woodcutting: { type: Number, default: 3 },
-  cooking: { type: Number, default: 3 },
-  trading: { type: Number, default: 3 },
-  farming: { type: Number, default: 3 },
+// Schemat mnożników dla ancestry
+const xpMultipliersSchema = new mongoose.Schema({
+  power: { type: Number },
+  defence: { type: Number },
+  speed: { type: Number },
+  agility: { type: Number },
+  vitality: { type: Number },
+  blood: { type: Number },
+  hp: { type: Number },
+  max_hp: { type: Number },
+  critical: { type: Number },
+  luck: { type: Number },
+  smithing: { type: Number },
+  smelting: { type: Number },
+  tailoring: { type: Number },
+  taming: { type: Number },
+  animal_husbandry: { type: Number },
+  carpenter: { type: Number },
+  mining: { type: Number },
+  alchemy: { type: Number },
+  healing_herbalism: { type: Number },
+  runemaking: { type: Number },
+  jewelry: { type: Number },
+  woodcutting: { type: Number },
+  cooking: { type: Number },
+  trading: { type: Number },
+  farming: { type: Number },
+  dodge: { type: Number },
+  swords: { type: Number },
+  axes: { type: Number },
+  maces: { type: Number },
+  polearms: { type: Number },
+  bows: { type: Number },
+  magic: { type: Number },
+  shielding: { type: Number },
+  lightarmor: { type: Number },
+  mediumarmor: { type: Number },
+  heavyarmor: { type: Number },
+  stealing: { type: Number },
+  vampire: { type: Number },
+  necromancy: { type: Number },
 });
 
-// Schemat umiejętności bojowych
-const fightingAbilitiesSchema = new mongoose.Schema({
-  dodge: { type: Number, default: 3 },
-  swords: { type: Number, default: 3 },
-  axes: { type: Number, default: 3 },
-  maces: { type: Number, default: 3 },
-  polearms: { type: Number, default: 3 },
-  bows: { type: Number, default: 3 },
-  magic: { type: Number, default: 3 },
-  shielding: { type: Number, default: 3 },
-  stealing: { type: Number, default: 3 },
-  vampire: { type: Number, default: 3 },
-  necromancy: { type: Number, default: 3 },
-});
-
+// Główny schemat ancestry
 const ancestrySchema = new mongoose.Schema({
-  race: { type: mongoose.Schema.Types.ObjectId, ref: 'Race', required: true }, // Odwołanie do rasy
+  race: { type: mongoose.Schema.Types.ObjectId, ref: 'Race', required: true }, // Referencja do rasy
   name: { type: String, required: true },
   description: { type: String, required: true },
-  stats: {
-    crafting: craftingAbilitiesSchema,
-    fighting: fightingAbilitiesSchema,
-  },
+  xpMultipliers: xpMultipliersSchema, // Mnożniki doświadczenia
 });
 
 const AncestryModel = mongoose.model('Ancestry', ancestrySchema);
