@@ -15,15 +15,50 @@ export default function SummaryPage() {
     const characterAncestry = sessionStorage.getItem('characterAncestry');
     const characterLocation = sessionStorage.getItem('characterLocation'); // Pobierz lokację początkową
 
-    const handleConfirm = () => {
+    // Pobierz mnożniki z sessionStorage
+    const xpMultipliers = JSON.parse(sessionStorage.getItem('xpMultipliers')) || {};
+
+    const handleConfirm = async () => {
         // Sprawdź, czy wszystkie wymagane dane są dostępne
         if (!characterRace || !characterClass || !characterDeity || !characterGender || !nickname || !characterAncestry || !characterLocation) {
             toast.error("Wszystkie pola muszą być wypełnione!");
             return;
         }
 
-        // Potwierdź stworzenie postaci (zapisz dane, przejdź dalej, itp.)
-        toast.success("Postać została stworzona!");
+        const confirmation = window.confirm("Czy na pewno chcesz stworzyć tę postać?");
+        if (!confirmation) {
+            return;
+        }
+
+        // Przygotuj dane do zapisania
+        const characterData = {
+            race: characterRace,
+            class: characterClass,
+            deity: characterDeity,
+            gender: characterGender,
+            nickname,
+            ancestry: characterAncestry,
+            location: characterLocation,
+            xpMultipliers
+        };
+
+        try {
+            const response = await fetch('/api/characters/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(characterData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            toast.success("Postać została stworzona!");
+        } catch (error) {
+            toast.error("Wystąpił błąd podczas tworzenia postaci: " + error.message);
+        }
 
         // Wyczyść sessionStorage po potwierdzeniu stworzenia postaci
         sessionStorage.clear();
@@ -54,6 +89,20 @@ export default function SummaryPage() {
                     <p><strong>Wyznanie:</strong> {characterDeity || 'Brak danych'}</p>
                     <p><strong>Płeć:</strong> {characterGender || 'Brak danych'}</p>
                     <p><strong>Lokacja Początkowa:</strong> {characterLocation || 'Brak danych'}</p> {/* Dodaj lokację */}
+                </div>
+
+                {/* Wyświetlanie zsumowanych mnożników */}
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold">Zsumowane Mnożniki:</h3>
+                    <ul className="mt-2">
+                        {Object.entries(xpMultipliers).map(([skill, multiplier]) => (
+                            multiplier !== 0 && (
+                                <li key={skill}>
+                                    <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier}
+                                </li>
+                            )
+                        ))}
+                    </ul>
                 </div>
 
                 <div className="mt-4">

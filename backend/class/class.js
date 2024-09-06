@@ -1,18 +1,17 @@
 class CharacterClass {
-    constructor({ name, description, attributes }) {
+  constructor({ name, description, xpMultipliers }) {
       this.name = name;
       this.description = description;
-      this.attributes = attributes;
-    }
-  
-    toDBObject() {
-      return {
-        name: this.name,
-        description: this.description,
-        attributes: this.attributes,
-      };
-    }
+      this.xpMultipliers = xpMultipliers; // Mnożniki doświadczenia
   }
-  
-  export default CharacterClass;
-  
+
+  toDBObject() {
+      return {
+          name: this.name,
+          description: this.description,
+          xpMultipliers: this.xpMultipliers, // Dodanie mnożników do obiektu
+      };
+  }
+}
+
+export default CharacterClass;

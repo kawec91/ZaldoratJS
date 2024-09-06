@@ -25,7 +25,7 @@ export default function SelectAncestryPage() {
                 const data = await response.json();
                 console.log("Pobrane pochodzenia:", data);
                 setAncestries(data.ancestries);
-                console.log("Stan ancestries po aktualizacji:", data); // Log after setting state
+                console.log("Stan ancestries po aktualizacji:", data);
             } catch (error) {
                 console.error('Błąd podczas pobierania pochodzeń:', error);
             }
@@ -57,7 +57,7 @@ export default function SelectAncestryPage() {
                         {ancestries.length > 0 ? (
                             ancestries.map((ancestry) => (
                                 <li
-                                    key={ancestry._id} // Keep this for the ancestry list
+                                    key={ancestry._id}
                                     onClick={() => handleAncestrySelection(ancestry)}
                                     className={`cursor-pointer p-2 rounded hover:bg-gray-200 ${selectedAncestry && selectedAncestry._id === ancestry._id ? 'bg-gray-300' : ''}`}
                                 >
@@ -80,8 +80,8 @@ export default function SelectAncestryPage() {
                             {/* Display Crafting Stats */}
                             <h3 className="text-lg font-semibold mt-4">Umiejętności Rzemieślnicze:</h3>
                             <ul className="mt-2">
-                                {selectedAncestry.stats.crafting ? (
-                                    Object.entries(selectedAncestry.stats.crafting)
+                                {selectedAncestry.xpMultipliers ? (
+                                    Object.entries(selectedAncestry.xpMultipliers)
                                         .filter(([key]) => key !== '_id') // Exclude _id key
                                         .map(([skill, value]) => (
                                             <li key={skill}>
@@ -96,8 +96,8 @@ export default function SelectAncestryPage() {
                             {/* Display Fighting Stats */}
                             <h3 className="text-lg font-semibold mt-4">Umiejętności Bojowe:</h3>
                             <ul className="mt-2">
-                                {selectedAncestry.stats.fighting ? (
-                                    Object.entries(selectedAncestry.stats.fighting)
+                                {selectedAncestry.xpMultipliers ? (
+                                    Object.entries(selectedAncestry.xpMultipliers)
                                         .filter(([key]) => key !== '_id') // Exclude _id key
                                         .map(([skill, value]) => (
                                             <li key={skill}>

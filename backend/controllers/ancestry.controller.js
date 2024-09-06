@@ -3,14 +3,14 @@ import AncestryModel from '../models/ancestry.model.js';
 class AncestryController {
   // Metoda do tworzenia nowego pochodzenia
   async createAncestry(req, res) {
-    const { raceId, name, description, stats } = req.body;
+    const { raceId, name, description, xpMultipliers } = req.body; // Dodano xpMultipliers
 
     try {
       const newAncestry = new AncestryModel({
         race: raceId,
         name,
         description,
-        stats,
+        xpMultipliers, // Dodano xpMultipliers
       });
 
       await newAncestry.save();

@@ -39,7 +39,7 @@ export default function SelectClassPage() {
         <div className="flex flex-col">
             {/* Opis kroku */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={2} /> {/* Ustawia obecny krok na 1 (Wybór Klasy) */}
+                <ProgressBar currentStep={2} /> {/* Ustawia obecny krok na 2 (Wybór Klasy) */}
             </div>
 
             <div className="flex flex-row w-full">
@@ -65,13 +65,35 @@ export default function SelectClassPage() {
                         <>
                             <h2 className="text-xl font-bold">{selectedClass.name}</h2>
                             <p className="mt-2">{selectedClass.description}</p>
-                            <h3 className="mt-4 text-lg font-semibold">Statystyki:</h3>
+                            
+                            {/* Wyświetlanie statystyk rzemieślniczych */}
+                            <h3 className="text-lg font-semibold mt-4">Umiejętności Rzemieślnicze:</h3>
                             <ul className="mt-2">
-                                <li>Siła: <span className="font-medium">{selectedClass.attributes?.strength || 0}</span></li>
-                                <li>Zwinność: <span className="font-medium">{selectedClass.attributes?.agility || 0}</span></li>
-                                <li>Witalność: <span className="font-medium">{selectedClass.attributes?.vitality || 0}</span></li>
-                                <li>Inteligencja: <span className="font-medium">{selectedClass.attributes?.intelligence || 0}</span></li>
+                                {selectedClass.xpMultipliers ? (
+                                    Object.entries(selectedClass.xpMultipliers).map(([skill, multiplier]) => (
+                                        <li key={skill}>
+                                            <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier || 'N/A'}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li>Brak umiejętności rzemieślniczych dla tej klasy.</li>
+                                )}
                             </ul>
+
+                            {/* Wyświetlanie statystyk bojowych */}
+                            <h3 className="text-lg font-semibold mt-4">Umiejętności Bojowe:</h3>
+                            <ul className="mt-2">
+                                {selectedClass.xpMultipliers ? (
+                                    Object.entries(selectedClass.xpMultipliers).map(([skill, multiplier]) => (
+                                        <li key={skill}>
+                                            <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier || 'N/A'}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li>Brak umiejętności bojowych dla tej klasy.</li>
+                                )}
+                            </ul>
+
                             <button 
                                 onClick={handleNext} 
                                 disabled={!selectedClass} 
