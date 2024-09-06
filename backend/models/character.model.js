@@ -113,7 +113,7 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  classType: {  // Zmieniono 'class' na 'classType'
+  classType: {
     type: String,
     required: true,
   },

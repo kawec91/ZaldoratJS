@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 
 export default function SelectClassPage() {
-    const [classes, setClasses] = useState([]); // Lista klas
-    const [selectedClass, setSelectedClass] = useState(null); // Wybrana klasa
+    const [classes, setClasses] = useState([]);
+    const [selectedClass, setSelectedClass] = useState(null);
     const navigate = useNavigate();
+    const ancestryId = sessionStorage.getItem('characterAncestryId');
 
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch('/api/classes/getall'); // Upewnij się, że endpoint jest poprawny
+                const response = await fetch('/api/classes/getall'); // Dostosuj do swojego API
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Błąd sieci: ' + response.statusText);
                 }
                 const data = await response.json();
                 setClasses(data); // Ustaw pobrane klasy
@@ -24,80 +25,59 @@ export default function SelectClassPage() {
         fetchClasses();
     }, []);
 
-    const handleClassSelection = (characterClass) => {
-        setSelectedClass(characterClass); // Ustaw wybraną klasę
+    const handleClassSelection = (classItem) => {
+        setSelectedClass(classItem);
     };
 
     const handleNext = () => {
         if (selectedClass) {
+            // Zapisz wybraną klasę i mnożniki do sessionStorage
             sessionStorage.setItem('characterClass', selectedClass.name);
-            navigate('selectdeity'); // Zmiana na właściwą stronę
+            sessionStorage.setItem('classMultipliers', JSON.stringify(selectedClass.xpMultipliers));
+            navigate('selectdeity'); // Przejdź do następnego kroku
         }
     };
 
     return (
-        <div className="flex flex-col">
-            {/* Opis kroku */}
-            <div className="w-full p-4">
-                <ProgressBar currentStep={2} /> {/* Ustawia obecny krok na 2 (Wybór Klasy) */}
-            </div>
-
-            <div className="flex flex-row w-full">
-                {/* Lista klas */}
+        <div>
+            <ProgressBar currentStep={2} />
+            <h1>Wybierz klasę</h1>
+            <div className="flex">
+                {/* Left side: Class List */}
                 <div className="w-1/3 p-4 border-r border-gray-300">
                     <h2 className="text-xl font-bold mb-4">Wybierz swoją klasę</h2>
-                    <ul className="flex flex-col">
-                        {classes.map((characterClass) => (
-                            <li 
-                                key={characterClass._id} 
-                                onClick={() => handleClassSelection(characterClass)} 
-                                className={`cursor-pointer p-2 rounded hover:bg-gray-200 ${selectedClass && selectedClass._id === characterClass._id ? 'bg-gray-300' : ''}`}
+                    <ul>
+                        {classes.map((classItem) => (
+                            <li
+                                key={classItem._id}
+                                onClick={() => handleClassSelection(classItem)}
+                                className={`cursor-pointer p-2 rounded hover:bg-gray-200 ${selectedClass && selectedClass._id === classItem._id ? 'bg-gray-300' : ''}`}
                             >
-                                {characterClass.name}
+                                {classItem.name}
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                {/* Opis wybranej klasy */}
+                {/* Right side: Selected Class Details */}
                 <div className="w-2/3 p-4">
                     {selectedClass ? (
                         <>
                             <h2 className="text-xl font-bold">{selectedClass.name}</h2>
                             <p className="mt-2">{selectedClass.description}</p>
-                            
-                            {/* Wyświetlanie statystyk rzemieślniczych */}
-                            <h3 className="text-lg font-semibold mt-4">Umiejętności Rzemieślnicze:</h3>
+                            <h3 className="text-lg font-semibold mt-4">Mnożniki:</h3>
                             <ul className="mt-2">
-                                {selectedClass.xpMultipliers ? (
-                                    Object.entries(selectedClass.xpMultipliers).map(([skill, multiplier]) => (
-                                        <li key={skill}>
-                                            <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier || 'N/A'}
+                                {Object.entries(selectedClass.xpMultipliers)
+                                    .filter(([key, value]) => value !== 0) // Filtruj mnożniki różne od 0
+                                    .map(([key, value]) => (
+                                        <li key={key}>
+                                            {key.charAt(0).toUpperCase() + key.slice(1)}: <span className="font-medium">{value}</span>
                                         </li>
-                                    ))
-                                ) : (
-                                    <li>Brak umiejętności rzemieślniczych dla tej klasy.</li>
-                                )}
+                                    ))}
                             </ul>
-
-                            {/* Wyświetlanie statystyk bojowych */}
-                            <h3 className="text-lg font-semibold mt-4">Umiejętności Bojowe:</h3>
-                            <ul className="mt-2">
-                                {selectedClass.xpMultipliers ? (
-                                    Object.entries(selectedClass.xpMultipliers).map(([skill, multiplier]) => (
-                                        <li key={skill}>
-                                            <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier || 'N/A'}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>Brak umiejętności bojowych dla tej klasy.</li>
-                                )}
-                            </ul>
-
-                            <button 
-                                onClick={handleNext} 
-                                disabled={!selectedClass} 
-                                className={`mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400`}
+                            <button
+                                onClick={handleNext}
+                                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                             >
                                 Dalej
                             </button>

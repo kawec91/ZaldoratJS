@@ -30,11 +30,15 @@ export default function SelectRacePage() {
         // Zapisz wybraną rasę w sessionStorage
         sessionStorage.setItem('characterRace', selectedRace.name);
         sessionStorage.setItem('characterRaceId', selectedRace._id);
-        // Przejdź do wyboru klasy
+        sessionStorage.setItem('raceMultipliers', JSON.stringify(selectedRace.xpMultipliers)); // Zapisz mnożniki rasy
+        // Przejdź do wyboru pochodzenia
         navigate('selectancestry');
     };
-
     const renderMultipliers = (multipliers) => {
+        if (!multipliers || Object.keys(multipliers).length === 0) {
+            return <li>Brak mnożników do wyświetlenia</li>;
+        }
+        
         return Object.entries(multipliers)
             .filter(([key, value]) => value !== 0) // Filtruj mnożniki różne od 0
             .map(([key, value]) => (

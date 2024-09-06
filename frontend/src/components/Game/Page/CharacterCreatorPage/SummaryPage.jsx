@@ -16,7 +16,27 @@ export default function SummaryPage() {
     const characterLocation = sessionStorage.getItem('characterLocation'); // Pobierz lokację początkową
 
     // Pobierz mnożniki z sessionStorage
-    const xpMultipliers = JSON.parse(sessionStorage.getItem('xpMultipliers')) || {};
+    const raceMultipliers = JSON.parse(sessionStorage.getItem('raceMultipliers')) || {};
+    const ancestryMultipliers = JSON.parse(sessionStorage.getItem('ancestryMultipliers')) || {};
+    const classMultipliers = JSON.parse(sessionStorage.getItem('classMultipliers')) || {};
+
+    // Zsumuj mnożniki
+    const totalMultipliers = {};
+
+    const sumMultipliers = (multipliers) => {
+        Object.entries(multipliers).forEach(([key, value]) => {
+            totalMultipliers[key] = (totalMultipliers[key] || 0) + value;
+        });
+    };
+
+    sumMultipliers(raceMultipliers);
+    sumMultipliers(ancestryMultipliers);
+    sumMultipliers(classMultipliers);
+
+    // Funkcja do zaokrąglania mnożników
+    const formatMultiplier = (multiplier) => {
+        return Math.round(multiplier * 100) / 100; // Zaokrąglij do 2 miejsc po przecinku
+    };
 
     const handleConfirm = async () => {
         // Sprawdź, czy wszystkie wymagane dane są dostępne
@@ -39,7 +59,7 @@ export default function SummaryPage() {
             nickname,
             ancestry: characterAncestry,
             location: characterLocation,
-            xpMultipliers
+            xpMultipliers: totalMultipliers // Użyj zsumowanych mnożników
         };
 
         try {
@@ -95,10 +115,10 @@ export default function SummaryPage() {
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Zsumowane Mnożniki:</h3>
                     <ul className="mt-2">
-                        {Object.entries(xpMultipliers).map(([skill, multiplier]) => (
+                        {Object.entries(totalMultipliers).map(([skill, multiplier]) => (
                             multiplier !== 0 && (
                                 <li key={skill}>
-                                    <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {multiplier}
+                                    <strong>{skill.charAt(0).toUpperCase() + skill.slice(1)}:</strong> {formatMultiplier(multiplier)}
                                 </li>
                             )
                         ))}
