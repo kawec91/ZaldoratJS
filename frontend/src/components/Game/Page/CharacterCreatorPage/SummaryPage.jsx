@@ -21,11 +21,16 @@ export default function SummaryPage({ authUser, isLoading }) {
     const ancestryMultipliers = JSON.parse(sessionStorage.getItem('ancestryMultipliers')) || {};
     const classMultipliers = JSON.parse(sessionStorage.getItem('classMultipliers')) || {};
 
-    // Zsumuj mnożniki
+    // Funkcja do zaokrąglania mnożników
+    const formatMultiplier = (multiplier) => {
+        return Math.round(multiplier * 100) / 100; // Zaokrąglij do 2 miejsc po przecinku
+    };
+
+    // Zsumuj i zaokrąglij mnożniki
     const totalMultipliers = {};
     const sumMultipliers = (multipliers) => {
         Object.entries(multipliers).forEach(([key, value]) => {
-            totalMultipliers[key] = (totalMultipliers[key] || 0) + value;
+            totalMultipliers[key] = formatMultiplier((totalMultipliers[key] || 0) + value);
         });
     };
 
@@ -33,13 +38,8 @@ export default function SummaryPage({ authUser, isLoading }) {
     sumMultipliers(ancestryMultipliers);
     sumMultipliers(classMultipliers);
 
-    // Zapisz zsumowane mnożniki w sessionStorage
+    // Zapisz zsumowane i zaokrąglone mnożniki w sessionStorage
     sessionStorage.setItem('totalMultipliers', JSON.stringify(totalMultipliers));
-
-    // Funkcja do zaokrąglania mnożników
-    const formatMultiplier = (multiplier) => {
-        return Math.round(multiplier * 100) / 100; // Zaokrąglij do 2 miejsc po przecinku
-    };
 
     const handleConfirm = async () => {
         const requiredFields = [
@@ -91,7 +91,7 @@ export default function SummaryPage({ authUser, isLoading }) {
             character_name: characterName,
             ancestry: characterAncestry,
             location: characterLocation,
-            multipliers: totalMultipliers, // Wysyłamy zsumowane mnożniki
+            multipliers: totalMultipliers, // Wysyłamy zsumowane i zaokrąglone mnożniki
             owner: ownerId
         };
 
