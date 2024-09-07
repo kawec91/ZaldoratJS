@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 
 export default function SelectNamePage() {
-    const [nickname, setNickname] = useState('');
+    const [characterName, setCharacterName] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Zapisz imię postaci w sessionStorage
-        sessionStorage.setItem('nickname', nickname);
+        sessionStorage.setItem('character_name', characterName);
         // Przejdź do następnej strony
         navigate('selectlocation'); // Przykład, zmień na odpowiednią ścieżkę
     };
@@ -18,7 +18,7 @@ export default function SelectNamePage() {
         <div className="flex flex-col items-center">
             {/* Pasek postępu */}
             <div className="w-full p-4">
-                <ProgressBar currentStep={5} /> {/* Ustawia obecny krok na 4 (Nadanie Imienia) */}
+                <ProgressBar currentStep={5} /> {/* Ustawia obecny krok na 5 (Nadanie Imienia) */}
             </div>
 
             <div className="flex flex-col items-center w-full p-4">
@@ -28,8 +28,8 @@ export default function SelectNamePage() {
                         Imię:
                         <input 
                             type="text" 
-                            value={nickname} 
-                            onChange={(e) => setNickname(e.target.value)} 
+                            value={characterName} 
+                            onChange={(e) => setCharacterName(e.target.value)} 
                             required 
                             className="border border-gray-300 p-2 rounded mt-1"
                         />

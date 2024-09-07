@@ -101,10 +101,7 @@ const characterSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  nickname: {
-    type: String,
-    required: true,
-  },
+
   character_name: {
     type: String,
     required: true,
@@ -135,7 +132,7 @@ const characterSchema = new mongoose.Schema({
   multipliers: multipliersSchema,  // Dodano sekcję dla mnożników
   world: {
     type: String,
-    required: true,
+    required: false,
   },
   deityRank: {
     type: String,

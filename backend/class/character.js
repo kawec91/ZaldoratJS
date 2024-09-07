@@ -1,11 +1,12 @@
 class Character {
   constructor({
     owner,
-    nickname,
-    characterName,
+  
+    character_name, // Zmiana na character_name
     race,
     classType,
     ancestry,
+    deity,
     level = 1,
     stats = {},
     craftingAbilities = {},
@@ -18,11 +19,12 @@ class Character {
     multipliers = {}, // Pojedyncze mnożniki
   }) {
     this.owner = owner;
-    this.nickname = nickname;
-    this.characterName = characterName;
+   
+    this.character_name = character_name; // Zmiana na character_name
     this.race = race;
     this.classType = classType;
     this.ancestry = ancestry;
+    this.deity = deity;
     this.level = level;
 
     this.stats = {
@@ -84,6 +86,45 @@ class Character {
 
     // Pojedyncze mnożniki
     this.multipliers = {
+      power: 1.0,
+      defence: 1.0,
+      speed: 1.0,
+      agility: 1.0,
+      vitality: 1.0,
+      blood: 1.0,
+      hp: 1.0,
+      max_hp: 1.0,
+      critical: 1.0,
+      luck: 1.0,
+      smithing: 1.0,
+      smelting: 1.0,
+      tailoring: 1.0,
+      taming: 1.0,
+      animalHusbandry: 1.0,
+      carpenter: 1.0,
+      mining: 1.0,
+      alchemy: 1.0,
+      healingHerbalism: 1.0,
+      runemaking: 1.0,
+      jewelry: 1.0,
+      woodcutting: 1.0,
+      cooking: 1.0,
+      trading: 1.0,
+      farming: 1.0,
+      dodge: 1.0,
+      swords: 1.0,
+      axes: 1.0,
+      maces: 1.0,
+      polearms: 1.0,
+      bows: 1.0,
+      magic: 1.0,
+      shielding: 1.0,
+      lightarmor: 1.0,
+      mediumarmor: 1.0,
+      heavyarmor: 1.0,
+      stealing: 1.0,
+      vampire: 1.0,
+      necromancy: 1.0,
       ...multipliers,
     };
   }
@@ -92,11 +133,12 @@ class Character {
   toDBObject() {
     return {
       owner: this.owner,
-      nickname: this.nickname,
-      character_name: this.characterName,
+     
+      character_name: this.character_name, // Zmiana na character_name
       race: this.race,
       classType: this.classType,
       ancestry: this.ancestry,
+      deity: this.deity, // Dodano pole deity
       level: this.level,
       stats: this.stats,
       crafting_abilities: this.craftingAbilities,

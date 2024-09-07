@@ -90,7 +90,7 @@ function App() {
           <Route path="new-character/game/selectrace/selectancestry" element={authUser ? <SelectAncestryPage /> : <Navigate to="/login" />} />
           <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/selectlocation" element={authUser ? <SelectLocationPage authUser={authUser} /> : <Navigate to="/login" />} />
 
-          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/selectlocation/summary" element={authUser ? <SummaryPage /> : <Navigate to="/login" />} />
+          <Route path="new-character/game/selectrace/selectancestry/selectclass/selectdeity/selectgender/selectname/selectlocation/summary" element={authUser ? <SummaryPage authUser={authUser} /> : <Navigate to="/login" />} />
         </Route>
         <Route path="/game/play" element={<InGameLayout />}>
           <Route index element={<ChangeLogPage />} />
