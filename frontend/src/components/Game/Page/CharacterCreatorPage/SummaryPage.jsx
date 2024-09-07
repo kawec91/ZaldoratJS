@@ -33,13 +33,24 @@ export default function SummaryPage({ authUser, isLoading }) {
     sumMultipliers(ancestryMultipliers);
     sumMultipliers(classMultipliers);
 
+    // Zapisz zsumowane mnożniki w sessionStorage
+    sessionStorage.setItem('totalMultipliers', JSON.stringify(totalMultipliers));
+
     // Funkcja do zaokrąglania mnożników
     const formatMultiplier = (multiplier) => {
         return Math.round(multiplier * 100) / 100; // Zaokrąglij do 2 miejsc po przecinku
     };
 
     const handleConfirm = async () => {
-        const requiredFields = [characterRace, characterClass, characterDeity, characterGender, characterName, characterAncestry, characterLocation];
+        const requiredFields = [
+            characterRace, 
+            characterClass, 
+            characterDeity, 
+            characterGender, 
+            characterName, 
+            characterAncestry, 
+            characterLocation
+        ];
 
         // Debugowanie: logowanie wartości
         console.log("Dane postaci:", {
@@ -80,7 +91,7 @@ export default function SummaryPage({ authUser, isLoading }) {
             character_name: characterName,
             ancestry: characterAncestry,
             location: characterLocation,
-            xpMultipliers: totalMultipliers,
+            xpMultipliers: totalMultipliers, // Wysyłamy zsumowane mnożniki
             owner: ownerId
         };
 
@@ -101,7 +112,7 @@ export default function SummaryPage({ authUser, isLoading }) {
             }
 
             toast.success("Postać została stworzona!");
-            sessionStorage.clear();
+            sessionStorage.clear(); // Wyczyść sessionStorage po pomyślnym stworzeniu postaci
             navigate('/game');
         } catch (error) {
             console.error("Wystąpił błąd podczas tworzenia postaci:", error);
