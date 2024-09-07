@@ -91,7 +91,7 @@ export default function SummaryPage({ authUser, isLoading }) {
             character_name: characterName,
             ancestry: characterAncestry,
             location: characterLocation,
-            xpMultipliers: totalMultipliers, // Wysyłamy zsumowane mnożniki
+            multipliers: totalMultipliers, // Wysyłamy zsumowane mnożniki
             owner: ownerId
         };
 

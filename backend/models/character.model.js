@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Schemat statystyk
 const statsSchema = new mongoose.Schema({
@@ -92,13 +92,14 @@ const multipliersSchema = new mongoose.Schema({
   stealing: { type: Number, default: 1.0 },
   vampire: { type: Number, default: 1.0 },
   necromancy: { type: Number, default: 1.0 },
+  _id: { type: String },
 });
 
 // Główny schemat postaci
 const characterSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
 
@@ -129,7 +130,7 @@ const characterSchema = new mongoose.Schema({
   stats: statsSchema,
   crafting_abilities: craftingAbilitiesSchema,
   fighting_abilities: fightingAbilitiesSchema,
-  multipliers: multipliersSchema,  // Dodano sekcję dla mnożników
+  multipliers: multipliersSchema, // Dodano sekcję dla mnożników
   world: {
     type: String,
     required: false,
@@ -146,9 +147,9 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  weight: { 
-    type: Number, 
-    default: 80 
+  weight: {
+    type: Number,
+    default: 80,
   },
   createdAt: {
     type: Date,
@@ -156,6 +157,6 @@ const characterSchema = new mongoose.Schema({
   },
 });
 
-const CharacterModel = mongoose.model('Character', characterSchema);
+const CharacterModel = mongoose.model("Character", characterSchema);
 
 export default CharacterModel;
