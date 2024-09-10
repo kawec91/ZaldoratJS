@@ -25,6 +25,9 @@ import BariermountainsPage from "./components/Game/Page/MountainsPage/Bariermoun
 import WhitemountainsPage from "./components/Game/Page/MountainsPage/WhitemountainsPage";
 import GlassmountainsPage from "./components/Game/Page/MountainsPage/GlassmountainsPage";
 import SandmountainsPage from "./components/Game/Page/MountainsPage/SandmountainsPage";
+//locations
+import VerentrisPage from "./components/Game/Page/Locations/VerentrisPage";
+import StartVillagePage from "./components/Game/Page/Locations/StartVillagePage";
 // Character creator
 import SelectRacePage from "./components/Game/Page/CharacterCreatorPage/SelectRacePage";
 import SelectDeityPage from "./components/Game/Page/CharacterCreatorPage/SelectDeityPage";
@@ -102,6 +105,8 @@ function App() {
           <Route path="admin/race" element={<AdminRacePage />} />
           <Route path="admin/class" element={<AdminClasPage />} />
           <Route path="admin/faith" element={<AdminFaithPage />} />
+          <Route path="locations/verentris" element={<VerentrisPage />} />
+          <Route path="locations/startvillage" element={<StartVillagePage />} />
           <Route path="mountains/barier" element={<BariermountainsPage />} />
           <Route path="mountains/white" element={<WhitemountainsPage />} />
           <Route path="mountains/glass" element={<GlassmountainsPage />} />
