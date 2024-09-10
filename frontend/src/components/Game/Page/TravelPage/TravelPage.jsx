@@ -1,55 +1,21 @@
-import React, { useState } from 'react';
-import worldMap from './world.jpg'; // Ścieżka do pliku w tym samym folderze
+import React from 'react';
+import Magnifier from 'react-magnifier';
+import worldMap from './world.jpg'; // Ścieżka do pliku z obrazem
 
 const TravelPage = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const zoomFactor = 2; // Wartość powiększenia
-
-  const handleMouseMove = (event) => {
-    const rect = event.target.getBoundingClientRect();
-    const x = event.clientX - rect.left; // X pos relative to image
-    const y = event.clientY - rect.top; // Y pos relative to image
-
-    setMousePosition({ x, y });
-  };
-
   return (
     <div className="flex justify-center items-center h-[calc(100vh_-_80px)] bg-gray-100 w-full">
-      <div
-        className="overflow-auto relative h-full w-full"
-        onMouseMove={handleMouseMove}
-      >
-        <img
+      <div className="overflow-auto relative h-full w-full">
+        <Magnifier
           src={worldMap}
-          alt="Mapa"
-          className="transition-transform duration-300 ease-in-out w-full cursor-none"
+          mgShape="circle"
+          mgShowOverflow={false}
+          mgWidth={150}
+          mgHeight={150}
+          zoomFactor={2}
+          alt="Mapa świata"
+          className="w-full"
         />
-        {/*Ta mapa tam jest w lewym gornym rogu, pomniejszona nie powiększona trzeba ją rozciągnąć ;p */}
-        {/* Szklane powiększenie */}
-        <div
-          className="absolute border-2 border-black rounded-full" 
-          style={{
-            width: '150px', // Szerokość szkła powiększającego
-            height: '150px', // Wysokość szkła powiększającego
-            left: `${mousePosition.x - 75}px`, // Ustawienie pozycji
-            top: `${mousePosition.y - 75}px`,
-            overflow: 'hidden',
-            pointerEvents: 'none', // Aby nie blokować interakcji z obrazem
-          }}
-        >
-          <img
-            src={worldMap}
-            alt="Mapa powiększona"
-            className='w-full'
-            style={{
-              position: 'absolute',
-              transform: `scale(${zoomFactor})`,
-              transformOrigin: 'top left',
-              left: `-${mousePosition.x * (zoomFactor - 1)}px`, // Przesunięcie w lewo
-              top: `-${mousePosition.y * (zoomFactor - 1)}px`, // Przesunięcie w górę
-            }}
-          />
-        </div>
       </div>
     </div>
   );
