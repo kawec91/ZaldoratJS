@@ -92,71 +92,32 @@ const multipliersSchema = new mongoose.Schema({
   stealing: { type: Number, default: 1.0 },
   vampire: { type: Number, default: 1.0 },
   necromancy: { type: Number, default: 1.0 },
-  _id: { type: String },
 });
 
-// Główny schemat postaci
+// Główny schemat
 const characterSchema = new mongoose.Schema({
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-
-  character_name: {
-    type: String,
-    required: true,
-  },
-  race: {
-    type: String,
-    required: true,
-  },
-  classType: {
-    type: String,
-    required: true,
-  },
-  ancestry: {
-    type: String,
-    required: true,
-  },
-  deity: {
-    type: String,
-    required: true,
-  },
-  level: {
-    type: Number,
-    default: 1,
-  },
-  stats: statsSchema,
-  crafting_abilities: craftingAbilitiesSchema,
-  fighting_abilities: fightingAbilitiesSchema,
-  multipliers: multipliersSchema, // Dodano sekcję dla mnożników
-  world: {
-    type: String,
-    required: false,
-  },
-  deityRank: {
-    type: String,
-    required: false,
-  },
-  lastSeen: {
-    type: Date,
-    default: Date.now,
-  },
-  location: {
-    type: String,
-    required: false,
-  },
-  weight: {
-    type: Number,
-    default: 80,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  character_name: { type: String, required: true },
+  race: { type: String, required: true },
+  classType: { type: String, required: true },
+  ancestry: { type: String, required: true },
+  deity: { type: String }, // Możesz ustawić jako opcjonalne
+  level: { type: Number, default: 1 },
+  stats: { type: statsSchema, default: () => ({}) },
+  crafting_abilities: { type: craftingAbilitiesSchema, default: () => ({}) },
+  fighting_abilities: { type: fightingAbilitiesSchema, default: () => ({}) },
+  world: { type: String },
+  deityRank: { type: Number },
+  lastSeen: { type: Date },
+  location: { type: String },
+  weight: { type: Number, default: 80 },
+  multipliers: { type: multipliersSchema, default: () => ({}) },
+  coords: { // Dodane pole współrzędnych
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
   },
 });
 
-const CharacterModel = mongoose.model("Character", characterSchema);
+const CharacterModel = mongoose.model('Character', characterSchema);
 
 export default CharacterModel;

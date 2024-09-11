@@ -14,7 +14,7 @@ export default function SummaryPage({ authUser, isLoading }) {
     const characterGender = sessionStorage.getItem('characterGender');
     const characterName = sessionStorage.getItem('character_name');
     const characterAncestry = sessionStorage.getItem('characterAncestry');
-    const characterLocation = sessionStorage.getItem('characterLocation');
+    const characterLocation = JSON.parse(sessionStorage.getItem('characterLocation')); // Zmiana na JSON.parse
 
     // Pobierz mnożniki z sessionStorage
     const raceMultipliers = JSON.parse(sessionStorage.getItem('raceMultipliers')) || {};
@@ -90,7 +90,8 @@ export default function SummaryPage({ authUser, isLoading }) {
             gender: characterGender,
             character_name: characterName,
             ancestry: characterAncestry,
-            location: characterLocation,
+            location: characterLocation.name, // Nazwa lokalizacji
+            coords: characterLocation.coordinates, // Współrzędne lokalizacji
             multipliers: totalMultipliers, // Wysyłamy zsumowane i zaokrąglone mnożniki
             owner: ownerId
         };
@@ -154,7 +155,8 @@ export default function SummaryPage({ authUser, isLoading }) {
                     <p><strong>Klasa:</strong> {characterClass || 'Brak danych'}</p>
                     <p><strong>Wyznanie:</strong> {characterDeity || 'Brak danych'}</p>
                     <p><strong>Płeć:</strong> {characterGender || 'Brak danych'}</p>
-                    <p><strong>Lokacja Początkowa:</strong> {characterLocation || 'Brak danych'}</p>
+                    <p><strong>Lokacja Początkowa:</strong> {characterLocation ? characterLocation.name : 'Brak danych'}</p>
+                    <p><strong>Współrzędne:</strong> {characterLocation ? `${characterLocation.coordinates.x}, ${characterLocation.coordinates.y}` : 'Brak danych'}</p>
                 </div>
 
                 <div className="mt-4">
@@ -193,17 +195,11 @@ export default function SummaryPage({ authUser, isLoading }) {
                             <h3 className="text-lg font-bold mb-4">Potwierdzenie</h3>
                             <p>Czy na pewno chcesz stworzyć tę postać?</p>
                             <div className="mt-4 flex justify-end">
-                                <button 
-                                    onClick={handleConfirm} 
-                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                >
-                                    Tak
+                                <button onClick={closeConfirmModal} className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 mr-2">
+                                    Anuluj
                                 </button>
-                                <button 
-                                    onClick={closeConfirmModal} 
-                                    className="ml-4 px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
-                                >
-                                    Nie
+                                <button onClick={handleConfirm} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    Tak, stwórz postać
                                 </button>
                             </div>
                         </div>

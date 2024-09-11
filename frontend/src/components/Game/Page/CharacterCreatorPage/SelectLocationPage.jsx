@@ -8,10 +8,12 @@ export default function SelectLocationPage({ authUser }) {
 
     // Definicja lokacji
     const locations = [
-        { name: 'Wioska Elfów', description: 'Zamieszkała przez elfy, piękna i spokojna.', premium: false },
-        { name: 'Wioska Krasnoludów', description: 'Podziemne miasto pełne rzemieślników.', premium: false },
-        { name: 'Wioska Ludzi', description: 'Typowa wioska zamieszkała przez ludzi.', premium: false },
-        { name: 'Verentris', description: 'Wielkie miasto pełne możliwości.', premium: true }
+        {
+            name: 'Start Village',
+            description: 'Zaczynasz swoją przygodę w tej małej wiosce.',
+            coordinates: { x: 278, y: 263 }, // Dodaj współrzędne wioski
+            premium: false
+        }
     ];
 
     const handleLocationSelection = (location) => {
@@ -20,7 +22,10 @@ export default function SelectLocationPage({ authUser }) {
 
     const handleNext = () => {
         if (selectedLocation) {
-            sessionStorage.setItem('characterLocation', selectedLocation.name);
+            sessionStorage.setItem('characterLocation', JSON.stringify({
+                name: selectedLocation.name,
+                coordinates: selectedLocation.coordinates // Użycie współrzędnych wybranej lokacji
+            }));
             navigate('summary'); // Zmień na odpowiednią ścieżkę
         }
     };

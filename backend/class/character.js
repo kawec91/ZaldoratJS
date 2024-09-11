@@ -1,7 +1,6 @@
 class Character {
   constructor({
     owner,
-  
     character_name, // Zmiana na character_name
     race,
     classType,
@@ -17,9 +16,9 @@ class Character {
     location,
     weight = 80,
     multipliers = {}, // Pojedyncze mnożniki
+    coords = { x: 0, y: 0 }, // Dodano pole coords
   }) {
     this.owner = owner;
-   
     this.character_name = character_name; // Zmiana na character_name
     this.race = race;
     this.classType = classType;
@@ -127,13 +126,15 @@ class Character {
       necromancy: 1.0,
       ...multipliers,
     };
+
+    // Dodano pole coords
+    this.coords = coords;
   }
 
   // Metoda do konwersji instancji klasy na obiekt gotowy do zapisu w bazie danych
   toDBObject() {
     return {
       owner: this.owner,
-     
       character_name: this.character_name, // Zmiana na character_name
       race: this.race,
       classType: this.classType,
@@ -149,6 +150,7 @@ class Character {
       location: this.location,
       weight: this.weight,
       multipliers: this.multipliers, // Pojedyncze mnożniki
+      coords: this.coords, // Dodano pole coords
     };
   }
 }
