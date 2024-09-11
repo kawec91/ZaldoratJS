@@ -81,7 +81,22 @@ export const updateCharacter = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+//coords
+export const getCharacterCoordinates = async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const character = await CharacterModel.findById(id);
+    if (!character) {
+      return res.status(404).json({ message: 'Character not found' });
+    }
+
+    // Zwróć tylko współrzędne
+    return res.status(200).json({ coords: character.coords });
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
 
 // Funkcja do pobierania postaci na podstawie ownera (accountId)
 export const getCharactersByOwner = async (req, res) => {

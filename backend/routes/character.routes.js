@@ -6,6 +6,8 @@ import {
   updateCharacter,
   getCharactersByOwner,
   getCharacterLocation,
+  getCharacterCoordinates,
+
 } from '../controllers/character.controller.js';
 
 const router = express.Router();
@@ -16,5 +18,6 @@ router.get('/:id', getCharacter); // Endpoint do pobierania postaci
 router.get('/:characterId/location', getCharacterLocation); // Endpoint do pobierania lokalizacji postaci
 router.put('/update/:id', updateCharacter); // Endpoint do aktualizacji postaci
 router.delete('/delete/:nickname', deleteCharacter); // Endpoint do usuwania postaci
-
+// Dodaj trasę do pobierania współrzędnych
+router.get('/:id/coords', getCharacterCoordinates);
 export default router;
