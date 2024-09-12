@@ -1,159 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import Magnifier from 'react-magnifier';
 import worldMap from './world.jpg'; // Ścieżka do pliku z obrazem
-import arrow from './arrow.png'; // Ścieżka do pliku z obrazem strzałki
 
 const TravelPage = () => {
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [locations] = useState([{ name: 'Start Village', x: 278, y: 263 }]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(true); // Ustawiamy na true, aby otworzyć modal od razu
-  const [characterCoordinates, setCharacterCoordinates] = useState({ x: 0, y: 0 });
+  const squareSize = 60; // Szerokość kwadratu siatki
+  const [gridCoordinates, setGridCoordinates] = useState(null);
+  const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    const characterId = sessionStorage.getItem('selectedCharacterId');
-    if (characterId) {
-      // Pobierz współrzędne postaci z serwera
-      fetch(`/api/characters/${characterId}/coords`) // Zaktualizowany endpoint
-        .then(response => response.json())
-        .then(data => {
-          console.log('Otrzymane dane z serwera:', data); // Debugowanie otrzymanych danych
-          if (data && data.coords) {
-            setCharacterCoordinates({
-              x: data.coords.x, // Użycie pola coords
-              y: data.coords.y,
-            });
-            console.log('Ustawione współrzędne postaci:', { x: data.coords.x, y: data.coords.y }); // Debugowanie ustawionych współrzędnych
-          } else {
-            console.warn('Brak współrzędnych w danych:', data); // Warn, jeśli nie ma coords
-          }
-        })
-        .catch(error => {
-          console.error('Błąd przy pobieraniu danych postaci:', error);
-        });
-    } else {
-      console.warn('Brak ID postaci w sessionStorage'); // Warn, jeśli nie ma characterId
+    const img = new Image();
+    img.src = worldMap;
+    img.onload = () => {
+      setMapDimensions({ width: img.width, height: img.height });
+    };
+  }, []);
+
+  const handleMouseMove = (event) => {
+    const rect = event.target.getBoundingClientRect();
+    const x = event.clientX - rect.left; // X pos relative to image
+    const y = event.clientY - rect.top; // Y pos relative to image
+
+    // Obliczanie współrzędnych siatki
+    const gridX = Math.floor(x / squareSize);
+    const gridY = Math.floor(y / squareSize);
+    setGridCoordinates({ x: gridX, y: gridY });
+  };
+
+  // Zablokowanie systemowego zoomowania
+  const preventZoom = (event) => {
+    if (event.ctrlKey || event.metaKey) {
+      event.preventDefault();
     }
-  }, []);
-
-  const handleMouseMove = (e) => {
-    const { left, top } = e.currentTarget.getBoundingClientRect();
-    const x = e.pageX - left - window.scrollX;
-    const y = e.pageY - top - window.scrollY;
-    setCursorPosition({ x, y });
   };
-
-  const handleLocationClick = (location) => {
-    setSelectedLocation(location);
-  };
-
-  const closeMapModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // Zablokowanie zoomu systemowego
-  useEffect(() => {
-    const handleWheel = (e) => {
-      if (e.ctrlKey) {
-        e.preventDefault();
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
 
   return (
-    <div className="flex justify-center items-center h-[calc(100vh_-_80px)] bg-gray-100 w-full">
-      {/* Modal z mapą */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
-          <div className="bg-white p-8 rounded max-w-4xl w-[140%]">
-            <h2 className="text-lg font-bold mb-2">Mapa świata</h2>
-            <div className="flex">
-              {/* Tabela z lokalizacjami w modalu */}
-              <div className="p-5 w-1/1">
-                <h2 className="text-lg font-bold mb-2">Znane lokalizacje:</h2>
-                <table className="border-collapse border border-gray-300 w-full">
-                  <thead>
-                    <tr>
-                      <th className="border border-gray-300 p-2">Nazwa</th>
-                      <th className="border border-gray-300 p-2">X</th>
-                      <th className="border border-gray-300 p-2">Y</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {locations.map((location, index) => (
-                      <tr
-                        key={index}
-                        onClick={() => handleLocationClick(location)}
-                        className="cursor-pointer hover:bg-gray-200"
-                      >
-                        <td className="border border-gray-300 p-2">{location.name}</td>
-                        <td className="border border-gray-300 p-2">{location.x}</td>
-                        <td className="border border-gray-300 p-2">{location.y}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+    <div
+      className="flex justify-center items-center h-[calc(100vh_-_80px)] bg-gray-100 w-full overflow-auto"
+      onWheel={preventZoom} // Zablokowanie zoomu podczas scrollowania
+    >
+      <div
+        className="relative"
+        onMouseMove={handleMouseMove}
+        style={{
+          width: `${mapDimensions.width}px`,
+          height: `${mapDimensions.height}px`,
+          overflow: 'auto', // Umożliwia przewijanie
+        }}
+      >
+        {/* Mapa */}
+        <img
+          src={worldMap}
+          alt="Mapa świata"
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block', // Zapewnia, że obraz zajmuje swoje miejsce
+          }}
+        />
 
-              <div className="relative flex-grow">
-                <Magnifier
-                  src={worldMap}
-                  mgShape="circle"
-                  mgShowOverflow={false}
-                  mgWidth={130} // Zwiększone o 10%
-                  mgHeight={130} // Zwiększone o 10%
-                  zoomFactor={2}
-                  alt="Mapa świata"
-                  className="max-w-full"
-                  onMouseMove={handleMouseMove}
-                />
-                {selectedLocation && (
-                  <div
-                    className="absolute bg-red-500 rounded-full"
-                    style={{
-                      width: '10px',
-                      height: '10px',
-                      top: `${selectedLocation.y - 5}px`,
-                      left: `${selectedLocation.x - 5}px`,
-                    }}
-                  />
-                )}
-                {/* Wyświetlanie postaci na mapie */}
-                <div
-                  className="absolute"
-                  style={{
-                    top: `${characterCoordinates.y - 20}px`, // Ustawienie Y dla strzałki
-                    left: `${characterCoordinates.x - 10}px`, // Ustawienie X dla strzałki
-                  }}
-                >
-                  <img src={arrow} alt="You are here" className="w-10 h-10" /> {/* Strzałka */}
-                  <div className="absolute text-red-500 text-sm" style={{ top: '15px', left: '15px', display: 'inline' }}>
-  You are here
-</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Wyświetlanie współrzędnych myszki */}
-            <div className="mt-2 text-gray-600">
-              Współrzędne myszki: X: {cursorPosition.x}, Y: {cursorPosition.y}
-            </div>
-
-            <button
-              onClick={closeMapModal}
-              className="mt-2 p-2 bg-red-500 text-white rounded"
-            >
-              Zamknij
-            </button>
-          </div>
+        {/* Siatka */}
+        <div className="absolute inset-0 pointer-events-none">
+          {Array.from({ length: Math.ceil(mapDimensions.height / squareSize) }).map((_, rowIndex) =>
+            Array.from({ length: Math.ceil(mapDimensions.width / squareSize) }).map((_, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className="absolute"
+                style={{
+                  width: `${squareSize}px`,
+                  height: `${squareSize}px`,
+                  left: `${colIndex * squareSize}px`,
+                  top: `${rowIndex * squareSize}px`,
+                  border: '1px solid rgba(0, 0, 0, 0.2)', // Ledwie widoczne obramowanie
+                  backgroundColor: gridCoordinates?.x === colIndex && gridCoordinates?.y === rowIndex ? 'rgba(255, 0, 0, 0.3)' : 'transparent', // Podświetlanie aktualnego kwadratu
+                }}
+                title={`Współrzędne: (${colIndex}, ${rowIndex})`} // Pokazuje współrzędne po najechaniu
+              />
+            ))
+          )}
         </div>
-      )}
+
+        {/* Wyświetlanie aktualnych współrzędnych */}
+        {gridCoordinates && (
+          <div
+            className="absolute bg-white p-2 rounded"
+            style={{
+              left: `${gridCoordinates.x * squareSize + 5}px`, // Dostosowanie pozycji
+              top: `${gridCoordinates.y * squareSize + 5}px`,
+              pointerEvents: 'none',
+            }}
+          >
+            {`Współrzędne: (${gridCoordinates.x}, ${gridCoordinates.y})`}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
