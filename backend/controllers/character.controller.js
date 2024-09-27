@@ -81,7 +81,8 @@ export const updateCharacter = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-//coords
+
+// Funkcja do pobierania współrzędnych postaci
 export const getCharacterCoordinates = async (req, res) => {
   const { id } = req.params;
 
@@ -95,6 +96,29 @@ export const getCharacterCoordinates = async (req, res) => {
     return res.status(200).json({ coords: character.coords });
   } catch (error) {
     return res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Nowa funkcja do aktualizacji współrzędnych postaci
+export const updateCharacterCoordinates = async (req, res) => {
+  const { id } = req.params; // Id postaci
+  const { coords } = req.body; // Współrzędne do aktualizacji
+
+  try {
+    // Sprawdź, czy postać istnieje
+    const character = await CharacterModel.findById(id);
+    if (!character) {
+      return res.status(404).json({ message: 'Character not found' });
+    }
+
+    // Aktualizuj współrzędne
+    character.coords = coords; // Zakładam, że coords to obiekt { x: number, y: number }
+    await character.save();
+
+    return res.status(200).json({ message: 'Coordinates updated successfully', coords: character.coords });
+  } catch (error) {
+    console.error('Error updating character coordinates:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -123,12 +147,12 @@ export const getCharacterLocation = async (req, res) => {
     const character = await CharacterModel.findById(characterId);
 
     if (!character) {
-      return res.status(404).json({ error: 'Postać nie znaleziona' });
+      return res.status(404).json({ error: 'Character not found' });
     }
 
     res.status(200).json({ location: character.location });
   } catch (error) {
-    console.error('Błąd podczas pobierania lokalizacji postaci:', error);
+    console.error('Error fetching character location:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

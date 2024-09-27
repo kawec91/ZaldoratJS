@@ -8,21 +8,20 @@ const TravelPage = () => {
   const [squareSize, setSquareSize] = useState(60);
   const [characterCoordinates, setCharacterCoordinates] = useState({ x: 0, y: 0 });
   const [locations] = useState([{ name: 'Start Village', x: 19, y: 18, description: 'A peaceful village where your journey begins.' }]);
-
-  const [hoveredLocation, setHoveredLocation] = useState(null); // Tooltip hover state
-  const [selectedLocation, setSelectedLocation] = useState(null); // For highlighting the clicked square
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 }); // Position of the tooltip
-  const mapRef = useRef(null); // Reference to the map container for scrolling
+  const [hoveredLocation, setHoveredLocation] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [loading, setLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const mapRef = useRef(null);
 
   useEffect(() => {
     const img = new Image();
     img.src = worldMap;
     img.onload = () => {
       setMapDimensions({ width: img.width, height: img.height });
-      setSquareSize(Math.min(img.width / 50, img.height / 50)); // Adjust grid size based on image dimensions
+      setSquareSize(Math.min(img.width / 50, img.height / 50));
     };
 
-    // Fetch character coordinates from server
     const characterId = sessionStorage.getItem('selectedCharacterId');
     if (characterId) {
       fetch(`/api/characters/${characterId}/coords`)
@@ -45,50 +44,93 @@ const TravelPage = () => {
     const x = e.pageX - left - window.scrollX;
     const y = e.pageY - top - window.scrollY;
 
-    // Calculate grid coordinates
     const gridX = Math.floor(x / squareSize);
     const gridY = Math.floor(y / squareSize);
     setGridCoordinates({ x: gridX, y: gridY });
 
-    // Check if mouse is hovering over a known location for tooltip
-    const hovered = locations.find(
-      location => Math.abs(location.x - gridX) < 2 && Math.abs(location.y - gridY) < 2
+    const hovered = locations.find(location =>
+      Math.abs(location.x - gridX) < 2 && Math.abs(location.y - gridY) < 2
     );
     setHoveredLocation(hovered || null);
-
-    // Update tooltip position
     setTooltipPosition({ x: e.pageX, y: e.pageY });
   };
 
-  const handleLocationClick = (location) => {
-    // Check if the clicked location is already selected
-    if (selectedLocation && selectedLocation.x === location.x && selectedLocation.y === location.y) {
-      // Unselect if the same location is clicked
-      setSelectedLocation(null);
-    } else {
-      // Set new selected location
-      setSelectedLocation(location);
+  const moveCharacter = (targetX, targetY) => {
+    setLoading(true);
+    setLoadingProgress(0);
 
-      // Scroll to center the selected location
-      const scrollX = (location.x * squareSize) - (mapRef.current.clientWidth / 2) + (squareSize / 2);
-      const scrollY = (location.y * squareSize) - (mapRef.current.clientHeight / 2) + (squareSize / 2);
+    // Function to increment loading progress
+    const updateProgress = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(updateProgress);
+          return prev;
+        }
+        return prev + 20;
+      });
+    }, 1000); // Update every second
+
+    const totalSquares = Math.max(Math.abs(targetX - characterCoordinates.x), Math.abs(targetY - characterCoordinates.y));
+    const interval = setInterval(() => {
+      if (characterCoordinates.x === targetX && characterCoordinates.y === targetY) {
+        clearInterval(interval);
+        clearInterval(updateProgress);
+        setLoading(false);
+        return;
+      }
+
+      const dx = Math.sign(targetX - characterCoordinates.x);
+      const dy = Math.sign(targetY - characterCoordinates.y);
+      const newX = Math.max(0, Math.min(characterCoordinates.x + dx, Math.floor(mapDimensions.width / squareSize) - 1));
+      const newY = Math.max(0, Math.min(characterCoordinates.y + dy, Math.floor(mapDimensions.height / squareSize) - 1));
+
+      setCharacterCoordinates({ x: newX, y: newY });
+
+      const scrollX = newX * squareSize - (mapRef.current.clientWidth / 2) + (squareSize / 2);
+      const scrollY = newY * squareSize - (mapRef.current.clientHeight / 2) + (squareSize / 2);
 
       mapRef.current.scrollTo({
         top: scrollY,
         left: scrollX,
-        behavior: 'smooth', // Smooth scrolling effect
+        behavior: 'smooth',
       });
-    }
+
+      const characterId = sessionStorage.getItem('selectedCharacterId');
+      fetch(`/api/characters/${characterId}/coords`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ coords: { x: newX, y: newY } }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Character location updated:', data);
+        })
+        .catch(error => {
+          console.error('Error updating character coordinates:', error);
+        });
+    }, 5000 / totalSquares); // Adjust the interval based on the total squares to travel
+
+    setTimeout(() => {
+      clearInterval(interval);
+      clearInterval(updateProgress);
+      setLoading(false);
+    }, 5000); // Ensure loading is displayed for 5 seconds
   };
 
-  const isSelectedSquare = (x, y) => {
-    return selectedLocation && selectedLocation.x === x && selectedLocation.y === y; // Check if it's the selected location
+  const autoMoveCharacter = (targetX, targetY) => {
+    moveCharacter(targetX, targetY);
   };
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh_-_80px)] bg-gray-100 w-full">
       <div className="flex w-full h-full">
-        {/* Sidebar */}
         <div className="p-5 w-1/9 max-h-screen overflow-y-auto bg-white border-r">
           <h2 className="text-lg font-bold mb-2">Znane lokalizacje:</h2>
           <table className="border-collapse border border-gray-300 w-full">
@@ -101,11 +143,7 @@ const TravelPage = () => {
             </thead>
             <tbody>
               {locations.map((location, index) => (
-                <tr
-                  key={index}
-                  className="cursor-pointer hover:bg-gray-200"
-                  onClick={() => handleLocationClick(location)} // Handle click to focus on location
-                >
+                <tr key={index} className="cursor-pointer hover:bg-gray-200" onClick={() => autoMoveCharacter(location.x, location.y)}>
                   <td className="border border-gray-300 p-2">{location.name}</td>
                   <td className="border border-gray-300 p-2">{location.x}</td>
                   <td className="border border-gray-300 p-2">{location.y}</td>
@@ -115,19 +153,16 @@ const TravelPage = () => {
           </table>
         </div>
 
-        {/* Map Section */}
         <div className="relative flex-grow h-full overflow-scroll" ref={mapRef}>
-          {/* Map container */}
           <div
             style={{
               width: `${mapDimensions.width}px`,
               height: `${mapDimensions.height}px`,
               position: 'relative',
-              overflow: 'visible', // Ensure no limit on content visibility
+              overflow: 'visible',
             }}
             onMouseMove={handleMouseMove}
           >
-            {/* World map image */}
             <img
               src={worldMap}
               alt="World Map"
@@ -141,51 +176,32 @@ const TravelPage = () => {
               }}
             />
 
-            {/* Grid Overlay */}
             <div className="absolute inset-0 pointer-events-none">
               {Array.from({ length: Math.ceil(mapDimensions.height / squareSize) }).map((_, rowIndex) =>
-                Array.from({ length: Math.ceil(mapDimensions.width / squareSize) }).map((_, colIndex) => {
-                  // Check if the current square is within the 3x3 area around the selected location
-                  const isInSelectedArea = selectedLocation &&
-                    colIndex >= selectedLocation.x - 1 && colIndex <= selectedLocation.x + 1 &&
-                    rowIndex >= selectedLocation.y - 1 && rowIndex <= selectedLocation.y + 1;
-
-                  // Determine if the square is on the outer edge of the 3x3 area
-                  const isTopEdge = isInSelectedArea && rowIndex === selectedLocation.y - 1;
-                  const isBottomEdge = isInSelectedArea && rowIndex === selectedLocation.y + 1;
-                  const isLeftEdge = isInSelectedArea && colIndex === selectedLocation.x - 1;
-                  const isRightEdge = isInSelectedArea && colIndex === selectedLocation.x + 1;
-
-                  return (
-                    <div
-                      key={`${rowIndex}-${colIndex}`}
-                      className="absolute"
-                      style={{
-                        width: `${squareSize}px`,
-                        height: `${squareSize}px`,
-                        left: `${colIndex * squareSize}px`,
-                        top: `${rowIndex * squareSize}px`,
-                        borderTop: isTopEdge ? '3px solid rgba(0, 255, 0, 0.8)' : '0px',
-                        borderBottom: isBottomEdge ? '3px solid rgba(0, 255, 0, 0.8)' : '0px',
-                        borderLeft: isLeftEdge ? '3px solid rgba(0, 255, 0, 0.8)' : '0px',
-                        borderRight: isRightEdge ? '3px solid rgba(0, 255, 0, 0.8)' : '0px',
-                        backgroundColor: gridCoordinates?.x === colIndex && gridCoordinates?.y === rowIndex
-                          ? 'rgba(255, 0, 0, 0.3)' // Highlight the hovered square
-                          : 'transparent',
-                      }}
-                      title={`Coordinates: (${colIndex}, ${rowIndex})`}
-                    />
-                  );
-                })
+                Array.from({ length: Math.ceil(mapDimensions.width / squareSize) }).map((_, colIndex) => (
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className="absolute"
+                    style={{
+                      width: `${squareSize}px`,
+                      height: `${squareSize}px`,
+                      left: `${colIndex * squareSize}px`,
+                      top: `${rowIndex * squareSize}px`,
+                      backgroundColor: gridCoordinates?.x === colIndex && gridCoordinates?.y === rowIndex
+                        ? 'rgba(255, 0, 0, 0.3)' // Highlight the hovered square
+                        : 'transparent',
+                    }}
+                    title={`Coordinates: (${colIndex}, ${rowIndex})`}
+                  />
+                ))
               )}
             </div>
 
-            {/* Display character on the map */}
             <div
               className="absolute"
               style={{
-                top: `${characterCoordinates.y * squareSize}px`, // Adjust for grid size
-                left: `${characterCoordinates.x * squareSize}px`, // Adjust for grid size
+                top: `${characterCoordinates.y * squareSize}px`,
+                left: `${characterCoordinates.x * squareSize}px`,
               }}
             >
               <img src={arrow} alt="You are here" className="w-10 h-10" />
@@ -194,30 +210,53 @@ const TravelPage = () => {
               </div>
             </div>
 
-            {/* Tooltip for hovering over location */}
             {hoveredLocation && (
               <div
                 className="fixed bg-gray-900 text-white p-2 rounded shadow-lg"
                 style={{
-                  top: `${tooltipPosition.y + 10}px`, // Offset from cursor position
-                  left: `${tooltipPosition.x + 10}px`,
-                  zIndex: 10,
+                  left: tooltipPosition.x,
+                  top: tooltipPosition.y,
+                  transform: 'translate(-50%, -100%)',
                 }}
               >
-                <strong>{hoveredLocation.name}</strong>
+                <h3 className="font-bold">{hoveredLocation.name}</h3>
                 <p>{hoveredLocation.description}</p>
               </div>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Display current grid coordinates */}
-      {gridCoordinates && (
-        <div className="fixed bottom-2 left-2 text-gray-600 bg-white p-2 rounded shadow">
-          Współrzędne siatki: X: {gridCoordinates.x}, Y: {gridCoordinates.y}
+          {/* Navigation arrows */}
+          <div className="absolute bottom-5 left-5 flex flex-col space-y-2">
+            <div className="flex space-x-2">
+              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↖</button>
+              <button onClick={() => moveCharacter(characterCoordinates.x, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↑</button>
+              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↗</button>
+            </div>
+
+            <div className="flex space-x-2">
+              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y)} className="bg-green-500 p-2 rounded">←</button>
+              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y)} className="bg-green-500 p-2 rounded">→</button>
+            </div>
+
+            <div className="flex space-x-2">
+              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↙</button>
+              <button onClick={() => moveCharacter(characterCoordinates.x, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↓</button>
+              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↘</button>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Loading modal */}
+        {loading && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-5 shadow-lg rounded">
+            <h2 className="text-lg">Traveling...</h2>
+            <div className="h-2 bg-gray-300 rounded">
+              <div className="bg-green-500 h-full" style={{ width: `${loadingProgress}%` }} />
+            </div>
+            <p className="text-center">{Math.ceil((5000 - loadingProgress * 50) / 1000)} seconds left</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
