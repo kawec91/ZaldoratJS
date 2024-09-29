@@ -128,23 +128,39 @@ const TravelPage = () => {
     };
 
   // Move Character with 5 Second Delay (for both manual and auto)
-  const moveCharacterWithDelay = (newX, newY) => {
-    setLoading(true);
-    setLoadingProgress(0);
+ // Move Character with 5 Second Delay (for both manual and auto)
+const moveCharacterWithDelay = (newX, newY) => {
+  setLoading(true);
+  setLoadingProgress(0);
 
-    const loadingInterval = setInterval(() => {
+  const loadingInterval = setInterval(() => {
       setLoadingProgress(prev => {
-        const newProgress = prev + 20; // Increase progress by 20% every second
-        if (newProgress >= 100) {
-          clearInterval(loadingInterval); // Stop loading when progress reaches 100%
-          setCharacterCoordinates({ x: newX, y: newY }); // Move character to new position
-          setLoading(false);
-        }
-        return newProgress;
-      });
-    }, 1000); // Progress updates every 1 second for 5 seconds
-  };
+          const newProgress = prev + 20; // Increase progress by 20% every second
+          if (newProgress >= 100) {
+              clearInterval(loadingInterval); // Stop loading when progress reaches 100%
+              setCharacterCoordinates({ x: newX, y: newY }); // Move character to new position
+              setLoading(false);
 
+              // Update coordinates in the backend (optional)
+              fetch(`/api/characters/${sessionStorage.getItem('selectedCharacterId')}/coords`, {
+                  method: 'PUT',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ coords: { x: newX, y: newY } }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                  console.log('Coordinates updated successfully:', data);
+              })
+              .catch(error => {
+                  console.error('Error updating coordinates:', error);
+              });
+          }
+          return newProgress;
+      });
+  }, 1000); // Progress updates every 1 second for 5 seconds
+};
   // Auto-walk: Move Character One Tile at a Time with 5 Second Delay
   const moveCharacterAlongPath = (path, index = 0) => {
     if (index >= path.length) {
