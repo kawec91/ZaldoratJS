@@ -12,6 +12,9 @@ const TravelPage = () => {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [loading, setLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [confirmWalk, setConfirmWalk] = useState(false); // Confirmation state
+  const [targetLocation, setTargetLocation] = useState(null); // Hold the selected location
+  const [autoWalkComplete, setAutoWalkComplete] = useState(false); // Auto-walk completion state
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -55,77 +58,145 @@ const TravelPage = () => {
     setTooltipPosition({ x: e.pageX, y: e.pageY });
   };
 
-  const moveCharacter = (targetX, targetY) => {
+  // A* Pathfinding Algorithm
+  const aStarPathfinding = (start, target, gridWidth, gridHeight) => {
+    const openList = [start];
+    const closedList = [];
+    const gScore = {};
+    const fScore = {};
+    const cameFrom = {};
+
+    const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y); // Manhattan distance
+
+    gScore[`${start.x},${start.y}`] = 0;
+    fScore[`${start.x},${start.y}`] = heuristic(start, target);
+
+    while (openList.length > 0) {
+      // Get the node with the lowest fScore
+      let current = openList.reduce((lowest, node) => {
+        const nodeKey = `${node.x},${node.y}`;
+        const lowestKey = `${lowest.x},${lowest.y}`;
+        return fScore[nodeKey] < fScore[lowestKey] ? node : lowest;
+      });
+
+      if (current.x === target.x && current.y === target.y) {
+        // Reconstruct path
+        const path = [];
+        while (current) {
+          path.unshift(current);
+          current = cameFrom[`${current.x},${current.y}`];
+        }
+        return path;
+      }
+
+      openList.splice(openList.indexOf(current), 1);
+      closedList.push(current);
+
+        // Check neighbors
+        const neighbors = [
+          { x: current.x + 1, y: current.y },
+          { x: current.x - 1, y: current.y },
+          { x: current.x, y: current.y + 1 },
+          { x: current.x, y: current.y - 1 },
+          { x: current.x + 1, y: current.y + 1 }, // Diagonal movement
+          { x: current.x - 1, y: current.y - 1 }, // Diagonal movement
+          { x: current.x + 1, y: current.y - 1 }, // Diagonal movement
+          { x: current.x - 1, y: current.y + 1 }  // Diagonal movement
+        ];
+  
+        neighbors.forEach(neighbor => {
+          if (neighbor.x < 0 || neighbor.x >= gridWidth || neighbor.y < 0 || neighbor.y >= gridHeight || closedList.find(n => n.x === neighbor.x && n.y === neighbor.y)) {
+            return; // Skip out of bounds or closed nodes
+          }
+  
+          const tentativeGScore = gScore[`${current.x},${current.y}`] + 1;
+  
+          const neighborKey = `${neighbor.x},${neighbor.y}`;
+          if (!openList.find(n => n.x === neighbor.x && n.y === neighbor.y)) {
+            openList.push(neighbor);
+          } else if (tentativeGScore >= gScore[neighborKey]) {
+            return; // Not a better path
+          }
+  
+          cameFrom[neighborKey] = current;
+          gScore[neighborKey] = tentativeGScore;
+          fScore[neighborKey] = tentativeGScore + heuristic(neighbor, target);
+        });
+      }
+  
+      return []; // No path found
+    };
+
+  // Move Character with 5 Second Delay (for both manual and auto)
+  const moveCharacterWithDelay = (newX, newY) => {
     setLoading(true);
     setLoadingProgress(0);
 
-    // Function to increment loading progress
-    const updateProgress = setInterval(() => {
+    const loadingInterval = setInterval(() => {
       setLoadingProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(updateProgress);
-          return prev;
+        const newProgress = prev + 20; // Increase progress by 20% every second
+        if (newProgress >= 100) {
+          clearInterval(loadingInterval); // Stop loading when progress reaches 100%
+          setCharacterCoordinates({ x: newX, y: newY }); // Move character to new position
+          setLoading(false);
         }
-        return prev + 20;
+        return newProgress;
       });
-    }, 1000); // Update every second
-
-    const totalSquares = Math.max(Math.abs(targetX - characterCoordinates.x), Math.abs(targetY - characterCoordinates.y));
-    const interval = setInterval(() => {
-      if (characterCoordinates.x === targetX && characterCoordinates.y === targetY) {
-        clearInterval(interval);
-        clearInterval(updateProgress);
-        setLoading(false);
-        return;
-      }
-
-      const dx = Math.sign(targetX - characterCoordinates.x);
-      const dy = Math.sign(targetY - characterCoordinates.y);
-      const newX = Math.max(0, Math.min(characterCoordinates.x + dx, Math.floor(mapDimensions.width / squareSize) - 1));
-      const newY = Math.max(0, Math.min(characterCoordinates.y + dy, Math.floor(mapDimensions.height / squareSize) - 1));
-
-      setCharacterCoordinates({ x: newX, y: newY });
-
-      const scrollX = newX * squareSize - (mapRef.current.clientWidth / 2) + (squareSize / 2);
-      const scrollY = newY * squareSize - (mapRef.current.clientHeight / 2) + (squareSize / 2);
-
-      mapRef.current.scrollTo({
-        top: scrollY,
-        left: scrollX,
-        behavior: 'smooth',
-      });
-
-      const characterId = sessionStorage.getItem('selectedCharacterId');
-      fetch(`/api/characters/${characterId}/coords`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ coords: { x: newX, y: newY } }),
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Character location updated:', data);
-        })
-        .catch(error => {
-          console.error('Error updating character coordinates:', error);
-        });
-    }, 5000 / totalSquares); // Adjust the interval based on the total squares to travel
-
-    setTimeout(() => {
-      clearInterval(interval);
-      clearInterval(updateProgress);
-      setLoading(false);
-    }, 5000); // Ensure loading is displayed for 5 seconds
+    }, 1000); // Progress updates every 1 second for 5 seconds
   };
 
+  // Auto-walk: Move Character One Tile at a Time with 5 Second Delay
+  const moveCharacterAlongPath = (path, index = 0) => {
+    if (index >= path.length) {
+      setAutoWalkComplete(true); // Auto-walk complete
+      setLoading(false); // Ensure loading is cleared
+      return;
+    }
+
+    const nextStep = path[index];
+
+    // Move the character one tile, then recursively call for the next tile after 5 seconds
+    moveCharacterWithDelay(nextStep.x, nextStep.y);
+
+    // After the 5-second delay, move to the next step in the path
+    setTimeout(() => {
+      moveCharacterAlongPath(path, index + 1); // Move to next step after delay
+    }, 5000); // 5-second delay for each step
+  };
+
+  // Start Auto Walk with Confirmation
   const autoMoveCharacter = (targetX, targetY) => {
-    moveCharacter(targetX, targetY);
+    const path = aStarPathfinding(characterCoordinates, { x: targetX, y: targetY }, Math.floor(mapDimensions.width / squareSize), Math.floor(mapDimensions.height / squareSize));
+
+    if (path.length > 0) {
+      moveCharacterAlongPath(path); // Start moving along the path
+    } else {
+      console.error('No valid path found to the target location.');
+    }
+  };
+
+  // Confirmation Modal Handler
+  const confirmAutoWalk = (location) => {
+    setConfirmWalk(true); // Open confirmation modal
+    setTargetLocation(location); // Store the selected location
+  };
+
+  const cancelAutoWalk = () => {
+    setConfirmWalk(false);
+    setTargetLocation(null);
+  };
+
+  const startAutoWalk = () => {
+    if (targetLocation) {
+      autoMoveCharacter(targetLocation.x, targetLocation.y);
+    }
+    setConfirmWalk(false);
+  };
+
+  // Stop Auto-Walk on Manual Move
+  const stopAutoWalk = () => {
+    setLoading(false); // Stop loading if auto-walk is interrupted
+    setAutoWalkComplete(false); // Reset auto-walk completion state
   };
 
   return (
@@ -143,7 +214,7 @@ const TravelPage = () => {
             </thead>
             <tbody>
               {locations.map((location, index) => (
-                <tr key={index} className="cursor-pointer hover:bg-gray-200" onClick={() => autoMoveCharacter(location.x, location.y)}>
+                <tr key={index} className="cursor-pointer hover:bg-gray-200" onClick={() => confirmAutoWalk(location)}>
                   <td className="border border-gray-300 p-2">{location.name}</td>
                   <td className="border border-gray-300 p-2">{location.x}</td>
                   <td className="border border-gray-300 p-2">{location.y}</td>
@@ -228,20 +299,20 @@ const TravelPage = () => {
           {/* Navigation arrows */}
           <div className="absolute bottom-5 left-5 flex flex-col space-y-2">
             <div className="flex space-x-2">
-              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↖</button>
-              <button onClick={() => moveCharacter(characterCoordinates.x, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↑</button>
-              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y - 1)} className="bg-green-500 p-2 rounded">↗</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x - 1, characterCoordinates.y - 1); }} className="bg-green-500 p-2 rounded">↖</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x, characterCoordinates.y - 1); }} className="bg-green-500 p-2 rounded">↑</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x + 1, characterCoordinates.y - 1); }} className="bg-green-500 p-2 rounded">↗</button>
             </div>
 
             <div className="flex space-x-2">
-              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y)} className="bg-green-500 p-2 rounded">←</button>
-              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y)} className="bg-green-500 p-2 rounded">→</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x - 1, characterCoordinates.y); }} className="bg-green-500 p-2 rounded">←</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x + 1, characterCoordinates.y); }} className="bg-green-500 p-2 rounded">→</button>
             </div>
 
             <div className="flex space-x-2">
-              <button onClick={() => moveCharacter(characterCoordinates.x - 1, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↙</button>
-              <button onClick={() => moveCharacter(characterCoordinates.x, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↓</button>
-              <button onClick={() => moveCharacter(characterCoordinates.x + 1, characterCoordinates.y + 1)} className="bg-green-500 p-2 rounded">↘</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x - 1, characterCoordinates.y + 1); }} className="bg-green-500 p-2 rounded">↙</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x, characterCoordinates.y + 1); }} className="bg-green-500 p-2 rounded">↓</button>
+              <button onClick={() => { stopAutoWalk(); moveCharacterWithDelay(characterCoordinates.x + 1, characterCoordinates.y + 1); }} className="bg-green-500 p-2 rounded">↘</button>
             </div>
           </div>
         </div>
@@ -254,6 +325,32 @@ const TravelPage = () => {
               <div className="bg-green-500 h-full" style={{ width: `${loadingProgress}%` }} />
             </div>
             <p className="text-center">{Math.ceil((5000 - loadingProgress * 50) / 1000)} seconds left</p>
+          </div>
+        )}
+
+        {/* Completion modal after auto-walk */}
+        {autoWalkComplete && (
+          <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded shadow-lg">
+              <h2 className="text-xl font-bold mb-4">You traveled to {targetLocation?.name}</h2>
+              <div className="mt-4">
+                <button onClick={() => setAutoWalkComplete(false)} className="bg-green-500 text-white p-2 rounded">OK</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Confirmation modal */}
+        {confirmWalk && (
+          <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded shadow-lg">
+              <h2 className="text-xl font-bold mb-4">Start Auto-Walk?</h2>
+              <p>Do you want to auto-move to {targetLocation?.name}?</p>
+              <div className="mt-4 flex space-x-4">
+                <button onClick={startAutoWalk} className="bg-green-500 text-white p-2 rounded">Yes</button>
+                <button onClick={cancelAutoWalk} className="bg-red-500 text-white p-2 rounded">No</button>
+              </div>
+            </div>
           </div>
         )}
       </div>
