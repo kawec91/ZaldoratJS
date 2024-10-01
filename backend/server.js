@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
+import inventoryRoutes from './routes/inventory.routes.js';
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import startRoutes from "./routes/start.routes.js";
@@ -56,7 +56,7 @@ app.use("/api/backpack", backpackRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/mine", mineRoutes);
 app.use("/api", ancestryRouter);
-
+app.use('/api/inventory', inventoryRoutes);
 //Server Listener
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/api`);
