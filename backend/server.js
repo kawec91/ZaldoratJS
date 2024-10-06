@@ -18,6 +18,7 @@ import backpackRoutes from "./routes/backpack.routes.js";
 import resourceRoutes from "./routes/resource.routes.js";
 import mineRoutes from "./routes/mine.routes.js";
 import fuelRoutes from "./routes/fuel.routes.js";
+import itemRoutes from "./routes/item.routes.js";
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use("/api/resources", resourceRoutes);
 app.use("/api/mine", mineRoutes);
 app.use("/api", ancestryRouter);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/items', itemRoutes); // Use the item routes
 //Server Listener
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/api`);

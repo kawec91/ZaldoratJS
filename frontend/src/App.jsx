@@ -12,6 +12,7 @@ import AccountPage from "./components/Game/Page/AccountPage/AccountPage";
 import CharacterCreatorPage from "./components/Game/Page/CharacterCreatorPage/CharacterCreatorPage";
 import InGameLayout from "./components/Game/Page/InGameLayout/InGameLayout";
 import AdminPage from "./components/Game/Page/AdminPage/AdminPage";
+import ItemPage from "./components/Game/Page/AdminItemPage/ItemPage";
 import AdminRacePage from "./components/Game/Page/AdminRacePage/AdminRacePage";
 import AdminClasPage from "./components/Game/Page/AdminClasPage/AdminClasPage";
 import AdminFaithPage from "./components/Game/Page/AdminFaithPage.jsx/AdminFaithPage";
@@ -105,6 +106,7 @@ function App() {
           <Route path="admin/race" element={<AdminRacePage />} />
           <Route path="admin/class" element={<AdminClasPage />} />
           <Route path="admin/faith" element={<AdminFaithPage />} />
+          <Route path="admin/item" element={<ItemPage />} />
           <Route path="locations/verentris" element={<VerentrisPage />} />
           <Route path="locations/startvillage" element={<StartVillagePage />} />
           <Route path="mountains/barier" element={<BariermountainsPage />} />
