@@ -44,12 +44,8 @@ export default function ItemPage() {
   const fetchCharacters = async () => {
     try {
       const response = await fetch('/api/characters');
-      if (!response.ok) {
-        throw new Error('Failed to fetch characters');
-      }
       const data = await response.json();
-      console.log(data); // Log the characters data for debugging
-      setCharacters(data); // Set the characters state with the fetched data
+      setCharacters(data);
     } catch (error) {
       console.error('Failed to fetch characters:', error);
     }
@@ -278,10 +274,10 @@ export default function ItemPage() {
                   >
                     <option value="None">None</option>
                     <option value="Head">Head</option>
-                    <option value="Body">Body</option>
+                    <option value="Chest">Chest</option>
                     <option value="Legs">Legs</option>
-                    <option value="Feet">Feet</option>
-                    <option value="Accessory">Accessory</option>
+                    <option value="Weapon">Weapon</option>
+                    <option value="Shield">Shield</option>
                   </select>
                 </div>
               )}
@@ -296,7 +292,6 @@ export default function ItemPage() {
                       onChange={handleInputChange}
                       placeholder="Durability"
                       className="border p-2 w-full"
-                      required
                     />
                   </div>
                   <div>
@@ -308,7 +303,6 @@ export default function ItemPage() {
                       onChange={handleInputChange}
                       placeholder="Power"
                       className="border p-2 w-full"
-                      required
                     />
                   </div>
                   <div>
@@ -320,22 +314,21 @@ export default function ItemPage() {
                       onChange={handleInputChange}
                       placeholder="Defense"
                       className="border p-2 w-full"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-1">Special</label>
-                    <input
-                      type="text"
-                      name="special"
-                      value={formData.special}
-                      onChange={handleInputChange}
-                      placeholder="Special"
-                      className="border p-2 w-full"
                     />
                   </div>
                 </>
               )}
+              <div>
+                <label className="block mb-1">Special</label>
+                <input
+                  type="text"
+                  name="special"
+                  value={formData.special}
+                  onChange={handleInputChange}
+                  placeholder="Special"
+                  className="border p-2 w-full"
+                />
+              </div>
             </div>
             <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
               {isEditing ? 'Update Item' : 'Create Item'}
@@ -344,15 +337,18 @@ export default function ItemPage() {
         </>
       )}
 
-      {/* Item List */}
+      {/* Item List Table */}
       {activeTab === 'ItemList' && (
-        <div className="mb-4">
-          <table className="min-w-full border-collapse border border-gray-300">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-300">
             <thead>
-              <tr>
-                {['ID', 'Name', 'Cost', 'Weight', 'Actions'].map((header) => (
-                  <th key={header} className="border border-gray-300 p-2 text-left">{header}</th>
-                ))}
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 p-2">ID</th>
+                <th className="border border-gray-300 p-2">Name</th>
+                <th className="border border-gray-300 p-2">Type</th>
+                <th className="border border-gray-300 p-2">Cost</th>
+                <th className="border border-gray-300 p-2">Weight</th>
+                <th className="border border-gray-300 p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -360,18 +356,19 @@ export default function ItemPage() {
                 <tr key={item._id}>
                   <td className="border border-gray-300 p-2">{item.idNumber}</td>
                   <td className="border border-gray-300 p-2">{item.name}</td>
+                  <td className="border border-gray-300 p-2">{item.type}</td>
                   <td className="border border-gray-300 p-2">{item.cost}</td>
                   <td className="border border-gray-300 p-2">{item.weight}</td>
                   <td className="border border-gray-300 p-2">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="text-blue-500 hover:underline"
+                      className="bg-yellow-500 text-white px-2 py-1 rounded"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item._id)}
-                      className="ml-2 text-red-500 hover:underline"
+                      className="bg-red-500 text-white px-2 py-1 rounded ml-2"
                     >
                       Delete
                     </button>
@@ -383,61 +380,109 @@ export default function ItemPage() {
         </div>
       )}
 
-      {/* Give Item */}
+      {/* Give Item Form */}
       {activeTab === 'GiveItem' && (
-        <form onSubmit={handleGiveItemSubmit} className="mb-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div>
+          <h3 className="text-xl mb-2">Give Item</h3>
+          <form onSubmit={handleGiveItemSubmit}>
             <div>
               <label className="block mb-1">Select Character</label>
               <select
-                name="selectedCharacter"
                 value={selectedCharacter}
                 onChange={(e) => setSelectedCharacter(e.target.value)}
                 className="border p-2 w-full"
                 required
               >
                 <option value="">Select a character</option>
-                {characters.map((character) => (
-                  <option key={character._id} value={character._id}>
-                    {character.character_name}
-                  </option>
+                {characters.map((char) => (
+                  <option key={char._id} value={char._id}>{char.name}</option>
                 ))}
               </select>
             </div>
+
             <div>
               <label className="block mb-1">Select Item</label>
               <select
-                name="itemId"
                 value={giveItemData.itemId}
                 onChange={handleGiveItemChange}
+                name="itemId"
                 className="border p-2 w-full"
                 required
               >
                 <option value="">Select an item</option>
                 {items.map((item) => (
-                  <option key={item._id} value={item._id}>
-                    {item.name}
-                  </option>
+                  <option key={item._id} value={item._id}>{item.name}</option>
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block mb-1">Quantity</label>
-              <input
-                type="number"
-                name="quantity"
-                value={giveItemData.quantity}
-                onChange={handleGiveItemChange}
-                min="1"
-                className="border p-2 w-full"
-                required
-              />
-            </div>
-          </div>
-          <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
-            Give Item
-          </button>
-        </form>
+
+            {/* Display stats for selected item to edit */}
+            {giveItemData.itemId && (
+              <>
+                <h4 className="text-lg mt-4">Modify Item Stats</h4>
+                {items.filter(item => item._id === giveItemData.itemId).map((item) => (
+                  <div key={item._id} className="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                      <label className="block mb-1">Durability</label>
+                      <input
+                        type="number"
+                        name="durability"
+                        value={giveItemData.modifiedStats.durability}
+                        onChange={handleGiveItemChange}
+                        className="border p-2 w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1">Power</label>
+                      <input
+                        type="number"
+                        name="power"
+                        value={giveItemData.modifiedStats.power}
+                        onChange={handleGiveItemChange}
+                        className="border p-2 w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1">Defense</label>
+                      <input
+                        type="number"
+                        name="defense"
+                        value={giveItemData.modifiedStats.defense}
+                        onChange={handleGiveItemChange}
+                        className="border p-2 w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1">Special</label>
+                      <input
+                        type="text"
+                        name="special"
+                        value={giveItemData.modifiedStats.special}
+                        onChange={handleGiveItemChange}
+                        className="border p-2 w-full"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-1">Quantity</label>
+                      <input
+                        type="number"
+                        name="quantity"
+                        value={giveItemData.quantity}
+                        onChange={handleGiveItemChange}
+                        className="border p-2 w-full"
+                        min="1"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
+              Give Item
+            </button>
+          </form>
+        </div>
       )}
     </div>
   );
