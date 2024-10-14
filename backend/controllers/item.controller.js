@@ -6,7 +6,11 @@ export const createItem = async (req, res) => {
   try {
     const newItem = new Item(req.body);
     await newItem.save();
-    res.status(201).json(newItem);
+    const itemWithImage = {
+      ...newItem._doc,
+      imageUrl: newItem.getImageUrl() // Add the image URL dynamically
+    };
+    res.status(201).json(itemWithImage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -16,7 +20,11 @@ export const createItem = async (req, res) => {
 export const getAllItems = async (req, res) => {
   try {
     const items = await Item.find();
-    res.status(200).json(items);
+    const itemsWithImages = items.map(item => ({
+      ...item._doc,
+      imageUrl: item.getImageUrl() // Add the image URL dynamically
+    }));
+    res.status(200).json(itemsWithImages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -27,7 +35,13 @@ export const getItemById = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
     if (!item) return res.status(404).json({ message: 'Item not found' });
-    res.status(200).json(item);
+
+    const itemWithImage = {
+      ...item._doc,
+      imageUrl: item.getImageUrl() // Add the image URL dynamically
+    };
+
+    res.status(200).json(itemWithImage);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,7 +52,13 @@ export const updateItem = async (req, res) => {
   try {
     const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
-    res.status(200).json(updatedItem);
+
+    const updatedItemWithImage = {
+      ...updatedItem._doc,
+      imageUrl: updatedItem.getImageUrl() // Add the image URL dynamically
+    };
+
+    res.status(200).json(updatedItemWithImage);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

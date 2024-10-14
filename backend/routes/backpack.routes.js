@@ -10,17 +10,18 @@ import {
 const router = express.Router();
 
 // Route to create a backpack for a character
-router.post('/create/:characterId', createBackpack);
+router.post('/owner/:characterId', createBackpack); // Use POST to /owner/:characterId for clarity
 
-// Route to get a backpack by ID
+// Route to get a backpack by its ID
 router.get('/:id', getBackpackById);
 
+// Route to get a backpack by its owner's ID
+router.get('/owner/:ownerId', getBackpackByOwnerId); // Added owner-specific route
+
 // Route to add an item to a backpack
-router.post('/:id/add-item', addItemToBackpack);
+router.post('/:id/items', addItemToBackpack); // Changed to a more RESTful endpoint
 
-// Route to remove an item from a backpack
-router.delete('/:id/remove-item/:itemId', removeItemFromBackpack);
-
-router.get('/owner/:ownerId', getBackpackByOwnerId);
+// Route to remove an item from a backpack 
+router.delete('/:id/items/:itemId', removeItemFromBackpack); // Changed to a more RESTful endpoint
 
 export default router;

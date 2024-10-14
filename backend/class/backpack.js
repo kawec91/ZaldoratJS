@@ -7,7 +7,8 @@ class Backpack {
     this.size = size;
   }
 
-  static async createBackpack(characterId, size) {
+  // Create a new backpack for a character
+  static async create(characterId, size) {
     try {
       const newBackpack = new BackpackModel({ owner: characterId, size });
       const savedBackpack = await newBackpack.save();
@@ -19,6 +20,7 @@ class Backpack {
     }
   }
 
+  // Find backpack by its ID
   static async findById(backpackId) {
     try {
       const backpack = await BackpackModel.findById(backpackId).populate('owner');
@@ -29,6 +31,7 @@ class Backpack {
     }
   }
 
+  // Find backpack by owner ID
   static async findByOwnerId(ownerId) {
     try {
       const backpack = await BackpackModel.findOne({ owner: ownerId }).populate('owner');
@@ -39,35 +42,36 @@ class Backpack {
     }
   }
 
+  // Add an item to the backpack
   async addItem(item) {
     try {
       const backpack = await BackpackModel.findById(this._id).populate('owner');
       if (!backpack) {
-        throw new Error("Plecak nie znaleziony");
+        throw new Error("Backpack not found");
       }
-  
-      const character = backpack.owner; // Właściciel plecaka
-      const currentWeight = backpack.items.reduce((total, item) => total + item.weight, 0); // Suma wag przedmiotów w plecaku
-      const itemWeight = item.weight; // Waga dodawanego przedmiotu (bez mnożnika)
-  
-      // Sprawdzanie maksymalnej wagi
-      if (currentWeight + itemWeight > character.weight) { // Użycie wagi z obiektu character
-        throw new Error("Nie udźwigniesz już więcej");
+
+      const character = backpack.owner;
+      const currentWeight = backpack.items.reduce((total, item) => total + item.weight * item.quantity, 0);
+      const itemWeight = item.weight * item.quantity;
+
+      if (currentWeight + itemWeight > character.weight) {
+        throw new Error("You cannot carry more weight");
       }
-  
+
       if (backpack.items.length >= backpack.slots) {
-        throw new Error("Plecak jest pełny");
+        throw new Error("Backpack is full");
       }
-  
+
       backpack.items.push(item);
       const updatedBackpack = await backpack.save();
       return updatedBackpack;
     } catch (error) {
-      console.error("Błąd podczas dodawania przedmiotu do plecaka:", error);
-      throw new Error("Błąd podczas dodawania przedmiotu do plecaka");
+      console.error("Error adding item to backpack:", error);
+      throw new Error("Error adding item to backpack");
     }
   }
 
+  // Remove an item from the backpack (Now renamed to match the controller)
   async removeItem(itemId) {
     try {
       const backpack = await BackpackModel.findById(this._id);

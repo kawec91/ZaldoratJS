@@ -1,11 +1,12 @@
 import Backpack from '../class/backpack.js';
 
+// Create a new backpack
 export const createBackpack = async (req, res) => {
   try {
     const { characterId } = req.params;
     const { size } = req.body;
 
-    const newBackpack = await Backpack.createBackpack(characterId, size);
+    const newBackpack = await Backpack.create(characterId, size); // Matches the class method
     res.status(201).json(newBackpack);
   } catch (error) {
     console.error("Error creating backpack:", error);
@@ -13,10 +14,11 @@ export const createBackpack = async (req, res) => {
   }
 };
 
+// Get backpack by its ID
 export const getBackpackById = async (req, res) => {
   try {
     const { id } = req.params;
-    const backpack = await Backpack.findById(id);
+    const backpack = await Backpack.findById(id); // Matches the class method
 
     if (!backpack) {
       return res.status(404).json({ error: "Backpack not found" });
@@ -29,11 +31,11 @@ export const getBackpackById = async (req, res) => {
   }
 };
 
-// Nowa funkcja do pobierania plecaka na podstawie ID właściciela
+// Get backpack by owner ID
 export const getBackpackByOwnerId = async (req, res) => {
   try {
     const { ownerId } = req.params;
-    const backpack = await Backpack.findByOwnerId(ownerId);
+    const backpack = await Backpack.findByOwnerId(ownerId); // Matches the class method
 
     if (!backpack) {
       return res.status(404).json({ error: "Backpack not found" });
@@ -46,18 +48,19 @@ export const getBackpackByOwnerId = async (req, res) => {
   }
 };
 
+// Add an item to the backpack
 export const addItemToBackpack = async (req, res) => {
   try {
     const { id } = req.params;
     const item = req.body;
 
-    const backpack = await Backpack.findById(id);
+    const backpack = await Backpack.findById(id); // Matches the class method
 
     if (!backpack) {
       return res.status(404).json({ error: "Backpack not found" });
     }
 
-    const updatedBackpack = await backpack.addItem(item);
+    const updatedBackpack = await backpack.addItem(item); // Matches the class method
     res.status(200).json(updatedBackpack);
   } catch (error) {
     console.error("Error adding item to backpack:", error);
@@ -65,24 +68,19 @@ export const addItemToBackpack = async (req, res) => {
   }
 };
 
+// Remove an item from the backpack
 export const removeItemFromBackpack = async (req, res) => {
   try {
     const { id, itemId } = req.params;
 
-    // Znalezienie plecaka po jego ID
-    const backpack = await Backpack.findById(id);
+    const backpack = await Backpack.findById(id); // Matches the class method
 
     if (!backpack) {
       return res.status(404).json({ error: "Backpack not found" });
     }
 
-    // Usunięcie przedmiotu z plecaka (filtrowanie listy przedmiotów)
-    backpack.items = backpack.items.filter((item) => item._id.toString() !== itemId);
-
-    // Zapisanie zaktualizowanego plecaka do bazy danych
-    await backpack.save();
-
-    res.status(200).json(backpack);
+    const updatedBackpack = await backpack.removeItem(itemId); // Matches the class method
+    res.status(200).json(updatedBackpack);
   } catch (error) {
     console.error("Error removing item from backpack:", error);
     res.status(500).json({ error: "Internal Server Error" });

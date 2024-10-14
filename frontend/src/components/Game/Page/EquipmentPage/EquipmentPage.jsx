@@ -73,6 +73,8 @@ export default function EquipmentPage() {
   };
 
   const handleConfirmDelete = async () => {
+    console.log('Deleting item with ID:', itemToDelete?._id);
+    console.log('From backpack with ID:', backpack?._id);
     if (backpack?._id && itemToDelete?._id) {
       try {
         const response = await fetch(`/api/backpack/${backpack._id}/remove-item/${itemToDelete._id}`, {
@@ -84,9 +86,11 @@ export default function EquipmentPage() {
         const updatedBackpack = await response.json();
         setBackpack(updatedBackpack);
       } catch (error) {
+        console.error('Error deleting item:', error);
         setError(error.message);
       } finally {
         setShowConfirmModal(false);
+        setItemToDelete(null); // Clear item after deletion
       }
     }
   };
@@ -139,7 +143,7 @@ export default function EquipmentPage() {
               { label: 'Companion', type: 'companion' },
             ].map((slot, index) => {
               const item = equippedItems.find((item) => item.type === slot.type);
-              const angle = (index * 27.69); // Adjust angle as needed
+              const angle = index * 27.69; // Adjust angle as needed
               return (
                 <div
                   key={index}
@@ -155,7 +159,11 @@ export default function EquipmentPage() {
                   <span className="text-white text-xs">{slot.label}</span>
                   {item ? (
                     <div className="text-center">
-                      <p className="text-sm">{item.name}</p>
+                      <img
+                        src={`/images/${item.image}`} // Ensure correct image path
+                        alt={item.name}
+                        className="w-10 h-10" // Square size
+                      />
                       <button className="text-red-500 text-xs" onClick={() => handleDeleteClick(item)}>
                         Unequip
                       </button>
@@ -175,30 +183,53 @@ export default function EquipmentPage() {
       </div>
 
       {/* New Card for Backpack (Scrollable) */}
-<div className="bg-gray-800 rounded-md p-4 w-1/4 mx-2 h-full flex flex-col">
-  <h3 className="text-center text-white text-2xl py-2">Backpack</h3>
-  <hr className="border-white mb-4" />
-  <div className="flex-grow overflow-y-auto"> {/* Keep this for scrollable items */}
-    <div className="flex flex-wrap justify-center w-full">
-      {items.map((item) => (
-        <div key={item._id} className="border border-white p-1 bg-gray-700 flex flex-col items-center justify-center m-1" style={{ width: '50px', height: '50px' }}>
-          <h4 className="text-xs">{item.name}</h4>
-          <p className="text-xs">Qty: {item.quantity}</p>
-          <p className="text-xs">W: {item.weight}</p>
-          <button className="text-red-500 text-xs" onClick={() => handleDeleteClick(item)}>
-            Drop
-          </button>
+      <div className="bg-gray-800 rounded-md p-4 w-1/4 mx-2 h-full flex flex-col">
+        <h3 className="text-center text-white text-2xl py-2">Backpack</h3>
+        <hr className="border-white mb-4" />
+        <div className="flex-grow overflow-y-auto"> {/* Keep this for scrollable items */}
+          <div className="flex flex-wrap justify-center w-full">
+            {items.map((item) => (
+              <div key={item._id} className="border border-white p-1 bg-gray-700 flex flex-col items-center justify-center m-1 relative" style={{ width: '50px', height: '50px' }}>
+                <img
+                  src={`/images/${item.image}`} // Adjust the path as needed
+                  alt={item.name}
+                  className="w-full h-full" // Ensure image fits the square
+                  onMouseOver={(e) => {
+                    const tooltip = document.createElement('div');
+                    tooltip.innerText = `Name: ${item.name}\nWeight: ${item.weight} kg\nQuantity: ${item.quantity}`;
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.backgroundColor = '#333';
+                    tooltip.style.color = '#fff';
+                    tooltip.style.padding = '5px';
+                    tooltip.style.borderRadius = '5px';
+                    tooltip.style.whiteSpace = 'nowrap';
+                    tooltip.style.zIndex = '1000';
+                    tooltip.style.transform = 'translate(-50%, -100%)';
+                    tooltip.style.left = `${e.clientX}px`;
+                    tooltip.style.top = `${e.clientY}px`;
+                    document.body.appendChild(tooltip);
+                    e.target.tooltip = tooltip; // Store tooltip in target element for removal later
+                  }}
+                  onMouseOut={(e) => {
+                    if (e.target.tooltip) {
+                      document.body.removeChild(e.target.tooltip);
+                      e.target.tooltip = null; // Clear tooltip reference
+                    }
+                  }}
+                />
+                <button className="text-red-500 text-xs" onClick={() => handleDeleteClick(item)}>
+                  Drop
+                </button>
+              </div>
+            ))}
+            {Array.from({ length: emptySlots }).map((_, index) => (
+              <div key={index} className="border border-gray-600 bg-gray-700 flex items-center justify-center m-1" style={{ width: '50px', height: '50px' }} />
+            ))}
+          </div>
         </div>
-      ))}
-      {Array.from({ length: emptySlots }).map((_, index) => (
-        <div key={index} className="border border-gray-600 bg-gray-700 flex items-center justify-center m-1" style={{ width: '50px', height: '50px' }} />
-      ))}
-    </div>
-  </div>
-  {/* Available Slots Information (Now at the bottom) */}
-  <p className="text-center text-white text-1xl py-2">Available Slots: {emptySlots}/{slots}</p>
-</div>
-
+        {/* Available Slots Information (Now at the bottom) */}
+        <p className="text-center text-white text-1xl py-2">Available Slots: {emptySlots}/{slots}</p>
+      </div>
 
       {/* New Card for Battle Stats (Moved) */}
       <div className="bg-gray-800 rounded-md p-4 w-1/4 mx-2 h-full flex flex-col">
