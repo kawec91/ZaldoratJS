@@ -48,6 +48,18 @@ export const getBackpackByOwnerId = async (req, res) => {
   }
 };
 
+// Get all backpacks
+export const getAllBackpacks = async (req, res) => {
+  try {
+    const backpacks = await Backpack.getAllBackpacks(); // Matches the class method
+
+    res.status(200).json(backpacks);
+  } catch (error) {
+    console.error("Error fetching all backpacks:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 // Add an item to the backpack
 export const addItemToBackpack = async (req, res) => {
   try {

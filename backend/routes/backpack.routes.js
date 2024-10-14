@@ -2,9 +2,10 @@ import express from 'express';
 import {
   createBackpack,
   getBackpackById,
+  getBackpackByOwnerId,
+  getAllBackpacks, // Import the new function
   addItemToBackpack,
   removeItemFromBackpack,
-  getBackpackByOwnerId,
 } from '../controllers/backpack.controller.js';
 
 const router = express.Router();
@@ -17,6 +18,9 @@ router.get('/:id', getBackpackById);
 
 // Route to get a backpack by its owner's ID
 router.get('/owner/:ownerId', getBackpackByOwnerId); // Added owner-specific route
+
+// Route to get all backpacks
+router.get('/', getAllBackpacks); // New route for fetching all backpacks
 
 // Route to add an item to a backpack
 router.post('/:id/items', addItemToBackpack); // Changed to a more RESTful endpoint

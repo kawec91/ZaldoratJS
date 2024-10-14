@@ -42,6 +42,17 @@ class Backpack {
     }
   }
 
+  // Get all backpacks
+  static async getAllBackpacks() {
+    try {
+      const backpacks = await BackpackModel.find(); // Assuming you're using Mongoose
+      return backpacks;
+    } catch (error) {
+      console.error('Error fetching backpacks:', error);
+      throw new Error('Error fetching backpacks: ' + error.message);
+    }
+  }
+
   // Add an item to the backpack
   async addItem(item) {
     try {
@@ -71,7 +82,7 @@ class Backpack {
     }
   }
 
-  // Remove an item from the backpack (Now renamed to match the controller)
+  // Remove an item from the backpack
   async removeItem(itemId) {
     try {
       const backpack = await BackpackModel.findById(this._id);
